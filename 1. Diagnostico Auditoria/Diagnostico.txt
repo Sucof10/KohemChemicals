@@ -1,0 +1,49 @@
+1. Nombre Proyecto
+
+Sistema Transaccional de Gestión de Pedidos y Asesoría para Distribuidora de Materias Primas
+
+2. Nombre Aplicación
+
+Kohem Chemicals
+
+3. Propósito Solución Software
+
+Desarrollar un sistema que permita a los clientes de la distribuidora consultar la disponibilidad de materias primas, realizar pedidos en línea, comunicarse directamente con los empleados encargados de ventas, y solicitar asesoría o agendar citas para formulaciones específicas. Adicionalmente, el sistema debe permitir a los administradores gestionar el inventario y registrar nuevos productos, garantizando información actualizada y confiable para la toma de decisiones comerciales.
+
+4. Propósito Auditoría Software
+
+Evaluar que el sistema transaccional cumpla con los requerimientos funcionales y de seguridad establecidos, verificando la integridad de los procesos de registro de pedidos, control de inventario, comunicación cliente-empleado y gestión de citas de asesoría, con el fin de identificar riesgos, inconsistencias o vulnerabilidades que puedan afectar la confiabilidad de la información y la operación del negocio.
+
+5. Actores
+
+Auditor de arquitectura: Se encarga de auditar la seguridad y la arquitectura
+Super Usuario:
+Administrador - Vendedor: gestiona el inventario y registra productos en el sistema.
+
+6. Requerimiento
+La empresa distribuidora de materias primas requiere un sistema de gestión de información que permita a sus clientes realizar pedidos y consultar la disponibilidad de los productos en tiempo real. El sistema debe permitir a los administradores tener control del inventario y registrar productos, así como habilitar un canal de comunicación directa entre los clientes y los empleados encargados de la venta de materias primas, incluyendo la posibilidad de solicitar acompañamiento tecnico o agendar citas de asesoría sobre formulaciones cuando el cliente lo requiera.
+
+7. Problemática (por que se quiere AUDITAR)
+
+Actualmente los pedidos se gestionan manualmente por WhatsApp, correo y llamadas, sin un sistema claro, y el inventario se controla en hojas de Excel. Esto genera errores, desactualización y demoras, afectando a una empresa
+que aún no está consolidada en el mercado.
+
+8. Escenario Actual
+
+Pedidos recibidos por canales dispersos, sin registro unificado.
+ Inventario controlado manualmente en Excel.
+ Disponibilidad de productos no visibles para el cliente en tiempo real.
+ Asesorías y citas coordinadas de forma informal, sin trazabilidad.
+
+
+9. Escenario Futuro
+
+Pedidos y disponibilidad de productos gestionados en linea, en tiempo real.
+Inventario centralizado y actualizado por los administradores en el sistema.
+Chat integrado entre clientes y empleados de ventas.
+Solicitud y agendamiento de asesorías de forma estructurada y trazable.
+
+
+10. Proceso a Auditar
+
+Proceso de registro y gestión de pedidos. Se prioriza por ser la empresa una organización en etapa de posicionamiento en el mercado, donde la confiabilidad en la atención al cliente es clave para su crecimiento; auditar permite detectar riesgos de la dispersión de canales manuales y sentar una base sólida antes de escalar operaciones.
