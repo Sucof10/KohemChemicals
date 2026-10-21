@@ -1,0 +1,2053 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Documentación Técnica y Funcional del Frontend — Kohem Chemicals</title>
+<style>
+  :root {
+    --teal: #0f766e;
+    --teal-dark: #115e59;
+    --teal-light: #ccfbf1;
+    --slate-900: #0f172a;
+    --slate-700: #334155;
+    --slate-500: #64748b;
+    --slate-300: #cbd5e1;
+    --slate-100: #f1f5f9;
+    --slate-50: #f8fafc;
+    --rose: #be123c;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 10.2pt;
+    line-height: 1.55;
+    color: var(--slate-700);
+    background: #fff;
+  }
+  @page { size: A4; margin: 16mm 15mm 18mm 15mm; }
+  h1, h2, h3, h4 { color: var(--slate-900); line-height: 1.25; }
+  h1 {
+    font-size: 18pt;
+    margin: 0 0 10pt;
+    padding-bottom: 5pt;
+    border-bottom: 2.5pt solid var(--teal);
+    color: var(--teal-dark);
+    break-after: avoid;
+  }
+  h2 {
+    font-size: 13pt;
+    margin: 16pt 0 6pt;
+    color: var(--teal-dark);
+    break-after: avoid;
+  }
+  h3 {
+    font-size: 11.2pt;
+    margin: 12pt 0 4pt;
+    color: var(--slate-900);
+    break-after: avoid;
+  }
+  p { margin: 4pt 0 7pt; orphans: 3; widows: 3; }
+  ul, ol { margin: 4pt 0 8pt 18pt; padding: 0; }
+  li { margin: 2pt 0; }
+  strong { color: var(--slate-900); }
+  a { color: var(--teal); text-decoration: none; }
+  hr { border: none; border-top: 1pt solid var(--slate-300); margin: 12pt 0; }
+  blockquote {
+    margin: 8pt 0;
+    padding: 7pt 10pt;
+    border-left: 3pt solid var(--teal);
+    background: #ecfdf5;
+    border-radius: 0 5pt 5pt 0;
+    color: var(--teal-dark);
+  }
+  blockquote p { margin: 0; }
+  code {
+    font-family: "Cascadia Code", "Consolas", "Courier New", monospace;
+    font-size: 8.3pt;
+    background: var(--slate-100);
+    border: 0.5pt solid #e2e8f0;
+    border-radius: 3pt;
+    padding: 1pt 3pt;
+    color: #0f172a;
+  }
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    border-radius: 6pt;
+    padding: 8pt 10pt;
+    margin: 6pt 0 9pt;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-word;
+    break-inside: avoid;
+  }
+  pre code {
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 0;
+    font-size: 8.2pt;
+    line-height: 1.45;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0 10pt;
+    font-size: 8.5pt;
+    break-inside: avoid;
+  }
+  thead { display: table-header-group; }
+  th {
+    background: var(--teal);
+    color: #fff;
+    text-align: left;
+    font-weight: 600;
+    padding: 4pt 5pt;
+    border: 0.5pt solid #0d9488;
+  }
+  td {
+    padding: 3.5pt 5pt;
+    border: 0.5pt solid var(--slate-300);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background: var(--slate-50); }
+  tr { break-inside: avoid; }
+  .page-break { break-before: page; height: 0; }
+  .cover {
+    min-height: 250mm;
+    background: linear-gradient(145deg, #0f766e 0%, #115e59 55%, #134e4a 100%);
+    color: #fff;
+    border-radius: 10pt;
+    padding: 26mm 22mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    break-after: page;
+  }
+  .cover-brand {
+    font-size: 11pt;
+    letter-spacing: 3pt;
+    font-weight: 600;
+    color: #99f6e4;
+  }
+  .cover h1 {
+    color: #fff;
+    border: none;
+    font-size: 31pt;
+    line-height: 1.15;
+    margin: 18mm 0 0;
+    padding: 0;
+    max-width: 150mm;
+  }
+  .cover-subtitle {
+    font-size: 14pt;
+    color: #ccfbf1;
+    margin-top: 8mm;
+    max-width: 135mm;
+  }
+  .cover-meta {
+    border-top: 1pt solid rgba(255,255,255,0.35);
+    padding-top: 7mm;
+    font-size: 9.5pt;
+    color: #e6fffa;
+  }
+  .cover-meta p { margin: 2.5pt 0; }
+  .cover-meta strong { color: #fff; }
+  .doc-end {
+    margin-top: 16pt;
+    padding-top: 8pt;
+    border-top: 1pt solid var(--slate-300);
+    text-align: center;
+    color: var(--slate-500);
+    font-size: 9pt;
+  }
+  h1 + p, h2 + p, h3 + p { margin-top: 2pt; }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="cover-brand">KOHEM CHEMICALS</div>
+  <h1>Documentación Técnica y Funcional del Frontend</h1>
+  <p class="cover-subtitle">MVP de gestión de materias primas, pedidos y asesoría</p>
+  <div class="cover-meta">
+    <p><strong>Versión:</strong> 1.0</p>
+    <p><strong>Fecha:</strong> 20 de octubre de 2026</p>
+    <p><strong>Alcance:</strong> SPA React + TypeScript conectada al backend FastAPI existente</p>
+    <p><strong>Ubicación:</strong> MVP/frontend</p>
+  </div>
+</div><div class="page-break"></div><h1>Contenido</h1>
+<ol>
+<li>Resumen ejecutivo</li>
+<li>Contexto y alcance</li>
+<li>Tecnologías, frameworks y lenguajes</li>
+<li>Arquitectura del frontend</li>
+<li>Autenticación y sesión</li>
+<li>Conexión con el backend</li>
+<li>Servicios API y payloads</li>
+<li>Funcionalidades y pantallas</li>
+<li>Roles y permisos</li>
+<li>Reglas de negocio reflejadas en la interfaz</li>
+<li>Manejo de errores y estados de interfaz</li>
+<li>Seguridad del frontend</li>
+<li>Pruebas y verificación</li>
+<li>Ejecución y uso</li>
+<li>Limitaciones y trabajo futuro</li>
+<li>Conclusiones</li>
+<li>Anexos</li>
+</ol>
+<div class="page-break"></div><h1>1. Resumen ejecutivo</h1>
+<p>Se desarrolló una aplicación web de una sola página (SPA) para Kohem Chemicals que consume el backend FastAPI existente sin modificar su código. El frontend cubre el flujo operativo disponible en la API real: autenticación con JWT, consulta y administración de materias primas, registro y seguimiento de pedidos, asesoría mediante un agente IA simulado y consulta de logs de auditoría.</p>
+<p>La solución se construyó con React 19, TypeScript estricto, Vite 8, Tailwind CSS 4, React Router, Axios, React Hook Form y Zod. La lógica de acceso a la API está separada de los componentes visuales mediante una capa de servicios, tipos y esquemas de validación. La interfaz adapta menús, rutas y acciones al rol autenticado (<code>admin</code>, <code>analista</code>, <code>cliente</code>), manteniendo al backend como autoridad final de autorización.</p>
+<p>El resultado es un MVP funcional, responsive y verificable:</p>
+<ul>
+<li>Compilación de producción correcta.</li>
+<li>Lint sin advertencias.</li>
+<li>36 pruebas automatizadas en verde.</li>
+<li>Pruebas de humo contra el backend real con usuarios <code>admin</code>, <code>analista</code> y <code>cliente</code>.</li>
+<li>Documentación de las limitaciones del backend y de los cambios necesarios para producción.</li>
+</ul>
+<blockquote>
+<p><strong>Importante:</strong> el prompt inicial mencionaba usuarios, citas, geografía, refresh tokens, rate-limit y borrado lógico. Esos elementos <strong>no existen en el backend real</strong>, por lo que no se inventaron endpoints ni pantallas funcionales para ellos. Se documentaron como trabajo futuro.</p>
+</blockquote>
+<div class="page-break"></div><h1>2. Contexto y alcance</h1>
+<h2>2.1 Backend real</h2>
+<p>El backend del repositorio es una API FastAPI con las siguientes características:</p>
+<ul>
+<li>Persistencia con SQLite y SQLAlchemy asíncrono.</li>
+<li>Autenticación con JWT firmado en HS256.</li>
+<li>Contraseñas con bcrypt mediante passlib.</li>
+<li>Roles reales: <code>admin</code>, <code>analista</code>, <code>cliente</code>.</li>
+<li>Prefijo de negocio: <code>/api/v1</code>.</li>
+<li>Access token con expiración de 60 minutos.</li>
+<li>Sin refresh token, sin revocación y sin logout del servidor.</li>
+<li>Sin CORS configurado.</li>
+<li>Sin rate-limit ni bloqueo de intentos de login.</li>
+</ul>
+<h2>2.2 Alcance implementado</h2>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Estado</th>
+<th>Observación</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Login y logout local</td>
+<td>Implementado</td>
+<td>JWT en <code>sessionStorage</code>; logout solo del cliente</td>
+</tr>
+<tr>
+<td>Registro de clientes</td>
+<td>Implementado</td>
+<td>Sin selector de rol; el backend asigna <code>cliente</code></td>
+</tr>
+<tr>
+<td>Dashboard por rol</td>
+<td>Implementado</td>
+<td>Métricas calculadas con hasta 100 registros de la API</td>
+</tr>
+<tr>
+<td>Materias primas</td>
+<td>Implementado</td>
+<td>Consulta, creación, edición y eliminación física</td>
+</tr>
+<tr>
+<td>Pedidos</td>
+<td>Implementado</td>
+<td>Creación, historial, detalle, cancelación y cambio de estado</td>
+</tr>
+<tr>
+<td>Asesoría IA</td>
+<td>Implementado</td>
+<td>Agente simulado por palabras clave</td>
+</tr>
+<tr>
+<td>Auditoría</td>
+<td>Implementado</td>
+<td>Solo lectura para <code>admin</code> y <code>analista</code></td>
+</tr>
+<tr>
+<td>Mi sesión</td>
+<td>Implementado</td>
+<td>Información del JWT; no existe edición de perfil</td>
+</tr>
+<tr>
+<td>Usuarios</td>
+<td>No soportado</td>
+<td>No existen endpoints de usuarios</td>
+</tr>
+<tr>
+<td>Citas</td>
+<td>No soportado</td>
+<td>No existe recurso <code>appointments</code></td>
+</tr>
+<tr>
+<td>Geografía</td>
+<td>No soportado</td>
+<td>No existen países, departamentos, ciudades ni sectores</td>
+</tr>
+<tr>
+<td>Refresh token</td>
+<td>No soportado</td>
+<td>El backend solo emite access token</td>
+</tr>
+<tr>
+<td>Rate-limit / lockout</td>
+<td>No soportado</td>
+<td>No implementado en el backend</td>
+</tr>
+<tr>
+<td>Soft delete</td>
+<td>No soportado</td>
+<td><code>DELETE</code> de materiales es físico</td>
+</tr>
+</tbody></table>
+<h2>2.3 Principios de diseño</h2>
+<ol>
+<li><strong>El backend es la fuente de verdad.</strong> La interfaz no inventa reglas ni datos.</li>
+<li><strong>Separación de responsabilidades.</strong> Los componentes visuales no realizan llamadas HTTP directas.</li>
+<li><strong>Tipado estricto.</strong> Los tipos reflejan los DTOs reales y los esquemas Zod replican las validaciones.</li>
+<li><strong>Defensa en profundidad.</strong> La UI oculta acciones no permitidas, pero el backend valida cada operación.</li>
+<li><strong>Mensajes claros.</strong> Los errores técnicos se transforman en mensajes accionables para el usuario.</li>
+<li><strong>Seguridad por defecto.</strong> Sin secretos en el código, sin <code>dangerouslySetInnerHTML</code> y sin logs de tokens.</li>
+</ol>
+<div class="page-break"></div><h1>3. Tecnologías, frameworks y lenguajes</h1>
+<h2>3.1 Lenguajes</h2>
+<table>
+<thead>
+<tr>
+<th>Lenguaje</th>
+<th>Uso</th>
+<th>Justificación</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TypeScript</td>
+<td>Código de la SPA</td>
+<td>Tipado estático, autocompletado y detección temprana de errores en contratos de API</td>
+</tr>
+<tr>
+<td>HTML5</td>
+<td>Estructura de la aplicación</td>
+<td>Base estándar de la SPA y del documento generado</td>
+</tr>
+<tr>
+<td>CSS (Tailwind)</td>
+<td>Estilos y diseño responsive</td>
+<td>Utilidades atómicas, consistencia visual y rapidez de implementación</td>
+</tr>
+<tr>
+<td>JSON</td>
+<td>Payloads de API y configuración</td>
+<td>Formato nativo del backend FastAPI</td>
+</tr>
+<tr>
+<td>PowerShell</td>
+<td>Script <code>dev.ps1</code></td>
+<td>Automatizar el arranque conjunto de backend y frontend en Windows</td>
+</tr>
+<tr>
+<td>Markdown</td>
+<td>Documentación</td>
+<td>Fuente legible y mantenible para generar el PDF</td>
+</tr>
+</tbody></table>
+<h2>3.2 Frameworks y librerías principales</h2>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th align="right">Versión</th>
+<th>Rol</th>
+<th>Por qué se eligió</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Node.js</td>
+<td align="right">24.16.0</td>
+<td>Entorno de ejecución y tooling</td>
+<td>LTS, compatible con Vite 8 y el ecosistema actual</td>
+</tr>
+<tr>
+<td>npm</td>
+<td align="right">11.13.0</td>
+<td>Gestión de dependencias</td>
+<td>Incluido con Node; lockfile reproducible</td>
+</tr>
+<tr>
+<td>React</td>
+<td align="right">19.3.1</td>
+<td>Biblioteca de interfaz</td>
+<td>Componentes declarativos, ecosistema maduro y buen soporte de TypeScript</td>
+</tr>
+<tr>
+<td>React DOM</td>
+<td align="right">19.3.1</td>
+<td>Renderizado web</td>
+<td>Integración oficial de React con el DOM</td>
+</tr>
+<tr>
+<td>Vite</td>
+<td align="right">8.3.4</td>
+<td>Dev server y bundler</td>
+<td>Arranque rápido, HMR, proxy de desarrollo y build optimizado</td>
+</tr>
+<tr>
+<td>TypeScript</td>
+<td align="right">7.0.2</td>
+<td>Lenguaje tipado</td>
+<td>Contratos claros, refactorización segura y modo estricto</td>
+</tr>
+<tr>
+<td>React Router DOM</td>
+<td align="right">7.18.4</td>
+<td>Enrutamiento SPA</td>
+<td>Rutas protegidas, layouts anidados y navegación declarativa</td>
+</tr>
+<tr>
+<td>Axios</td>
+<td align="right">1.20.0</td>
+<td>Cliente HTTP</td>
+<td>Interceptores, instancia centralizada y manejo consistente de errores</td>
+</tr>
+<tr>
+<td>React Hook Form</td>
+<td align="right">7.90.0</td>
+<td>Gestión de formularios</td>
+<td>Bajo acoplamiento, buen rendimiento y validación integrada</td>
+</tr>
+<tr>
+<td>Zod</td>
+<td align="right">4.6.7</td>
+<td>Validación de esquemas</td>
+<td>Validación tipada y reutilizable en formularios y payloads</td>
+</tr>
+<tr>
+<td>@hookform/resolvers</td>
+<td align="right">5.9.2</td>
+<td>Puente RHF + Zod</td>
+<td>Integración oficial entre React Hook Form y Zod</td>
+</tr>
+<tr>
+<td>Tailwind CSS</td>
+<td align="right">4.3.3</td>
+<td>Estilos</td>
+<td>Diseño consistente sin CSS global extenso</td>
+</tr>
+<tr>
+<td>@tailwindcss/vite</td>
+<td align="right">4.3.3</td>
+<td>Integración Tailwind + Vite</td>
+<td>Configuración mínima y compilación eficiente</td>
+</tr>
+<tr>
+<td>jwt-decode</td>
+<td align="right">4.0.0</td>
+<td>Lectura del JWT</td>
+<td>Obtener <code>sub</code>, <code>role</code>, <code>user_id</code> y <code>exp</code> sin verificar la firma en el cliente</td>
+</tr>
+<tr>
+<td>Vitest</td>
+<td align="right">5.0.5</td>
+<td>Pruebas unitarias</td>
+<td>Rápido, integrado con Vite y compatible con TypeScript</td>
+</tr>
+<tr>
+<td>Testing Library</td>
+<td align="right">16.3.3</td>
+<td>Pruebas de componentes</td>
+<td>Enfoque en el comportamiento visible para el usuario</td>
+</tr>
+<tr>
+<td>jest-dom</td>
+<td align="right">7.0.1</td>
+<td>Matchers DOM</td>
+<td>Aserciones legibles sobre el DOM</td>
+</tr>
+<tr>
+<td>user-event</td>
+<td align="right">14.6.8</td>
+<td>Simulación de interacción</td>
+<td>Eventos más cercanos al comportamiento real del usuario</td>
+</tr>
+<tr>
+<td>MSW</td>
+<td align="right">3.0.3</td>
+<td>Mock de API en pruebas</td>
+<td>Intercepta peticiones HTTP sin modificar los servicios</td>
+</tr>
+<tr>
+<td>jsdom</td>
+<td align="right">30.1.3</td>
+<td>Entorno DOM para pruebas</td>
+<td>Ejecuta componentes React en Node durante Vitest</td>
+</tr>
+<tr>
+<td>oxlint</td>
+<td align="right">1.89.0</td>
+<td>Lint</td>
+<td>Verificación rápida de reglas de React y TypeScript</td>
+</tr>
+</tbody></table>
+<h2>3.3 Herramientas de calidad y build</h2>
+<ul>
+<li><strong>TypeScript estricto:</strong> <code>strict</code>, <code>noUnusedLocals</code>, <code>noUnusedParameters</code>, <code>noFallthroughCasesInSwitch</code>.</li>
+<li><strong>Vite:</strong> build de producción con división de código por rutas (<code>React.lazy</code>).</li>
+<li><strong>Vitest + Testing Library + MSW:</strong> pruebas de esquemas, servicios, guards y pantalla de login.</li>
+<li><strong>oxlint:</strong> reglas de hooks y exportación de componentes.</li>
+<li><strong>Variables de entorno:</strong> <code>VITE_API_BASE_URL</code>; <code>.env</code> fuera del control de versiones.</li>
+</ul>
+<div class="page-break"></div><h1>4. Arquitectura del frontend</h1>
+<h2>4.1 Capas</h2>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Carpeta</th>
+<th>Responsabilidad</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Configuración</td>
+<td><code>src/config</code></td>
+<td>URL base, endpoints centralizados y claves de sesión</td>
+</tr>
+<tr>
+<td>API</td>
+<td><code>src/api</code></td>
+<td>Cliente Axios, interceptores, normalización de errores y servicios por recurso</td>
+</tr>
+<tr>
+<td>Tipos</td>
+<td><code>src/types</code></td>
+<td>Interfaces 1:1 con los DTOs del backend</td>
+</tr>
+<tr>
+<td>Esquemas</td>
+<td><code>src/schemas</code></td>
+<td>Validaciones Zod equivalentes a las reglas del backend</td>
+</tr>
+<tr>
+<td>Autenticación</td>
+<td><code>src/auth</code></td>
+<td>Contexto de sesión, decodificación del JWT, guards y almacenamiento del token</td>
+</tr>
+<tr>
+<td>Hooks</td>
+<td><code>src/hooks</code></td>
+<td>Lógica reutilizable de carga de datos</td>
+</tr>
+<tr>
+<td>Componentes</td>
+<td><code>src/components</code></td>
+<td>Layout, UI reutilizable y feedback visual</td>
+</tr>
+<tr>
+<td>Páginas</td>
+<td><code>src/pages</code></td>
+<td>Vistas por módulo y por rol</td>
+</tr>
+<tr>
+<td>Utilidades</td>
+<td><code>src/utils</code></td>
+<td>Formato de fechas, moneda, etiquetas, permisos y clases CSS</td>
+</tr>
+<tr>
+<td>Pruebas</td>
+<td><code>src/tests</code></td>
+<td>Pruebas unitarias, de servicios y de componentes</td>
+</tr>
+</tbody></table>
+<h2>4.2 Estructura de carpetas</h2>
+<pre><code class="language-text">frontend/
+  docs/
+    ANALISIS_BACKEND.md
+    EVALUACION_SEGURIDAD.md
+    DOCUMENTACION_FRONTEND.md
+    DOCUMENTACION_FRONTEND.pdf
+  scripts/
+    dev.ps1
+  src/
+    api/
+      client.ts
+      errors.ts
+      services/
+        auth.service.ts
+        materials.service.ts
+        orders.service.ts
+        ai.service.ts
+        audit.service.ts
+    auth/
+      AuthContext.ts
+      AuthProvider.tsx
+      guards.tsx
+      jwt.ts
+      tokenStorage.ts
+      useAuth.ts
+    components/
+      feedback/
+      forms/ (reservada para formularios reutilizables)
+      layout/
+      ui/
+    config/
+      endpoints.ts
+      env.ts
+    hooks/
+      useApiData.ts
+    pages/
+      ai/
+      audit/
+      auth/
+      dashboard/
+      errors/
+      materials/
+      orders/
+      session/
+    schemas/
+      ai.schema.ts
+      auth.schema.ts
+      material.schema.ts
+      order.schema.ts
+    tests/
+    types/
+      api.ts
+    utils/
+      cn.ts
+      format.ts
+      labels.ts
+      permissions.ts
+  .env
+  .env.example
+  .env.test
+  .gitignore
+  index.html
+  package.json
+  tsconfig.json
+  vite.config.ts
+  vitest.config.ts
+</code></pre>
+<h2>4.3 Flujo de una operación</h2>
+<pre><code class="language-text">Usuario
+  → Componente de página
+  → Hook / estado local
+  → Servicio API (src/api/services)
+  → Axios (cliente centralizado)
+  → Proxy de Vite (/api) o URL absoluta
+  → Backend FastAPI
+  → Respuesta JSON
+  → Normalización de errores (si aplica)
+  → Estado de la página
+  → Interfaz actualizada
+</code></pre>
+<p>Los componentes visuales nunca llaman a <code>axios</code> directamente. Toda petición pasa por un servicio, lo que facilita pruebas, cambios de contrato y manejo uniforme de errores.</p>
+<h2>4.4 Rendimiento y carga por rutas</h2>
+<p>Las páginas se cargan con <code>React.lazy</code> y <code>Suspense</code>. El build genera fragmentos separados para login, dashboard, materiales, pedidos, IA, auditoría y sesión. Esto reduce el paquete inicial y mejora el tiempo de carga. El layout permanece visible mientras se carga el módulo solicitado.</p>
+<h2>4.5 Diseño responsive</h2>
+<ul>
+<li>Barra lateral fija en escritorio y menú desplegable en móvil.</li>
+<li>Tablas con desplazamiento horizontal en pantallas pequeñas.</li>
+<li>Formularios en una o dos columnas según el ancho.</li>
+<li>Mensajes, botones y acciones adaptados a teclado y lectores de pantalla.</li>
+</ul>
+<div class="page-break"></div><h1>5. Autenticación y sesión</h1>
+<h2>5.1 Flujo de login</h2>
+<ol>
+<li>El usuario escribe <code>username</code> y <code>password</code>.</li>
+<li>El formulario valida que ambos campos no estén vacíos y que el usuario no supere 50 caracteres.</li>
+<li>Se envía <code>POST /api/v1/auth/token</code> con <code>Content-Type: application/json</code>.</li>
+<li>El backend responde <code>200</code> con <code>access_token</code> y <code>token_type</code>.</li>
+<li>El frontend decodifica el JWT para obtener <code>sub</code>, <code>role</code>, <code>user_id</code> y <code>exp</code>.</li>
+<li>Se guarda el token en <code>sessionStorage</code> y se actualiza el contexto de sesión.</li>
+<li>El usuario es redirigido a <code>/</code> o a la ruta que intentaba visitar.</li>
+</ol>
+<h3>Petición real</h3>
+<pre><code class="language-http">POST /api/v1/auth/token
+Content-Type: application/json
+
+{
+  &quot;username&quot;: &quot;admin&quot;,
+  &quot;password&quot;: &quot;AdminPass123!&quot;
+}
+</code></pre>
+<h3>Respuesta real</h3>
+<pre><code class="language-json">{
+  &quot;access_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;,
+  &quot;token_type&quot;: &quot;bearer&quot;
+}
+</code></pre>
+<h3>Claims del JWT</h3>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Tipo</th>
+<th>Uso en el frontend</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>sub</code></td>
+<td>string</td>
+<td>Nombre de usuario mostrado en la interfaz</td>
+</tr>
+<tr>
+<td><code>role</code></td>
+<td>string</td>
+<td>Control de menú, rutas y acciones</td>
+</tr>
+<tr>
+<td><code>user_id</code></td>
+<td>number</td>
+<td>Identificador de usuario en “Mi sesión”</td>
+</tr>
+<tr>
+<td><code>exp</code></td>
+<td>number</td>
+<td>Detección de expiración (60 minutos)</td>
+</tr>
+</tbody></table>
+<p>El frontend no valida la firma del token; solo lee sus datos para la interfaz. La autorización real siempre la realiza el backend.</p>
+<h2>5.2 Almacenamiento del token</h2>
+<p>Se eligió <code>sessionStorage</code> porque:</p>
+<ul>
+<li>El backend solo entrega el JWT en el cuerpo JSON; no ofrece cookies <code>HttpOnly</code>.</li>
+<li><code>sessionStorage</code> está aislado por pestaña y se borra al cerrarla.</li>
+<li>Es menos persistente que <code>localStorage</code>.</li>
+<li>Permite sobrevivir a una recarga de página dentro de la misma pestaña.</li>
+</ul>
+<p><strong>Riesgo residual:</strong> cualquier token accesible por JavaScript es vulnerable ante XSS. El frontend mitiga el riesgo evitando <code>dangerouslySetInnerHTML</code> y no insertando HTML de la API. La solución definitiva requiere cookies <code>HttpOnly</code>, <code>Secure</code> y <code>SameSite</code>, junto con protección CSRF, lo que exige cambios en el backend.</p>
+<h2>5.3 Expiración y cierre de sesión</h2>
+<ul>
+<li>Al iniciar la aplicación se lee el token almacenado.</li>
+<li>Si el token no se puede decodificar o <code>exp</code> ya pasó, se elimina.</li>
+<li>El interceptor de respuestas detecta <code>401</code> y emite un evento de sesión expirada.</li>
+<li>El contexto limpia token y usuario; los guards redirigen a <code>/login</code>.</li>
+<li>El botón “Cerrar sesión” elimina el token local y navega al login.</li>
+<li>No existe logout del servidor ni revocación de tokens.</li>
+</ul>
+<h2>5.4 Registro</h2>
+<p>El formulario solicita:</p>
+<ul>
+<li><code>username</code> (3–50 caracteres).</li>
+<li><code>email</code> con formato válido.</li>
+<li><code>password</code> (mínimo 8 caracteres).</li>
+<li>Confirmación de contraseña.</li>
+</ul>
+<p>El frontend <strong>no envía el campo <code>role</code></strong>. El backend aplica su valor por defecto <code>cliente</code>. Esto evita exponer en la interfaz la escalada de privilegios que permite el endpoint actual.</p>
+<h3>Petición real</h3>
+<pre><code class="language-http">POST /api/v1/auth/register
+Content-Type: application/json
+
+{
+  &quot;username&quot;: &quot;nuevo_cliente&quot;,
+  &quot;email&quot;: &quot;nuevo@kohem.com&quot;,
+  &quot;password&quot;: &quot;Password123!&quot;
+}
+</code></pre>
+<h3>Respuesta real</h3>
+<pre><code class="language-json">{
+  &quot;id&quot;: 3,
+  &quot;username&quot;: &quot;nuevo_cliente&quot;,
+  &quot;email&quot;: &quot;nuevo@kohem.com&quot;,
+  &quot;role&quot;: &quot;cliente&quot;,
+  &quot;is_active&quot;: true
+}
+</code></pre>
+<h2>5.5 Guards de ruta</h2>
+<table>
+<thead>
+<tr>
+<th>Guard</th>
+<th>Comportamiento</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>PublicOnlyRoute</code></td>
+<td>Si ya hay sesión, redirige al panel; si no, permite login/registro</td>
+</tr>
+<tr>
+<td><code>ProtectedRoute</code></td>
+<td>Sin sesión redirige a <code>/login</code>; con rol no autorizado redirige a <code>/forbidden</code></td>
+</tr>
+</tbody></table>
+<p>Rutas protegidas por rol:</p>
+<ul>
+<li><code>/materials/new</code>: solo <code>admin</code>.</li>
+<li><code>/materials/:id/edit</code>: <code>admin</code> y <code>analista</code>.</li>
+<li><code>/orders/new</code>: solo <code>cliente</code>.</li>
+<li><code>/audit-logs</code>: <code>admin</code> y <code>analista</code>.</li>
+</ul>
+<div class="page-break"></div><h1>6. Conexión con el backend</h1>
+<h2>6.1 URL base y variables de entorno</h2>
+<p>El frontend usa una única variable:</p>
+<pre><code class="language-env">VITE_API_BASE_URL=/api/v1
+</code></pre>
+<p>En desarrollo, Vite reenvía las peticiones que comienzan con <code>/api</code> a <code>http://127.0.0.1:8000</code>:</p>
+<pre><code class="language-ts">server: {
+  port: 5173,
+  proxy: {
+    &#39;/api&#39;: {
+      target: &#39;http://127.0.0.1:8000&#39;,
+      changeOrigin: true,
+    },
+  },
+}
+</code></pre>
+<p>El proxy también se configuró para <code>npm run preview</code>, de modo que la vista previa del build funcione en local sin CORS.</p>
+<p>En producción, si el frontend se sirve desde otro origen, debe configurarse CORS en FastAPI. El proxy de Vite <strong>no sustituye</strong> esa configuración.</p>
+<h2>6.2 Cliente Axios</h2>
+<p>El cliente centralizado:</p>
+<ul>
+<li>Usa <code>baseURL</code> desde <code>VITE_API_BASE_URL</code>.</li>
+<li>Usa el adaptador <code>fetch</code> de Axios.</li>
+<li>Agrega <code>Authorization: Bearer &lt;token&gt;</code> si hay token almacenado.</li>
+<li>Detecta <code>401</code> en respuestas que no sean el login.</li>
+<li>Limpia el token y emite el evento <code>kohem:unauthorized</code>.</li>
+<li>No registra tokens ni datos sensibles en consola.</li>
+</ul>
+<h2>6.3 Interceptores y manejo de sesión</h2>
+<pre><code class="language-text">Solicitud → Request interceptor → Agrega Bearer → Backend
+Respuesta ← Response interceptor ← 401 → Limpia token + evento
+</code></pre>
+<p>El login se excluye del cierre automático para poder mostrar “Usuario o contraseña incorrectos” en lugar de “Sesión expirada”.</p>
+<h2>6.4 Normalización de errores</h2>
+<table>
+<thead>
+<tr>
+<th>HTTP</th>
+<th>Mensaje mostrado</th>
+<th>Comportamiento</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>400</td>
+<td>Detalle de negocio del backend</td>
+<td>Se muestra el texto seguro de stock, material o duplicado</td>
+</tr>
+<tr>
+<td>401</td>
+<td>“Tu sesión expiró. Inicia sesión nuevamente.”</td>
+<td>Limpia sesión y redirige al login</td>
+</tr>
+<tr>
+<td>403</td>
+<td>“No tienes permisos para realizar esta acción.”</td>
+<td>Se muestra en la vista o formulario</td>
+</tr>
+<tr>
+<td>404</td>
+<td>“El recurso solicitado no existe.”</td>
+<td>Estado de error con reintento</td>
+</tr>
+<tr>
+<td>409</td>
+<td>Detalle de negocio del backend</td>
+<td>Conflicto de estado de pedido</td>
+</tr>
+<tr>
+<td>415</td>
+<td>Mensaje genérico de operación</td>
+<td>No se usa en el flujo normal</td>
+</tr>
+<tr>
+<td>422</td>
+<td>“Revisa los campos marcados…”</td>
+<td>Se mapean errores por campo</td>
+</tr>
+<tr>
+<td>429</td>
+<td>“Demasiados intentos…”</td>
+<td>Contemplado aunque el backend no lo emite</td>
+</tr>
+<tr>
+<td>500</td>
+<td>“Ocurrió un error interno…”</td>
+<td>Mensaje genérico</td>
+</tr>
+<tr>
+<td>502</td>
+<td>“El servicio no está disponible. Verifica que el backend esté en ejecución…”</td>
+<td>Backend caído o proxy sin destino</td>
+</tr>
+<tr>
+<td>503/504</td>
+<td>Servicio no disponible / tiempo agotado</td>
+<td>Mensajes específicos</td>
+</tr>
+<tr>
+<td>Red</td>
+<td>“No se pudo conectar con el servidor…”</td>
+<td>Revisión de conexión</td>
+</tr>
+</tbody></table>
+<p>El backend <strong>no devuelve <code>request_id</code></strong>, por lo que no existe un código de soporte que mostrar al usuario.</p>
+<div class="page-break"></div><h1>7. Servicios API y payloads</h1>
+<h2>7.1 Endpoints consumidos</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Endpoint</th>
+<th>Servicio</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>POST</td>
+<td><code>/api/v1/auth/token</code></td>
+<td><code>auth.service.ts</code></td>
+<td>Público</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/auth/register</code></td>
+<td><code>auth.service.ts</code></td>
+<td>Público</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/materials</code></td>
+<td><code>materials.service.ts</code></td>
+<td>Público</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/materials/{id}</code></td>
+<td><code>materials.service.ts</code></td>
+<td>Público</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/materials</code></td>
+<td><code>materials.service.ts</code></td>
+<td><code>admin</code></td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/materials/{id}</code></td>
+<td><code>materials.service.ts</code></td>
+<td><code>admin</code>, <code>analista</code></td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/v1/materials/{id}</code></td>
+<td><code>materials.service.ts</code></td>
+<td><code>admin</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/orders</code></td>
+<td><code>orders.service.ts</code></td>
+<td><code>cliente</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/orders</code></td>
+<td><code>orders.service.ts</code></td>
+<td>Autenticado</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/orders/{id}</code></td>
+<td><code>orders.service.ts</code></td>
+<td>Propietario o staff</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/api/v1/orders/{id}/status</code></td>
+<td><code>orders.service.ts</code></td>
+<td>Autenticado según rol</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/ai/chat</code></td>
+<td><code>ai.service.ts</code></td>
+<td>Autenticado</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/audit-logs</code></td>
+<td><code>audit.service.ts</code></td>
+<td><code>admin</code>, <code>analista</code></td>
+</tr>
+</tbody></table>
+<h2>7.2 Materias primas</h2>
+<h3>Listar</h3>
+<pre><code class="language-http">GET /api/v1/materials?skip=0&amp;limit=100
+</code></pre>
+<p>Respuesta:</p>
+<pre><code class="language-json">[
+  {
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;Aceite esencial de menta&quot;,
+    &quot;category&quot;: &quot;Aceites esenciales&quot;,
+    &quot;unit&quot;: &quot;kg&quot;,
+    &quot;price&quot;: 85000.0,
+    &quot;stock&quot;: 50.0,
+    &quot;description&quot;: &quot;Materia prima para formulaciones cosméticas.&quot;,
+    &quot;is_active&quot;: true
+  }
+]
+</code></pre>
+<h3>Crear</h3>
+<pre><code class="language-http">POST /api/v1/materials
+Authorization: Bearer &lt;token-admin&gt;
+Content-Type: application/json
+
+{
+  &quot;name&quot;: &quot;Glicerina vegetal&quot;,
+  &quot;category&quot;: &quot;Humectantes&quot;,
+  &quot;unit&quot;: &quot;kg&quot;,
+  &quot;price&quot;: 18000,
+  &quot;stock&quot;: 100,
+  &quot;description&quot;: &quot;Materia prima para formulaciones cosméticas.&quot;
+}
+</code></pre>
+<p>Validaciones del formulario y del backend:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Regla</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>name</code></td>
+<td>2–120 caracteres</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>2–80 caracteres</td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td>1–20 caracteres</td>
+</tr>
+<tr>
+<td><code>price</code></td>
+<td>Mayor que 0</td>
+</tr>
+<tr>
+<td><code>stock</code></td>
+<td>Mayor o igual a 0</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>Máximo 500 caracteres; opcional</td>
+</tr>
+</tbody></table>
+<h3>Editar</h3>
+<pre><code class="language-http">PUT /api/v1/materials/2
+Authorization: Bearer &lt;token-admin-o-analista&gt;
+Content-Type: application/json
+
+{
+  &quot;name&quot;: &quot;Glicerina vegetal refinada&quot;,
+  &quot;category&quot;: &quot;Humectantes&quot;,
+  &quot;unit&quot;: &quot;kg&quot;,
+  &quot;price&quot;: 19500,
+  &quot;stock&quot;: 120,
+  &quot;description&quot;: &quot;Materia prima actualizada.&quot;
+}
+</code></pre>
+<p>El frontend envía el objeto completo para evitar ambigüedad, aunque el DTO del backend permite campos opcionales.</p>
+<h3>Eliminar</h3>
+<pre><code class="language-http">DELETE /api/v1/materials/2
+Authorization: Bearer &lt;token-admin&gt;
+</code></pre>
+<p>Respuesta: <code>204 No Content</code>. Es un borrado físico; no existe desactivación lógica en el backend. La interfaz muestra una confirmación explícita antes de ejecutarlo.</p>
+<h2>7.3 Pedidos</h2>
+<h3>Crear pedido</h3>
+<pre><code class="language-http">POST /api/v1/orders
+Authorization: Bearer &lt;token-cliente&gt;
+Content-Type: application/json
+
+{
+  &quot;items&quot;: [
+    { &quot;raw_material_id&quot;: 1, &quot;quantity&quot;: 5 },
+    { &quot;raw_material_id&quot;: 2, &quot;quantity&quot;: 10 }
+  ],
+  &quot;notes&quot;: &quot;Pedido para formulación cosmética.&quot;
+}
+</code></pre>
+<p>Respuesta:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: 1,
+  &quot;customer_id&quot;: 2,
+  &quot;status&quot;: &quot;pendiente&quot;,
+  &quot;total&quot;: 605000.0,
+  &quot;notes&quot;: &quot;Pedido para formulación cosmética.&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;raw_material_id&quot;: 1,
+      &quot;quantity&quot;: 5.0,
+      &quot;unit_price&quot;: 85000.0,
+      &quot;subtotal&quot;: 425000.0
+    },
+    {
+      &quot;id&quot;: 2,
+      &quot;raw_material_id&quot;: 2,
+      &quot;quantity&quot;: 10.0,
+      &quot;unit_price&quot;: 18000.0,
+      &quot;subtotal&quot;: 180000.0
+    }
+  ],
+  &quot;created_at&quot;: &quot;2026-10-20T10:00:00&quot;,
+  &quot;updated_at&quot;: &quot;2026-10-20T10:00:00&quot;
+}
+</code></pre>
+<p>Reglas internas del frontend antes de enviar:</p>
+<ul>
+<li>Debe existir al menos una línea.</li>
+<li><code>raw_material_id</code> debe ser un entero positivo.</li>
+<li><code>quantity</code> debe ser mayor que cero.</li>
+<li>No se permiten líneas duplicadas del mismo material.</li>
+<li>La cantidad agregada no puede superar el stock mostrado.</li>
+<li>El material debe estar activo.</li>
+<li>Las notas tienen un máximo de 500 caracteres.</li>
+</ul>
+<p>El total definitivo siempre se toma de la respuesta del servidor. El “total estimado” del carrito es solo una referencia visual y no se usa como dato de confianza.</p>
+<h3>Listar pedidos</h3>
+<pre><code class="language-http">GET /api/v1/orders?skip=0&amp;limit=100
+Authorization: Bearer &lt;token&gt;
+</code></pre>
+<ul>
+<li><code>cliente</code>: el backend devuelve solo sus pedidos.</li>
+<li><code>admin</code> y <code>analista</code>: devuelve todos.</li>
+<li>La lista se ordena por id descendente en el backend.</li>
+</ul>
+<h3>Consultar pedido</h3>
+<pre><code class="language-http">GET /api/v1/orders/1
+Authorization: Bearer &lt;token&gt;
+</code></pre>
+<p>Un cliente que consulta un pedido ajeno recibe <code>403</code>.</p>
+<h3>Cambiar estado</h3>
+<pre><code class="language-http">PATCH /api/v1/orders/1/status
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{
+  &quot;status&quot;: &quot;confirmado&quot;
+}
+</code></pre>
+<p>Estados válidos: <code>pendiente</code>, <code>confirmado</code>, <code>preparando</code>, <code>enviado</code>, <code>entregado</code>, <code>cancelado</code>.</p>
+<ul>
+<li><code>cliente</code>: solo puede enviar <code>cancelado</code> y únicamente si el pedido no está en estado final.</li>
+<li><code>admin</code> y <code>analista</code>: pueden enviar cualquier estado si el pedido no está <code>entregado</code> ni <code>cancelado</code>.</li>
+<li>Al cancelar, el backend devuelve el stock reservado.</li>
+<li>El backend no implementa una matriz de transición; la interfaz respeta esa realidad y no restringe estados que el servidor aceptaría.</li>
+</ul>
+<h2>7.4 Asesoría IA</h2>
+<pre><code class="language-http">POST /api/v1/ai/chat
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+
+{
+  &quot;message&quot;: &quot;Necesito asesoría para formular un producto cosmético.&quot;
+}
+</code></pre>
+<p>Respuesta:</p>
+<pre><code class="language-json">{
+  &quot;response&quot;: &quot;Puedo registrar tu consulta, pero este caso requiere revisión de un asesor de Kohem Chemicals.&quot;,
+  &quot;transfer_to_employee&quot;: true,
+  &quot;reason&quot;: &quot;La consulta puede requerir conocimiento técnico o intervención humana.&quot;
+}
+</code></pre>
+<p>El agente es simulado y funciona por palabras clave. No hay integración con un modelo de lenguaje externo ni persistencia de la conversación.</p>
+<h2>7.5 Auditoría</h2>
+<pre><code class="language-http">GET /api/v1/audit-logs?limit=100
+Authorization: Bearer &lt;token-admin-o-analista&gt;
+</code></pre>
+<p>Respuesta:</p>
+<pre><code class="language-json">[
+  {
+    &quot;id&quot;: 1,
+    &quot;user_id&quot;: 2,
+    &quot;action&quot;: &quot;CREATE&quot;,
+    &quot;entity&quot;: &quot;order&quot;,
+    &quot;entity_id&quot;: 1,
+    &quot;detail&quot;: &quot;Pedido creado por cliente 2; total=605000.0&quot;,
+    &quot;created_at&quot;: &quot;2026-10-20T10:00:00&quot;
+  }
+]
+</code></pre>
+<p>La vista es de solo lectura. No existen filtros ni paginación con total; la API devuelve hasta 100 registros.</p>
+<div class="page-break"></div><h1>8. Funcionalidades y pantallas</h1>
+<h2>8.1 Login</h2>
+<p><strong>Ruta:</strong> <code>/login</code></p>
+<p>Elementos:</p>
+<ul>
+<li>Campo Usuario.</li>
+<li>Campo Contraseña.</li>
+<li>Botón Entrar.</li>
+<li>Enlace a registro.</li>
+<li>Credenciales de demostración visibles solo en desarrollo.</li>
+</ul>
+<p>Comportamiento:</p>
+<ul>
+<li>Valida campos obligatorios.</li>
+<li>Envía JSON al endpoint de token.</li>
+<li>Guarda el JWT y redirige.</li>
+<li>Con <code>401</code>, muestra “Usuario o contraseña incorrectos”.</li>
+<li>Con backend caído (<code>502</code>), muestra que el servicio no está disponible.</li>
+</ul>
+<h2>8.2 Registro</h2>
+<p><strong>Ruta:</strong> <code>/register</code></p>
+<p>Elementos:</p>
+<ul>
+<li>Usuario.</li>
+<li>Correo electrónico.</li>
+<li>Contraseña.</li>
+<li>Confirmación de contraseña.</li>
+<li>Enlace a login.</li>
+</ul>
+<p>Comportamiento:</p>
+<ul>
+<li>Valida longitudes, correo y coincidencia de contraseñas.</li>
+<li>No muestra selector de rol.</li>
+<li>Crea la cuenta como <code>cliente</code>.</li>
+<li>Redirige al login con mensaje de éxito.</li>
+</ul>
+<h2>8.3 Layout y menú</h2>
+<p>Elementos:</p>
+<ul>
+<li>Barra lateral con logo y nombre.</li>
+<li>Navegación: Panel, Materiales, Pedidos, Asesoría IA, Auditoría y Mi sesión.</li>
+<li>Tarjeta de usuario con rol.</li>
+<li>Botón Cerrar sesión.</li>
+<li>Menú móvil desplegable.</li>
+</ul>
+<p>El enlace de Auditoría solo aparece para <code>admin</code> y <code>analista</code>.</p>
+<h2>8.4 Dashboard</h2>
+<p><strong>Ruta:</strong> <code>/</code></p>
+<p>Elementos:</p>
+<ul>
+<li>Saludo con nombre de usuario y rol.</li>
+<li>Acciones rápidas: Nuevo pedido (cliente) o Nuevo material (admin).</li>
+<li>Tarjetas: materiales, pedidos, pedidos en curso, pedidos entregados.</li>
+<li>Tabla de pedidos recientes.</li>
+<li>Accesos rápidos a materiales, pedidos, IA y auditoría.</li>
+<li>Contador de eventos de auditoría para staff.</li>
+</ul>
+<p>Comportamiento interno:</p>
+<ul>
+<li>Consulta materiales y pedidos en paralelo.</li>
+<li>Consulta auditoría solo si el rol lo permite.</li>
+<li>Calcula métricas sobre los hasta 100 registros devueltos.</li>
+<li>No usa agregados del servidor porque no existen.</li>
+</ul>
+<h2>8.5 Materias primas</h2>
+<p><strong>Ruta:</strong> <code>/materials</code></p>
+<p>Opciones:</p>
+<ul>
+<li>Buscar por nombre o categoría en el cliente.</li>
+<li>Ver nombre, descripción, categoría, precio, unidad, stock y estado.</li>
+<li>Crear material (solo <code>admin</code>).</li>
+<li>Editar material (<code>admin</code> y <code>analista</code>).</li>
+<li>Eliminar material (solo <code>admin</code>) con confirmación.</li>
+<li>“Pedir” para clientes, deshabilitado si el material está inactivo o sin stock.</li>
+</ul>
+<p>Peticiones internas:</p>
+<ul>
+<li><code>GET /materials?limit=100</code> al cargar.</li>
+<li><code>POST /materials</code> al crear.</li>
+<li><code>PUT /materials/{id}</code> al editar.</li>
+<li><code>DELETE /materials/{id}</code> al eliminar.</li>
+</ul>
+<p>La eliminación es física y se advierte en el diálogo de confirmación.</p>
+<h2>8.6 Formulario de material</h2>
+<p><strong>Rutas:</strong> <code>/materials/new</code> y <code>/materials/:id/edit</code></p>
+<p>Campos:</p>
+<ul>
+<li>Nombre.</li>
+<li>Categoría.</li>
+<li>Unidad de medida.</li>
+<li>Precio.</li>
+<li>Stock.</li>
+<li>Descripción.</li>
+</ul>
+<p>Comportamiento:</p>
+<ul>
+<li>En edición carga el material y rellena el formulario.</li>
+<li>Valida con Zod antes de enviar.</li>
+<li>Mapea errores <code>422</code> del servidor a los campos.</li>
+<li>Al guardar, vuelve al listado con mensaje de éxito.</li>
+</ul>
+<h2>8.7 Pedidos</h2>
+<p><strong>Ruta:</strong> <code>/orders</code></p>
+<p>Opciones:</p>
+<ul>
+<li>Buscar por id de pedido; staff también por id de cliente.</li>
+<li>Filtrar por estado.</li>
+<li>Ver id, cliente (staff), estado, número de líneas, total y fecha.</li>
+<li>Abrir detalle.</li>
+<li>Crear pedido (solo cliente).</li>
+</ul>
+<p>Petición interna: <code>GET /orders?limit=100</code>.</p>
+<h2>8.8 Nuevo pedido</h2>
+<p><strong>Ruta:</strong> <code>/orders/new</code> (solo cliente)</p>
+<p>Elementos:</p>
+<ul>
+<li>Selector de materia prima activa.</li>
+<li>Campo de cantidad.</li>
+<li>Botón Agregar.</li>
+<li>Tabla del carrito con cantidades editables y opción Quitar.</li>
+<li>Campo de notas.</li>
+<li>Resumen con total estimado.</li>
+<li>Botón Registrar pedido.</li>
+</ul>
+<p>Comportamiento:</p>
+<ul>
+<li>Impide duplicar un material.</li>
+<li>Valida stock y cantidad antes de agregar y antes de enviar.</li>
+<li>Muestra el stock disponible y la unidad.</li>
+<li>Envía <code>POST /orders</code> con <code>items</code> y <code>notes</code>.</li>
+<li>Al crear, navega al detalle y muestra el total devuelto por el servidor.</li>
+<li>Si el servidor rechaza por stock, muestra el detalle de negocio.</li>
+</ul>
+<h2>8.9 Detalle de pedido</h2>
+<p><strong>Ruta:</strong> <code>/orders/:id</code></p>
+<p>Elementos:</p>
+<ul>
+<li>Estado, fechas y total.</li>
+<li>Tabla de materiales con nombre, cantidad, precio unitario y subtotal.</li>
+<li>Notas del pedido.</li>
+<li>Cliente ID para staff.</li>
+<li>Acciones según rol.</li>
+</ul>
+<p>Cliente:</p>
+<ul>
+<li>Puede cancelar si el pedido no está entregado ni cancelado.</li>
+<li>La cancelación pide confirmación y advierte que se devuelve stock.</li>
+</ul>
+<p>Staff:</p>
+<ul>
+<li>Puede seleccionar un nuevo estado y actualizar.</li>
+<li>La cancelación también pide confirmación.</li>
+<li>Si el pedido está en estado final, no se muestran acciones.</li>
+</ul>
+<p>Peticiones internas:</p>
+<ul>
+<li><code>GET /orders/{id}</code>.</li>
+<li><code>GET /materials?limit=100</code> para resolver nombres.</li>
+<li><code>PATCH /orders/{id}/status</code>.</li>
+</ul>
+<h2>8.10 Asesoría IA</h2>
+<p><strong>Ruta:</strong> <code>/ai</code></p>
+<p>Elementos:</p>
+<ul>
+<li>Historial de mensajes en la sesión actual.</li>
+<li>Sugerencias rápidas.</li>
+<li>Campo de consulta con límite de 1000 caracteres.</li>
+<li>Botón Enviar.</li>
+<li>Indicador de respuesta en curso.</li>
+<li>Insignia “Transferencia a empleado” cuando corresponde.</li>
+</ul>
+<p>No hay historial persistente ni conexión con un empleado real; solo se muestra la marca que devuelve el backend.</p>
+<h2>8.11 Auditoría</h2>
+<p><strong>Ruta:</strong> <code>/audit-logs</code> (solo <code>admin</code> y <code>analista</code>)</p>
+<p>Elementos:</p>
+<ul>
+<li>Tabla de logs con id, fecha, usuario, acción, entidad y detalle.</li>
+<li>Estado vacío si no hay eventos.</li>
+<li>Sin acciones de edición.</li>
+</ul>
+<p>Petición interna: <code>GET /audit-logs?limit=100</code>.</p>
+<h2>8.12 Mi sesión</h2>
+<p><strong>Ruta:</strong> <code>/session</code></p>
+<p>Elementos:</p>
+<ul>
+<li>Usuario.</li>
+<li>Rol.</li>
+<li>ID de usuario.</li>
+<li>Fecha de expiración del token.</li>
+<li>Botón Cerrar sesión.</li>
+</ul>
+<p>No existe edición de perfil ni endpoint <code>/users/me</code> en el backend.</p>
+<h2>8.13 Errores 403 y 404</h2>
+<ul>
+<li><code>/forbidden</code>: se muestra cuando un rol intenta acceder a una ruta no permitida.</li>
+<li>Cualquier ruta desconocida muestra la página 404 con enlace al panel.</li>
+</ul>
+<div class="page-break"></div><h1>9. Roles y permisos</h1>
+<table>
+<thead>
+<tr>
+<th>Operación</th>
+<th align="center">admin</th>
+<th align="center">analista</th>
+<th align="center">cliente</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Iniciar sesión</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+</tr>
+<tr>
+<td>Registrarse</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+</tr>
+<tr>
+<td>Ver materiales</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+</tr>
+<tr>
+<td>Crear material</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Editar material</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Eliminar material</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Crear pedido</td>
+<td align="center">No</td>
+<td align="center">No</td>
+<td align="center">Sí</td>
+</tr>
+<tr>
+<td>Ver todos los pedidos</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Ver pedidos propios</td>
+<td align="center">—</td>
+<td align="center">—</td>
+<td align="center">Sí</td>
+</tr>
+<tr>
+<td>Ver pedido ajeno</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Cambiar estado a cualquier valor</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+</tr>
+<tr>
+<td>Cancelar pedido</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">Sí (propio)</td>
+</tr>
+<tr>
+<td>Usar agente IA</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+</tr>
+<tr>
+<td>Ver auditoría</td>
+<td align="center">Sí</td>
+<td align="center">Sí</td>
+<td align="center">No</td>
+</tr>
+</tbody></table>
+<p>La interfaz oculta o deshabilita acciones no permitidas, pero el backend vuelve a validar cada solicitud.</p>
+<div class="page-break"></div><h1>10. Reglas de negocio reflejadas en la interfaz</h1>
+<ol>
+<li><strong>Stock al crear:</strong> el stock se valida y descuenta al registrar el pedido, no al confirmarlo.</li>
+<li><strong>Cancelación:</strong> devuelve el stock reservado.</li>
+<li><strong>Estados finales:</strong> <code>entregado</code> y <code>cancelado</code> no admiten cambios.</li>
+<li><strong>Cliente:</strong> solo puede cancelar sus propios pedidos y solo si no están en estado final.</li>
+<li><strong>Staff:</strong> puede cambiar a cualquier estado mientras el pedido no sea final.</li>
+<li><strong>Total:</strong> se muestra el total del servidor; el estimado del carrito es referencial.</li>
+<li><strong>Materiales inactivos:</strong> no se ofrecen para nuevos pedidos.</li>
+<li><strong>Duplicados:</strong> el frontend impide dos líneas del mismo material para evitar el riesgo de sobreventa del backend.</li>
+<li><strong>Borrado:</strong> la eliminación de materiales es física; se advierte al usuario.</li>
+<li><strong>Auditoría:</strong> solo registra creación y cambio de estado de pedidos.</li>
+<li><strong>Citas y geografía:</strong> no existen en el backend y no se simulan.</li>
+<li><strong>Fechas:</strong> el backend envía fechas ISO sin zona horaria; el frontend las interpreta como UTC y las muestra en hora local.</li>
+</ol>
+<div class="page-break"></div><h1>11. Manejo de errores y estados de interfaz</h1>
+<h2>11.1 Estados</h2>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>Implementación</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Carga</td>
+<td><code>LoadingScreen</code>, <code>Spinner</code> y botones con <code>isLoading</code></td>
+</tr>
+<tr>
+<td>Vacío</td>
+<td><code>EmptyState</code> en listas, carrito, auditoría y pedidos</td>
+</tr>
+<tr>
+<td>Error</td>
+<td><code>ErrorState</code> con mensaje y botón Reintentar</td>
+</tr>
+<tr>
+<td>Éxito</td>
+<td><code>Alert</code> con mensaje posterior a crear, editar, cancelar o cambiar estado</td>
+</tr>
+<tr>
+<td>Confirmación</td>
+<td><code>ConfirmDialog</code> para eliminar materiales y cancelar pedidos</td>
+</tr>
+</tbody></table>
+<h2>11.2 Errores por campo</h2>
+<p>Cuando el backend devuelve <code>422</code>, el frontend recorre <code>detail[].loc</code>, obtiene el nombre del campo y asigna un mensaje genérico “Valor inválido según el servidor”. No muestra el mensaje técnico de Pydantic, que puede estar en inglés o revelar detalles de implementación.</p>
+<h2>11.3 Errores de negocio</h2>
+<p>Los errores <code>400</code> y <code>409</code> contienen mensajes de negocio en español, por ejemplo:</p>
+<ul>
+<li>“Stock insuficiente para &#39;Glicerina vegetal&#39;. Disponible: 100.0, solicitado: 150.0.”</li>
+<li>“El pedido ya está en un estado final y no puede modificarse.”</li>
+</ul>
+<p>Se muestran como texto escapado por React, sin interpretar HTML.</p>
+<div class="page-break"></div><h1>12. Seguridad del frontend</h1>
+<table>
+<thead>
+<tr>
+<th>Control</th>
+<th>Implementación</th>
+<th>Riesgo residual</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Almacenamiento del token</td>
+<td><code>sessionStorage</code> por pestaña</td>
+<td>XSS podría leer el token; se recomienda cookie HttpOnly</td>
+</tr>
+<tr>
+<td>Exposición de secretos</td>
+<td>Solo <code>VITE_API_BASE_URL</code>; <code>.env</code> ignorado</td>
+<td>Las variables <code>VITE_*</code> son públicas por diseño</td>
+</tr>
+<tr>
+<td>XSS</td>
+<td>Sin <code>dangerouslySetInnerHTML</code>; React escapa texto</td>
+<td>Falta CSP en el despliegue</td>
+</tr>
+<tr>
+<td>Autorización</td>
+<td>Guards y permisos por rol</td>
+<td>El backend sigue siendo la autoridad</td>
+</tr>
+<tr>
+<td>Expiración</td>
+<td>Validación de <code>exp</code> y cierre en <code>401</code></td>
+<td>No hay revocación del servidor</td>
+</tr>
+<tr>
+<td>Logs</td>
+<td>Sin tokens ni datos sensibles en consola</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CORS</td>
+<td>Proxy de Vite en desarrollo</td>
+<td>Producción requiere CORS en FastAPI</td>
+</tr>
+<tr>
+<td>CSRF</td>
+<td>No se usan cookies de sesión</td>
+<td>Si se migra a cookies, añadir CSRF</td>
+</tr>
+<tr>
+<td>Contraseñas</td>
+<td>Mínimo 8 caracteres validado en cliente y servidor</td>
+<td>El backend no exige complejidad</td>
+</tr>
+</tbody></table>
+<h2>Hallazgos del backend que afectan al frontend</h2>
+<ol>
+<li><strong>Crítico:</strong> el registro público acepta <code>role</code>, incluido <code>admin</code>. Verificado en prueba de humo.</li>
+<li><strong>Alto:</strong> no hay CORS configurado.</li>
+<li><strong>Alto:</strong> no hay rate-limit ni lockout en login.</li>
+<li><strong>Alto:</strong> <code>SECRET_KEY</code> tiene valor por defecto si no existe <code>.env</code>.</li>
+<li><strong>Medio:</strong> no hay refresh ni revocación de tokens.</li>
+<li><strong>Medio:</strong> borrado físico de materiales.</li>
+<li><strong>Medio:</strong> riesgo de sobreventa por concurrencia y por líneas duplicadas.</li>
+<li><strong>Medio:</strong> ausencia de <code>request_id</code>.</li>
+<li><strong>Bajo:</strong> Swagger y OpenAPI públicos.</li>
+<li><strong>Bajo:</strong> política de contraseñas débil.</li>
+</ol>
+<div class="page-break"></div><h1>13. Pruebas y verificación</h1>
+<h2>13.1 Pruebas automatizadas</h2>
+<table>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Cobertura</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>schemas.test.ts</code></td>
+<td>Validaciones de login, registro, materiales, pedidos e IA</td>
+</tr>
+<tr>
+<td><code>permissions.test.ts</code></td>
+<td>Matriz de permisos por rol</td>
+</tr>
+<tr>
+<td><code>errors.test.ts</code></td>
+<td>Normalización de 422, 409, 403, 502, red y errores no Axios</td>
+</tr>
+<tr>
+<td><code>jwt.test.ts</code></td>
+<td>Decodificación de claims, rol inválido, token malformado y expiración</td>
+</tr>
+<tr>
+<td><code>api-services.test.ts</code></td>
+<td>Login JSON, registro sin <code>role</code>, listado de materiales, Bearer y PATCH de estado</td>
+</tr>
+<tr>
+<td><code>guards.test.tsx</code></td>
+<td>Redirección sin sesión, acceso permitido y acceso denegado por rol</td>
+</tr>
+<tr>
+<td><code>login-page.test.tsx</code></td>
+<td>Login exitoso y mensaje claro con credenciales inválidas</td>
+</tr>
+</tbody></table>
+<p>Resultado:</p>
+<pre><code class="language-text">Test Files  7 passed (7)
+Tests       36 passed (36)
+</code></pre>
+<h2>13.2 Comandos ejecutados</h2>
+<pre><code class="language-bash">npm install       # instalación de dependencias
+npm run lint      # oxlint, sin advertencias
+npm run build     # typecheck + build de producción
+npm run test      # 36 pruebas en verde
+</code></pre>
+<h2>13.3 Pruebas de humo contra el backend real</h2>
+<p>Se levantó el backend con una base SQLite temporal para no alterar la base original:</p>
+<ul>
+<li>Login de <code>admin</code> y <code>cliente</code> → <code>200</code>.</li>
+<li>Creación de un <code>analista</code> vía API → <code>201</code>.</li>
+<li><code>analista</code> edita material → <code>200</code>.</li>
+<li><code>analista</code> crea/elimina material → <code>403</code>.</li>
+<li><code>analista</code> consulta pedidos y auditoría → <code>200</code>.</li>
+<li>Pedido del cliente: total <code>18000</code>, stock <code>100 → 99</code>.</li>
+<li>Cancelación: stock restaurado a <code>100</code>.</li>
+<li>Cliente crea material → <code>403</code>.</li>
+<li>Cliente consulta auditoría → <code>403</code>.</li>
+<li>Admin consulta auditoría → <code>200</code>.</li>
+<li>CORS: <code>Access-Control-Allow-Origin</code> vacío.</li>
+<li>OpenAPI: 10 rutas reales.</li>
+<li>Vite sirvió la aplicación y el proxy devolvió los materiales.</li>
+<li>La base original <code>kohem.db</code> quedó intacta.</li>
+</ul>
+<div class="page-break"></div><h1>14. Ejecución y uso</h1>
+<h2>14.1 Requisitos</h2>
+<ul>
+<li>Node.js 24 LTS o superior.</li>
+<li>npm 11 o superior.</li>
+<li>Backend FastAPI ejecutable desde la carpeta <code>MVP</code>.</li>
+<li>Python y dependencias del backend para el entorno virtual.</li>
+</ul>
+<h2>14.2 Instalación</h2>
+<pre><code class="language-bash">cd &quot;MVP/frontend&quot;
+npm install
+copy .env.example .env
+</code></pre>
+<h2>14.3 Arranque conjunto en Windows</h2>
+<pre><code class="language-bash">npm run dev:all
+</code></pre>
+<p>El script:</p>
+<ol>
+<li>Comprueba si el backend responde en <code>http://127.0.0.1:8000</code>.</li>
+<li>Si no responde, inicia <code>uvicorn</code> desde <code>../venv</code>.</li>
+<li>Ejecuta <code>npm run dev</code>.</li>
+<li>Al cerrar Vite, detiene el backend que haya iniciado.</li>
+</ol>
+<h2>14.4 Arranque separado</h2>
+<p>Terminal 1:</p>
+<pre><code class="language-bash">cd &quot;MVP&quot;
+venv\Scripts\python -m uvicorn app.presentation.main:app --reload
+</code></pre>
+<p>Terminal 2:</p>
+<pre><code class="language-bash">cd &quot;MVP/frontend&quot;
+npm run dev
+</code></pre>
+<p>Abrir <code>http://localhost:5173</code>.</p>
+<h2>14.5 Scripts disponibles</h2>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>npm run dev</code></td>
+<td>Servidor de desarrollo con proxy</td>
+</tr>
+<tr>
+<td><code>npm run dev:all</code></td>
+<td>Backend + frontend en Windows</td>
+</tr>
+<tr>
+<td><code>npm run build</code></td>
+<td>Typecheck y build de producción</td>
+</tr>
+<tr>
+<td><code>npm run preview</code></td>
+<td>Vista previa del build con proxy</td>
+</tr>
+<tr>
+<td><code>npm run lint</code></td>
+<td>Análisis estático con oxlint</td>
+</tr>
+<tr>
+<td><code>npm run typecheck</code></td>
+<td>Verificación de tipos</td>
+</tr>
+<tr>
+<td><code>npm run test</code></td>
+<td>Pruebas automatizadas</td>
+</tr>
+<tr>
+<td><code>npm run test:watch</code></td>
+<td>Pruebas en modo watch</td>
+</tr>
+<tr>
+<td><code>npm run test:coverage</code></td>
+<td>Cobertura de pruebas</td>
+</tr>
+</tbody></table>
+<h2>14.6 Usuarios de prueba</h2>
+<table>
+<thead>
+<tr>
+<th>Rol</th>
+<th>Usuario</th>
+<th>Contraseña</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Administrador</td>
+<td><code>admin</code></td>
+<td><code>AdminPass123!</code></td>
+</tr>
+<tr>
+<td>Cliente</td>
+<td><code>cliente</code></td>
+<td><code>ClientPass123!</code></td>
+</tr>
+<tr>
+<td>Analista</td>
+<td>No seedeado</td>
+<td>Crear vía API con <code>&quot;role&quot;: &quot;analista&quot;</code></td>
+</tr>
+</tbody></table>
+<p>El formulario del frontend no permite elegir rol. Para probar el rol <code>analista</code> se puede usar Swagger o una petición directa al backend.</p>
+<h2>14.7 Solución de problemas</h2>
+<table>
+<thead>
+<tr>
+<th>Síntoma</th>
+<th>Causa probable</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>“El servicio no está disponible…”</td>
+<td>Backend caído o proxy sin destino</td>
+<td>Iniciar backend o usar <code>npm run dev:all</code></td>
+</tr>
+<tr>
+<td>“No se pudo conectar con el servidor…”</td>
+<td>URL de API incorrecta o red</td>
+<td>Revisar <code>VITE_API_BASE_URL</code> y conexión</td>
+</tr>
+<tr>
+<td><code>401</code> al navegar</td>
+<td>Token expirado</td>
+<td>Volver a iniciar sesión</td>
+</tr>
+<tr>
+<td><code>403</code></td>
+<td>Rol sin permiso</td>
+<td>Usar la cuenta correcta</td>
+</tr>
+<tr>
+<td><code>502</code> en login</td>
+<td>Vite no encuentra el backend en <code>8000</code></td>
+<td>Verificar <code>http://127.0.0.1:8000/</code></td>
+</tr>
+<tr>
+<td>Error de CORS en producción</td>
+<td>Backend sin <code>CORSMiddleware</code></td>
+<td>Configurar CORS en FastAPI</td>
+</tr>
+</tbody></table>
+<div class="page-break"></div><h1>15. Limitaciones y trabajo futuro</h1>
+<h2>15.1 Limitaciones actuales</h2>
+<ul>
+<li>No hay gestión de usuarios ni edición de perfil.</li>
+<li>No hay citas ni agendamiento.</li>
+<li>No hay selectores geográficos.</li>
+<li>No hay refresh token ni revocación.</li>
+<li>No hay rate-limit ni bloqueo de login.</li>
+<li>No hay borrado lógico de materiales.</li>
+<li>No hay filtros ni paginación con total en el backend.</li>
+<li>No se muestra el nombre del cliente en pedidos, solo <code>customer_id</code>.</li>
+<li>La auditoría solo cubre pedidos.</li>
+<li>El dashboard no usa agregados del servidor.</li>
+</ul>
+<h2>15.2 Cambios recomendados en el backend</h2>
+<ol>
+<li>Restringir <code>role</code> en el registro público.</li>
+<li>Añadir <code>CORSMiddleware</code> con el origen exacto del frontend.</li>
+<li>Configurar una <code>SECRET_KEY</code> obligatoria y fuerte.</li>
+<li>Implementar rate-limit y lockout en login.</li>
+<li>Añadir refresh token con rotación y revocación.</li>
+<li>Implementar desactivación lógica de materiales.</li>
+<li>Añadir <code>request_id</code> a respuestas y errores.</li>
+<li>Agregar transacciones o bloqueos para evitar sobreventa.</li>
+<li>Implementar endpoints de usuarios, citas y geografía si el alcance lo requiere.</li>
+<li>Añadir auditoría de materiales, usuarios y accesos denegados.</li>
+</ol>
+<h2>15.3 Mejoras futuras del frontend</h2>
+<ul>
+<li>Migrar la sesión a cookies <code>HttpOnly</code> cuando el backend lo soporte.</li>
+<li>Añadir CSP y cabeceras de seguridad en el despliegue.</li>
+<li>Incorporar pruebas E2E con Playwright para los flujos por rol.</li>
+<li>Añadir filtros y paginación cuando el backend los exponga.</li>
+<li>Implementar un centro de notificaciones para transferencias de la IA.</li>
+<li>Internacionalización formal si se requiere más de un idioma.</li>
+</ul>
+<div class="page-break"></div><h1>16. Conclusiones</h1>
+<p>El frontend desarrollado cumple el objetivo de entregar un MVP funcional y seguro dentro de las capacidades reales del backend. La arquitectura por capas, el tipado estricto y la validación con Zod reducen errores de integración; los guards y la matriz de permisos ordenan la experiencia por rol; y el manejo centralizado de errores evita exponer detalles técnicos al usuario.</p>
+<p>La aplicación fue verificada con compilación, lint, 36 pruebas automatizadas y pruebas de humo contra el backend real. El sistema queda listo para demostración y revisión, con una lista clara de limitaciones y de cambios necesarios para un despliegue de producción alineado con controles de seguridad más estrictos.</p>
+<div class="page-break"></div><h1>17. Anexos</h1>
+<h2>Anexo A. Endpoints reales del backend</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Ruta</th>
+<th>Auth</th>
+<th>Roles</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GET</td>
+<td><code>/</code></td>
+<td>No</td>
+<td>Público</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/auth/register</code></td>
+<td>No</td>
+<td>Público</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/auth/token</code></td>
+<td>No</td>
+<td>Público</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/materials</code></td>
+<td>No</td>
+<td>Público</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/materials/{id}</code></td>
+<td>No</td>
+<td>Público</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/materials</code></td>
+<td>Sí</td>
+<td><code>admin</code></td>
+</tr>
+<tr>
+<td>PUT</td>
+<td><code>/api/v1/materials/{id}</code></td>
+<td>Sí</td>
+<td><code>admin</code>, <code>analista</code></td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td><code>/api/v1/materials/{id}</code></td>
+<td>Sí</td>
+<td><code>admin</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/orders</code></td>
+<td>Sí</td>
+<td><code>cliente</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/orders</code></td>
+<td>Sí</td>
+<td>Autenticado</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/orders/{id}</code></td>
+<td>Sí</td>
+<td>Propietario o staff</td>
+</tr>
+<tr>
+<td>PATCH</td>
+<td><code>/api/v1/orders/{id}/status</code></td>
+<td>Sí</td>
+<td>Autenticado según rol</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/api/v1/ai/chat</code></td>
+<td>Sí</td>
+<td>Autenticado</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/api/v1/audit-logs</code></td>
+<td>Sí</td>
+<td><code>admin</code>, <code>analista</code></td>
+</tr>
+</tbody></table>
+<h2>Anexo B. Variables de entorno</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Ejemplo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>VITE_API_BASE_URL</code></td>
+<td><code>/api/v1</code></td>
+<td>URL base de la API en desarrollo con proxy</td>
+</tr>
+<tr>
+<td><code>VITE_API_BASE_URL</code></td>
+<td><code>http://127.0.0.1:8000/api/v1</code></td>
+<td>URL absoluta para producción, requiere CORS</td>
+</tr>
+</tbody></table>
+<h2>Anexo C. Comandos de verificación</h2>
+<pre><code class="language-bash">npm install
+npm run lint
+npm run build
+npm run test
+</code></pre>
+<h2>Anexo D. Mapa de archivos clave</h2>
+<table>
+<thead>
+<tr>
+<th>Archivo</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>src/api/client.ts</code></td>
+<td>Instancia Axios e interceptores</td>
+</tr>
+<tr>
+<td><code>src/api/errors.ts</code></td>
+<td>Normalización de errores HTTP</td>
+</tr>
+<tr>
+<td><code>src/auth/AuthProvider.tsx</code></td>
+<td>Estado de sesión y login/logout</td>
+</tr>
+<tr>
+<td><code>src/auth/guards.tsx</code></td>
+<td>Rutas protegidas y públicas</td>
+</tr>
+<tr>
+<td><code>src/auth/tokenStorage.ts</code></td>
+<td>Lectura/escritura en <code>sessionStorage</code></td>
+</tr>
+<tr>
+<td><code>src/config/endpoints.ts</code></td>
+<td>Endpoints centralizados</td>
+</tr>
+<tr>
+<td><code>src/config/env.ts</code></td>
+<td>URL base y claves de sesión</td>
+</tr>
+<tr>
+<td><code>src/schemas/*.ts</code></td>
+<td>Validaciones Zod</td>
+</tr>
+<tr>
+<td><code>src/types/api.ts</code></td>
+<td>Contratos TypeScript de la API</td>
+</tr>
+<tr>
+<td><code>src/pages/*</code></td>
+<td>Vistas por módulo</td>
+</tr>
+<tr>
+<td><code>src/components/ui/*</code></td>
+<td>Componentes reutilizables</td>
+</tr>
+<tr>
+<td><code>vite.config.ts</code></td>
+<td>Proxy de desarrollo y preview</td>
+</tr>
+<tr>
+<td><code>scripts/dev.ps1</code></td>
+<td>Arranque conjunto backend + frontend</td>
+</tr>
+<tr>
+<td><code>docs/ANALISIS_BACKEND.md</code></td>
+<td>Análisis detallado de la API</td>
+</tr>
+<tr>
+<td><code>docs/EVALUACION_SEGURIDAD.md</code></td>
+<td>Evaluación de controles de seguridad</td>
+</tr>
+</tbody></table>
+<h2>Anexo E. Glosario</h2>
+<ul>
+<li><strong>SPA:</strong> aplicación de una sola página que se ejecuta en el navegador.</li>
+<li><strong>JWT:</strong> token firmado que contiene identidad y rol.</li>
+<li><strong>Access token:</strong> token de acceso de corta duración.</li>
+<li><strong>Refresh token:</strong> token para renovar el access token; no existe en este backend.</li>
+<li><strong>Guard:</strong> componente que protege una ruta según la sesión o el rol.</li>
+<li><strong>Payload:</strong> cuerpo JSON enviado o recibido por la API.</li>
+<li><strong>Proxy:</strong> servidor de desarrollo que reenvía peticiones al backend.</li>
+<li><strong>CORS:</strong> política del navegador para peticiones entre orígenes distintos.</li>
+<li><strong>RBAC:</strong> control de acceso basado en roles.</li>
+<li><strong>XSS:</strong> ejecución de código malicioso inyectado en la página.</li>
+<li><strong>Soft delete:</strong> borrado lógico mediante un campo de estado; no implementado.</li>
+</ul>
+<div class="doc-end">
+  <p>Kohem Chemicals — Documentación del Frontend MVP</p>
+  <p>Versión 1.0 · Octubre de 2026</p>
+</div>
+
+</body>
+</html>
