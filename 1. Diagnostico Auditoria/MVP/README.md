@@ -91,6 +91,24 @@ Si la consulta pasa por el agente IA y requiere intervención humana:
 ### Agente IA
 - `POST /api/v1/ai/chat`
 
+## CORS
+
+El backend permite peticiones desde los orígenes indicados en `CORS_ORIGINS`
+(`.env` / `app/infrastructure/config.py`). Por defecto:
+
+```env
+CORS_ORIGINS="http://localhost:5173,http://127.0.0.1:5173"
+```
+
+Se registran métodos `GET, POST, PUT, PATCH, DELETE, OPTIONS` y las cabeceras
+`Authorization` y `Content-Type`, con `allow_credentials=True`. **No** se usa
+`allow_origins=["*"]`: en producción se debe reemplazar la lista por el dominio real del
+frontend.
+
+Con el proxy de Vite el navegador ve un único origen, así que CORS no interviene en
+desarrollo; esta configuración es la que habilita consumir la API desde una URL absoluta o
+desde otro dominio.
+
 ## Pruebas
 
 ```bash

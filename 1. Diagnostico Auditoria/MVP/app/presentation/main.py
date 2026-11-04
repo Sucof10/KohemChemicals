@@ -1,5 +1,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.infrastructure.config import settings
 from app.infrastructure.database import init_db, AsyncSessionLocal
 from app.infrastructure.security import SecurityService
 from app.infrastructure.repositories import SQLiteUserRepository, SQLiteRawMaterialRepository
@@ -26,6 +28,16 @@ async def lifespan(app: FastAPI):
     yield
 
 app=FastAPI(title="Kohem Chemicals MVP API", version="1.0.0", lifespan=lifespan, description="MVP para gestión de materias primas y registro de pedidos. Los POST/PUT/PATCH con cuerpo aceptan JSON o formulario editable desde Swagger.")
+
+# CORS: solo los orígenes configurados (frontend Vite en desarrollo, dominio propio en producción).
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[o.strip() for o in settings.CORS_ORIGINS.split(",") if o.strip()],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
+)
+
 app.include_router(auth_router.router,prefix="/api/v1")
 app.include_router(material_router.router,prefix="/api/v1")
 app.include_router(order_router.router,prefix="/api/v1")
