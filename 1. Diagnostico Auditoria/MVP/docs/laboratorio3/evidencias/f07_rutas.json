@@ -1,0 +1,66 @@
+{
+  "caso": "F07",
+  "actividad": "Auditoria de rutas del Frontend",
+  "metodo": "Navegacion real en navegador Chromium comprobando contenido renderizado (h1) y URL final. El codigo HTTP no se usa como criterio porque la SPA devuelve 200 para cualquier ruta.",
+  "origen": "http://localhost:5173",
+  "fecha": "2026-11-06",
+
+  "limitacion_del_enfoque_http": {
+    "prueba": "GET con cabecera Accept de navegador a 6 rutas, incluida /ruta-inexistente-xyz",
+    "resultado": "Las 6 devuelven HTTP 200 y el mismo index.html (misma huella MD5)",
+    "conclusion": "El status code no permite determinar existencia, redireccion ni autenticacion en una SPA."
+  },
+
+  "estado_sin_sesion": [
+    { "solicitada": "/", "final": "/login", "h1": "Gestion de inventario y pedidos para tu operacion quimica.", "resultado": "Redirige a login" },
+    { "solicitada": "/materials", "final": "/login", "h1": "Gestion de inventario y pedidos para tu operacion quimica.", "resultado": "Redirige a login" },
+    { "solicitada": "/audit-logs", "final": "/login", "h1": "Gestion de inventario y pedidos para tu operacion quimica.", "resultado": "Redirige a login" },
+    { "solicitada": "/ruta-inexistente-xyz", "final": "/login", "h1": "Gestion de inventario y pedidos para tu operacion quimica.", "resultado": "Redirige a login", "nota": "El 404 del frontend vive dentro del area protegida" }
+  ],
+
+  "estado_cliente": [
+    { "solicitada": "/", "final": "/", "h1": "Hola, cliente", "resultado": "Permitida" },
+    { "solicitada": "/materials", "final": "/materials", "h1": "Materias primas", "resultado": "Permitida" },
+    { "solicitada": "/orders", "final": "/orders", "h1": "Mis pedidos", "resultado": "Permitida (solo sus pedidos)" },
+    { "solicitada": "/ai", "final": "/ai", "h1": "Asesoria IA", "resultado": "Permitida" },
+    { "solicitada": "/session", "final": "/session", "h1": "Mi sesion", "resultado": "Permitida" },
+    { "solicitada": "/orders/new", "final": "/orders/new", "h1": "Nuevo pedido", "resultado": "Permitida" },
+    { "solicitada": "/audit-logs", "final": "/forbidden", "h1": "No tienes permisos para esta seccion", "resultado": "Bloqueada por rol" },
+    { "solicitada": "/materials/new", "final": "/forbidden", "h1": "No tienes permisos para esta seccion", "resultado": "Bloqueada por rol" },
+    { "solicitada": "/materials/1/edit", "final": "/forbidden", "h1": "No tienes permisos para esta seccion", "resultado": "Bloqueada por rol" },
+    { "solicitada": "/ruta-inexistente-xyz", "final": "/ruta-inexistente-xyz", "h1": "Pagina no encontrada", "resultado": "404 del frontend" }
+  ],
+
+  "estado_admin": [
+    { "solicitada": "/", "final": "/", "h1": "Hola, admin", "resultado": "Permitida" },
+    { "solicitada": "/audit-logs", "final": "/audit-logs", "h1": "Logs de auditoria", "resultado": "Permitida" },
+    { "solicitada": "/materials/new", "final": "/materials/new", "h1": "Nuevo material", "resultado": "Permitida" },
+    { "solicitada": "/materials/1/edit", "final": "/materials/1/edit", "h1": "Editar material", "resultado": "Permitida" },
+    { "solicitada": "/orders/new", "final": "/forbidden", "h1": "No tienes permisos para esta seccion", "resultado": "Bloqueada: ruta exclusiva de cliente" },
+    { "solicitada": "/ruta-inexistente-xyz", "final": "/ruta-inexistente-xyz", "h1": "Pagina no encontrada", "resultado": "404 del frontend" }
+  ],
+
+  "hallazgos": [
+    {
+      "id": "H-F07-01",
+      "titulo": "El script de rutas basado en HTTP no es aplicable a esta SPA",
+      "severidad": "Metodologico",
+      "detalle": "Las rutas inexistentes devuelven 200 y el mismo index.html. Un auditor que solo mire el status code concluiria falsamente que todas las rutas existen.",
+      "recomendacion": "Verificar por contenido renderizado o usar automatizacion de navegador."
+    },
+    {
+      "id": "H-F07-02",
+      "titulo": "Las rutas protegidas redirigen correctamente sin sesion",
+      "severidad": "Positivo",
+      "detalle": "Sin token, todas las rutas del area privada llevan a /login, incluida la ruta inexistente.",
+      "recomendacion": "Mantener."
+    },
+    {
+      "id": "H-F07-03",
+      "titulo": "Control de acceso por rol consistente en las rutas",
+      "severidad": "Positivo",
+      "detalle": "Cliente no accede a audit-logs, materials/new ni materials/:id/edit. Admin no accede a orders/new.",
+      "recomendacion": "Mantener y cubrir con pruebas."
+    }
+  ]
+}

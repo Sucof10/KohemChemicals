@@ -1,0 +1,112 @@
+{
+  "caso": "F02",
+  "actividad": "Auditoria del proceso de autenticacion y gestion de sesion",
+  "herramientas": ["Chromium (DevTools - Network/Application)", "captura automatizada del navegador"],
+  "origen": "http://localhost:5173",
+  "fecha": "2026-11-06",
+
+  "1_estado_inicial_sin_sesion": {
+    "url": "http://localhost:5173/login",
+    "sessionStorage": {},
+    "localStorage": {},
+    "cookies": "",
+    "observacion": "Antes de autenticarse no existe ningun token ni cookie de sesion."
+  },
+
+  "2_peticion_de_autenticacion": {
+    "metodo": "POST",
+    "url": "http://localhost:5173/api/v1/auth/token",
+    "content_type": "application/json",
+    "request_body": {
+      "username": "cliente",
+      "password": "<oculta>"
+    },
+    "status": 200,
+    "response_body": {
+      "access_token": "<JWT de 165 caracteres, enmascarado>",
+      "token_type": "bearer"
+    },
+    "response_headers_relevantes": {
+      "content-type": "application/json",
+      "access-control-allow-origin": "http://localhost:5173",
+      "access-control-allow-credentials": "true",
+      "vary": "Origin",
+      "server": "uvicorn"
+    },
+    "set_cookie": null,
+    "observacion": "La autenticacion es por JWT en el cuerpo de la respuesta. No se emite ninguna cookie de sesion."
+  },
+
+  "3_almacenamiento_tras_el_login": {
+    "sessionStorage": {
+      "kohem.session.token": "<JWT de 165 caracteres, enmascarado>"
+    },
+    "localStorage": {},
+    "cookies": "",
+    "observacion": "El token se guarda en sessionStorage bajo la clave kohem.session.token. No se usa localStorage ni cookies."
+  },
+
+  "4_payload_del_jwt": {
+    "algoritmo": "HS256",
+    "claims": {
+      "sub": "cliente",
+      "role": "cliente",
+      "user_id": 2,
+      "exp": "epoch (60 minutos desde la emision)"
+    },
+    "observacion": "El rol viaja dentro del token y el frontend lo usa para decidir que mostrar. No hay refresh_token."
+  },
+
+  "5_cierre_de_sesion": {
+    "accion": "Clic en 'Cerrar sesion'",
+    "url_resultante": "http://localhost:5173/login",
+    "sessionStorage_resultante": {},
+    "localStorage_resultante": {},
+    "cookies_resultantes": "",
+    "observacion": "El frontend elimina correctamente el token del almacenamiento y redirige al login."
+  },
+
+  "6_reutilizacion_del_token_tras_logout": {
+    "prueba": "GET /api/v1/orders?limit=100 con el token capturado antes del logout",
+    "status": 200,
+    "body": "[]",
+    "observacion": "HALLAZGO: el token sigue siendo aceptado despues del cierre de sesion. No existe revocacion en el servidor; el logout es solo del lado cliente. El token permanece valido hasta su expiracion (60 min)."
+  },
+
+  "7_persistencia_de_sesion": {
+    "prueba": "Navegar a /materials y /orders recargando la pagina",
+    "resultado": "La sesion se mantiene",
+    "observacion": "sessionStorage sobrevive a la navegacion dentro de la misma pestana, pero se pierde al cerrar la pestana."
+  },
+
+  "hallazgos": [
+    {
+      "id": "H-F02-01",
+      "titulo": "Token JWT almacenado en sessionStorage",
+      "severidad": "Media",
+      "detalle": "Un XSS podria leer el token. Mitigado parcialmente porque vive por pestana y se borra al cerrarla.",
+      "recomendacion": "Valorar cookies HttpOnly + SameSite, o mantener sessionStorage con CSP estricta."
+    },
+    {
+      "id": "H-F02-02",
+      "titulo": "Logout sin revocacion en el servidor",
+      "severidad": "Media-Alta",
+      "detalle": "El token capturado antes del logout sigue devolviendo 200. No hay blacklist ni refresh token.",
+      "recomendacion": "Implementar revocacion/rotacion de tokens o expiraciones cortas con refresh."
+    },
+    {
+      "id": "H-F02-03",
+      "titulo": "Credenciales de demostracion visibles en la interfaz",
+      "severidad": "Baja (solo entorno DEV)",
+      "detalle": "La pantalla de login muestra admin/AdminPass123! y cliente/ClientPass123! cuando import.meta.env.DEV es true.",
+      "recomendacion": "Asegurar que la build de produccion no incluya este bloque."
+    },
+    {
+      "id": "H-F02-04",
+      "titulo": "Credenciales enviadas sin cifrar en transito",
+      "severidad": "Media",
+      "detalle": "El login viaja por HTTP en desarrollo; no hay TLS.",
+      "recomendacion": "HTTPS obligatorio en produccion."
+    }
+  ]
+}

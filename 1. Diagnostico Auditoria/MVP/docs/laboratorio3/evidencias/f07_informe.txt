@@ -1,0 +1,61 @@
+PARTE 1 - VERIFICACION POR CODIGO HTTP (script f07_rutas.py)
+====================================================================================================
+
+========================================================================
+F07 - RUTAS DEL FRONTEND (verificacion por codigo HTTP)
+Base: http://localhost:5173
+========================================================================
+
+RUTA                             HTTP   BYTES   CONTENT-TYPE       HASH
+------------------------------------------------------------------------
+/                                200    715     text/html          d8ef36d641c0
+/login                           200    715     text/html          d8ef36d641c0
+/materials                       200    715     text/html          d8ef36d641c0
+/orders                          200    715     text/html          d8ef36d641c0
+/audit-logs                      200    715     text/html          d8ef36d641c0
+/ruta-inexistente-xyz            200    715     text/html          d8ef36d641c0
+
+RESULTADO
+------------------------------------------------------------------------
+Rutas probadas      : 6
+Documentos distintos: 1
+Ruta inexistente    : HTTP 200
+
+[CONCLUSION] Todas las rutas devuelven el MISMO documento con HTTP 200.
+             El codigo HTTP no distingue rutas existentes de inexistentes.
+             Esta verificacion NO es suficiente en una SPA.
+             La proteccion real se comprueba en el navegador (ver f07_rutas.json).
+
+
+PARTE 2 - VERIFICACION POR RENDERIZADO (navegador)
+====================================================================================================
+El status HTTP no sirve; se comprueba la URL final y el titulo renderizado.
+
+--- SIN SESION --------------------------------------------------------------------------------------
+RUTA SOLICITADA            URL FINAL              RESULTADO                              TITULO RENDERIZADO
+/                          /login                 Redirige a login                       Gestion de inventario y pedidos para tu operacion quimica.
+/materials                 /login                 Redirige a login                       Gestion de inventario y pedidos para tu operacion quimica.
+/audit-logs                /login                 Redirige a login                       Gestion de inventario y pedidos para tu operacion quimica.
+/ruta-inexistente-xyz      /login                 Redirige a login                       Gestion de inventario y pedidos para tu operacion quimica.
+
+--- SESION: cliente ---------------------------------------------------------------------------------
+RUTA SOLICITADA            URL FINAL              RESULTADO                              TITULO RENDERIZADO
+/                          /                      Permitida                              Hola, cliente
+/materials                 /materials             Permitida                              Materias primas
+/orders                    /orders                Permitida (solo sus pedidos)           Mis pedidos
+/ai                        /ai                    Permitida                              Asesoria IA
+/session                   /session               Permitida                              Mi sesion
+/orders/new                /orders/new            Permitida                              Nuevo pedido
+/audit-logs                /forbidden             Bloqueada por rol                      No tienes permisos para esta seccion
+/materials/new             /forbidden             Bloqueada por rol                      No tienes permisos para esta seccion
+/materials/1/edit          /forbidden             Bloqueada por rol                      No tienes permisos para esta seccion
+/ruta-inexistente-xyz      /ruta-inexistente-xyz  404 del frontend                       Pagina no encontrada
+
+--- SESION: admin -----------------------------------------------------------------------------------
+RUTA SOLICITADA            URL FINAL              RESULTADO                              TITULO RENDERIZADO
+/                          /                      Permitida                              Hola, admin
+/audit-logs                /audit-logs            Permitida                              Logs de auditoria
+/materials/new             /materials/new         Permitida                              Nuevo material
+/materials/1/edit          /materials/1/edit      Permitida                              Editar material
+/orders/new                /forbidden             Bloqueada: ruta exclusiva de cliente   No tienes permisos para esta seccion
+/ruta-inexistente-xyz      /ruta-inexistente-xyz  404 del frontend                       Pagina no encontrada

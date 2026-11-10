@@ -1,0 +1,72 @@
+{
+  "caso": "F03",
+  "actividad": "Prueba de autorizacion desde el Frontend",
+  "alcance": "Se analiza el control de acceso visible y el comportamiento de las rutas protegidas. No se ataca el backend; se comprueba que el backend rechaza.",
+  "origen": "http://localhost:5173",
+  "fecha": "2026-11-06",
+
+  "1_menu_por_rol": {
+    "cliente": ["Panel", "Materiales", "Pedidos", "Asesoria IA", "Mi sesion"],
+    "admin": ["Panel", "Materiales", "Pedidos", "Asesoria IA", "Auditoria", "Mi sesion"],
+    "observacion": "El menu se construye con can(role, ...) sobre el rol extraido del JWT. Las opciones administrativas no se renderizan para cliente."
+  },
+
+  "2_rutas_protegidas_con_sesion_cliente": [
+    { "ruta_solicitada": "/audit-logs", "url_final": "/forbidden", "resultado": "Bloqueada por el guard del frontend" },
+    { "ruta_solicitada": "/materials/new", "url_final": "/forbidden", "resultado": "Bloqueada por el guard del frontend" },
+    { "ruta_solicitada": "/materials/1/edit", "url_final": "/forbidden", "resultado": "Bloqueada por el guard del frontend" },
+    { "ruta_solicitada": "/orders/new", "url_final": "/orders/new", "resultado": "Permitida (ruta del rol cliente)" }
+  ],
+
+  "3_rutas_protegidas_con_sesion_admin": [
+    { "ruta_solicitada": "/orders/new", "url_final": "/forbidden", "resultado": "Bloqueada: ruta exclusiva de cliente" },
+    { "ruta_solicitada": "/audit-logs", "url_final": "/audit-logs", "resultado": "Permitida" }
+  ],
+
+  "4_api_con_token_de_cliente": {
+    "GET /api/v1/audit-logs": { "status": 403, "body": "Solo admin o analista pueden consultar los logs." },
+    "GET /api/v1/materials": { "status": 200 },
+    "GET /api/v1/orders?limit=100": { "status": 200 },
+    "observacion": "El backend aplica autorizacion real. Ocultar el menu no es la unica defensa."
+  },
+
+  "5_prueba_controlada_de_manipulacion_del_cliente": {
+    "que_se_hizo": "Se decodifico el payload del JWT en sessionStorage, se cambio role de 'cliente' a 'admin' y se volvio a escribir el token SIN firma valida.",
+    "resultado_ui": {
+      "menu": ["Panel", "Materiales", "Pedidos", "Asesoria IA", "Auditoria", "Mi sesion"],
+      "etiqueta_rol": "Administrador",
+      "observacion": "El frontend confia en el payload sin verificar la firma, por lo que la interfaz se desbloquea."
+    },
+    "resultado_backend": {
+      "navegacion_a": "/audit-logs",
+      "resultado": "La peticion a la API devuelve 401 (firma invalida); el interceptor borra el token y redirige a /login.",
+      "url_final": "/login",
+      "sessionStorage": {}
+    },
+    "conclusion": "La restriccion visual es evitable, pero el backend mantiene el control. El dano se limita a la interfaz."
+  },
+
+  "hallazgos": [
+    {
+      "id": "H-F03-01",
+      "titulo": "El control de acceso del frontend depende de un JWT no verificado",
+      "severidad": "Baja-Media",
+      "detalle": "jwt-decode no valida la firma. Alterar el payload desbloquea el menu y las rutas, aunque el backend devuelve 401/403.",
+      "recomendacion": "Mantener la autorizacion en el backend (ya ocurre) y asumir que la UI no es un control de seguridad. Añadir expiracion y validacion de claims en el servidor."
+    },
+    {
+      "id": "H-F03-02",
+      "titulo": "Inconsistencia visual con token manipulado",
+      "severidad": "Informativa",
+      "detalle": "Se muestra el usuario 'cliente' con la etiqueta 'Administrador'.",
+      "recomendacion": "Ninguna accion; evidencia de que la UI deriva todo del token."
+    },
+    {
+      "id": "H-F03-03",
+      "titulo": "Redireccion a /forbidden correcta en rutas de rol",
+      "severidad": "Positivo",
+      "detalle": "Los guards redirigen a /forbidden y el backend responde 403 en audit-logs.",
+      "recomendacion": "Mantener y cubrir con pruebas automatizadas."
+    }
+  ]
+}

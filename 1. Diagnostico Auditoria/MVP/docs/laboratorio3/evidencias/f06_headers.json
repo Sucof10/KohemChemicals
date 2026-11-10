@@ -1,0 +1,185 @@
+{
+  "caso": "F06",
+  "fecha": "2026-11-06T18:02:53",
+  "objetivos": [
+    {
+      "url": "http://localhost:5173/",
+      "url_final": "http://localhost:5173/",
+      "status": 200,
+      "server": null,
+      "headers": {
+        "Vary": "Origin",
+        "Content-Type": "text/html",
+        "Cache-Control": "no-cache",
+        "Etag": "W/\"2cb-JqnPvtZLIHKrs92SljsM40plc+8\"",
+        "Date": "Fri, 06 Nov 2026 23:02:53 GMT",
+        "Connection": "keep-alive",
+        "Keep-Alive": "timeout=5",
+        "Content-Length": "715"
+      },
+      "seguridad": {
+        "Content-Security-Policy": {
+          "presente": false,
+          "valor": null
+        },
+        "X-Content-Type-Options": {
+          "presente": false,
+          "valor": null
+        },
+        "X-Frame-Options": {
+          "presente": false,
+          "valor": null
+        },
+        "Referrer-Policy": {
+          "presente": false,
+          "valor": null
+        },
+        "Permissions-Policy": {
+          "presente": false,
+          "valor": null
+        },
+        "Strict-Transport-Security": {
+          "presente": false,
+          "valor": null
+        }
+      },
+      "faltantes": [
+        "Content-Security-Policy",
+        "X-Content-Type-Options",
+        "X-Frame-Options",
+        "Referrer-Policy",
+        "Permissions-Policy",
+        "Strict-Transport-Security"
+      ]
+    },
+    {
+      "url": "http://localhost:4173/",
+      "url_final": "http://localhost:4173/",
+      "status": 200,
+      "server": null,
+      "headers": {
+        "Vary": "Origin",
+        "Content-Type": "text/html",
+        "Cache-Control": "no-cache",
+        "Etag": "W/\"277-vq68g4hc4HjI2/5UASldi0Dje6I\"",
+        "Date": "Fri, 06 Nov 2026 23:02:53 GMT",
+        "Connection": "keep-alive",
+        "Keep-Alive": "timeout=5",
+        "Transfer-Encoding": "chunked"
+      },
+      "seguridad": {
+        "Content-Security-Policy": {
+          "presente": false,
+          "valor": null
+        },
+        "X-Content-Type-Options": {
+          "presente": false,
+          "valor": null
+        },
+        "X-Frame-Options": {
+          "presente": false,
+          "valor": null
+        },
+        "Referrer-Policy": {
+          "presente": false,
+          "valor": null
+        },
+        "Permissions-Policy": {
+          "presente": false,
+          "valor": null
+        },
+        "Strict-Transport-Security": {
+          "presente": false,
+          "valor": null
+        }
+      },
+      "faltantes": [
+        "Content-Security-Policy",
+        "X-Content-Type-Options",
+        "X-Frame-Options",
+        "Referrer-Policy",
+        "Permissions-Policy",
+        "Strict-Transport-Security"
+      ]
+    },
+    {
+      "url": "http://127.0.0.1:8000/",
+      "url_final": "http://127.0.0.1:8000/",
+      "status": 200,
+      "server": "uvicorn",
+      "headers": {
+        "date": "Fri, 06 Nov 2026 23:02:53 GMT",
+        "server": "uvicorn",
+        "content-length": "74",
+        "content-type": "application/json",
+        "vary": "Origin"
+      },
+      "seguridad": {
+        "Content-Security-Policy": {
+          "presente": false,
+          "valor": null
+        },
+        "X-Content-Type-Options": {
+          "presente": false,
+          "valor": null
+        },
+        "X-Frame-Options": {
+          "presente": false,
+          "valor": null
+        },
+        "Referrer-Policy": {
+          "presente": false,
+          "valor": null
+        },
+        "Permissions-Policy": {
+          "presente": false,
+          "valor": null
+        },
+        "Strict-Transport-Security": {
+          "presente": false,
+          "valor": null
+        }
+      },
+      "faltantes": [
+        "Content-Security-Policy",
+        "X-Content-Type-Options",
+        "X-Frame-Options",
+        "Referrer-Policy",
+        "Permissions-Policy",
+        "Strict-Transport-Security"
+      ]
+    }
+  ],
+  "resumen": {
+    "entornos_probados": 3,
+    "cabeceras_presentes": "0/6 en los 3 entornos",
+    "conclusion": "La ausencia es sistemica: no depende del dev server de Vite, tambien ocurre en el build de produccion y en la API."
+  },
+  "hallazgos": [
+    {
+      "id": "H-F06-01",
+      "titulo": "Ausencia total de cabeceras de seguridad",
+      "severidad": "Media en desarrollo / Alta en produccion",
+      "detalle": "CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy y HSTS ausentes en 5173, 4173 y 8000.",
+      "recomendacion": "Configurar en el reverse proxy (nginx) o con middleware. Aplicar CSP, nosniff, DENY/SAMEORIGIN, strict-origin-when-cross-origin, Permissions-Policy y HSTS bajo HTTPS."
+    },
+    {
+      "id": "H-F06-02",
+      "titulo": "Divulgacion de tecnologia en la API",
+      "severidad": "Baja",
+      "detalle": "La API responde Server: uvicorn.",
+      "recomendacion": "Ocultar o normalizar la cabecera Server en produccion."
+    },
+    {
+      "id": "H-F06-03",
+      "titulo": "HSTS no evaluable en desarrollo",
+      "severidad": "Informativa / falso positivo",
+      "detalle": "HSTS solo tiene sentido sobre HTTPS. Reportarlo como vulnerabilidad en localhost seria un falso positivo.",
+      "recomendacion": "Evaluar HSTS unicamente en el entorno desplegado con TLS."
+    }
+  ],
+  "falsos_positivos": [
+    "HSTS ausente en localhost: no aplica sin HTTPS.",
+    "CSP ausente en el dev server: el dev server de Vite no es el entorno de despliegue; el hallazgo se traslada al hosting."
+  ]
+}

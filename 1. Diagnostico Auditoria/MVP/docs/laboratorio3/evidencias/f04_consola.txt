@@ -1,0 +1,108 @@
+========================================================================
+F04 - MANIPULACION CONTROLADA DE SOLICITUDES
+Origen: http://localhost:5173
+Fecha : 2026-11-06T18:19:43
+========================================================================
+
+[A1. Original valida] POST /materials
+    Request : {"name": "Material F04 original", "category": "Pruebas F04", "unit": "kg", "price": 1000, "stock": 10, "description": "Registro base para F04."}
+    Response: 201 -> {"id": 4, "name": "Material F04 original", "category": "Pruebas F04", "unit": "kg", "price": 1000.0, "stock": 10.0, "description": "Registro base para F04.", "is_active": true}
+    Nota    : Peticion base generada desde React
+
+[B1. name vacio] POST /materials
+    Request : {"name": "", "category": "Pruebas F04", "unit": "kg", "price": 1000, "stock": 10, "description": "Registro base para F04."}
+    Response: 500 -> "Internal Server Error"
+    Nota    : Se espera 422 por min_length=2
+
+[B2. price texto] POST /materials
+    Request : {"name": "Material F04 original", "category": "Pruebas F04", "unit": "kg", "price": "texto", "stock": 10, "description": "Registro base para F04."}
+    Response: 500 -> "Internal Server Error"
+    Nota    : Se espera 422 por tipo invalido
+
+[B3. price 0] POST /materials
+    Request : {"name": "Material F04 original", "category": "Pruebas F04", "unit": "kg", "price": 0, "stock": 10, "description": "Registro base para F04."}
+    Response: 500 -> "Internal Server Error"
+    Nota    : Se espera 422 por gt=0
+
+[B4. stock negativo] POST /materials
+    Request : {"name": "Material F04 original", "category": "Pruebas F04", "unit": "kg", "price": 1000, "stock": -1, "description": "Registro base para F04."}
+    Response: 500 -> "Internal Server Error"
+    Nota    : Se espera 422 por ge=0
+
+[B5. name muy largo] POST /materials
+    Request : {"name": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    Response: 500 -> "Internal Server Error"
+    Nota    : Se espera 422 por max_length=120
+
+[B6. campos extra (mass assignment)] POST /materials
+    Request : {"name": "Material F04 original", "category": "Pruebas F04", "unit": "kg", "price": 1000, "stock": 10, "description": "Registro base para F04.", "id": 999, "is_active": false, "rol
+    Response: 201 -> {"id": 5, "name": "Material F04 original", "category": "Pruebas F04", "unit": "kg", "price": 1000.0, "stock": 10.0, "description": "Registro base para F04.", "is_active": true}
+    Nota    : Se inyectan id, is_active y role; los modelos Pydantic deberian ignorarlos
+
+[C1. PUT con valores negativos] PUT /materials/4
+    Request : {"stock": -50, "price": -10}
+    Response: 500 -> "Internal Server Error"
+    Nota    : Se espera 422
+
+[C2. PUT valido] PUT /materials/4
+    Request : {"name": "Material F04 actualizado", "price": 1500}
+    Response: 200 -> {"id": 4, "name": "Material F04 actualizado", "category": "Pruebas F04", "unit": "kg", "price": 1500.0, "stock": 10.0, "description": "Registro base para F04.", "is_active": true}
+    Nota    : Modificacion legitima para comparar con C1
+
+[D1. quantity negativa] POST /orders
+    Request : {"items": [{"raw_material_id": 1, "quantity": -5}]}
+    Response: 500 -> "Internal Server Error"
+    Nota    : Se espera 422 por gt=0
+
+[D2. quantity cero] POST /orders
+    Request : {"items": [{"raw_material_id": 1, "quantity": 0}]}
+    Response: 500 -> "Internal Server Error"
+    Nota    : Se espera 422 por gt=0
+
+[D3. quantity mayor al stock] POST /orders
+    Request : {"items": [{"raw_material_id": 1, "quantity": 999999}]}
+    Response: 400 -> {"detail": "Stock insuficiente para 'Aceite esencial de menta'. Disponible: 50.0, solicitado: 999999.0."}
+    Nota    : Se espera rechazo por disponibilidad
+
+[D4. material inexistente] POST /orders
+    Request : {"items": [{"raw_material_id": 999999, "quantity": 1}]}
+    Response: 400 -> {"detail": "Materia prima con identificador 999999 no fue encontrado."}
+    Nota    : Se espera rechazo
+
+[D5. pedido sin items] POST /orders
+    Request : {"items": []}
+    Response: 500 -> "Internal Server Error"
+    Nota    : Se espera 422 por min_length=1
+
+[E1. cliente intenta crear material] POST /materials
+    Request : {"name": "Material F04 original", "category": "Pruebas F04", "unit": "kg", "price": 1000, "stock": 10, "description": "Registro base para F04."}
+    Response: 403 -> {"detail": "El usuario no posee permisos suficientes para ejecutar esta operaci\u00f3n."}
+    Nota    : Se espera 403
+
+[E2. cliente intenta editar material] PUT /materials/4
+    Request : {"price": 1}
+    Response: 403 -> {"detail": "El usuario no posee permisos suficientes para ejecutar esta operaci\u00f3n."}
+    Nota    : Se espera 403
+
+[F1. registro publico con role=admin] POST /auth/register
+    Request : {"username": "auditor_f04_admin", "email": "auditor_f04_admin@kohem.com", "password": "AuditorF04Pass123!", "role": "admin"}
+    Response: 201 -> {"id": 3, "username": "auditor_f04_admin", "email": "auditor_f04_admin@kohem.com", "role": "admin", "is_active": true}
+    Nota    : El endpoint no exige autenticacion ni restringe el rol
+
+[F2. login del usuario creado] POST /auth/token
+    Response: 200 -> claims: {"sub": "auditor_f04_admin", "role": "admin", "user_id": 3, "exp": 1794010784}
+    Nota    : HALLAZGO: rol admin asignado desde el registro publico
+
+[F3. usuario nuevo consulta auditoria] GET /audit-logs
+    Request : (sin cuerpo)
+    Response: 200 -> []
+    Nota    : 200 confirma que la escalada es efectiva
+
+[Limpieza] DELETE /materials/4 -> 204
+
+[Limpieza] DELETE /materials/5 -> 204
+
+========================================================================
+Casos registrados: 19
+Evidencia: docs\laboratorio3\evidencias\f04_manipulacion.json
+========================================================================

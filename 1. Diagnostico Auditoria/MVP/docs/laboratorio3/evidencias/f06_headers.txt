@@ -1,0 +1,115 @@
+Fecha: 2026-11-06T18:02:53
+
+========================================================================
+OBJETIVO: http://localhost:5173/
+========================================================================
+URL final : http://localhost:5173/
+STATUS    : 200
+SERVER    : (sin cabecera)
+POWERED-BY: (sin cabecera)
+
+CABECERAS RECIBIDAS
+------------------------------------------------------------------------
+Vary: Origin
+Content-Type: text/html
+Cache-Control: no-cache
+Etag: W/"2cb-JqnPvtZLIHKrs92SljsM40plc+8"
+Date: Fri, 06 Nov 2026 23:02:53 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 715
+
+CABECERAS DE SEGURIDAD
+------------------------------------------------------------------------
+[REVISAR] Content-Security-Policy
+           Mitiga XSS e inyeccion de contenido
+[REVISAR] X-Content-Type-Options
+           Evita el sniffing de tipos MIME
+[REVISAR] X-Frame-Options
+           Mitiga clickjacking
+[REVISAR] Referrer-Policy
+           Controla la fuga de URL de origen
+[REVISAR] Permissions-Policy
+           Restringe APIs del navegador
+[REVISAR] Strict-Transport-Security
+           Fuerza HTTPS (solo en produccion)
+
+RESUMEN
+------------------------------------------------------------------------
+Presentes: 0/6
+Faltantes: Content-Security-Policy, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy, Strict-Transport-Security
+========================================================================
+OBJETIVO: http://localhost:4173/
+========================================================================
+URL final : http://localhost:4173/
+STATUS    : 200
+SERVER    : (sin cabecera)
+POWERED-BY: (sin cabecera)
+
+CABECERAS RECIBIDAS
+------------------------------------------------------------------------
+Vary: Origin
+Content-Type: text/html
+Cache-Control: no-cache
+Etag: W/"277-vq68g4hc4HjI2/5UASldi0Dje6I"
+Date: Fri, 06 Nov 2026 23:02:53 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+CABECERAS DE SEGURIDAD
+------------------------------------------------------------------------
+[REVISAR] Content-Security-Policy
+           Mitiga XSS e inyeccion de contenido
+[REVISAR] X-Content-Type-Options
+           Evita el sniffing de tipos MIME
+[REVISAR] X-Frame-Options
+           Mitiga clickjacking
+[REVISAR] Referrer-Policy
+           Controla la fuga de URL de origen
+[REVISAR] Permissions-Policy
+           Restringe APIs del navegador
+[REVISAR] Strict-Transport-Security
+           Fuerza HTTPS (solo en produccion)
+
+RESUMEN
+------------------------------------------------------------------------
+Presentes: 0/6
+Faltantes: Content-Security-Policy, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy, Strict-Transport-Security
+========================================================================
+OBJETIVO: http://127.0.0.1:8000/
+========================================================================
+URL final : http://127.0.0.1:8000/
+STATUS    : 200
+SERVER    : uvicorn
+POWERED-BY: (sin cabecera)
+
+CABECERAS RECIBIDAS
+------------------------------------------------------------------------
+date: Fri, 06 Nov 2026 23:02:53 GMT
+server: uvicorn
+content-length: 74
+content-type: application/json
+vary: Origin
+
+CABECERAS DE SEGURIDAD
+------------------------------------------------------------------------
+[REVISAR] Content-Security-Policy
+           Mitiga XSS e inyeccion de contenido
+[REVISAR] X-Content-Type-Options
+           Evita el sniffing de tipos MIME
+[REVISAR] X-Frame-Options
+           Mitiga clickjacking
+[REVISAR] Referrer-Policy
+           Controla la fuga de URL de origen
+[REVISAR] Permissions-Policy
+           Restringe APIs del navegador
+[REVISAR] Strict-Transport-Security
+           Fuerza HTTPS (solo en produccion)
+
+RESUMEN
+------------------------------------------------------------------------
+Presentes: 0/6
+Faltantes: Content-Security-Policy, X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy, Strict-Transport-Security
+
+Evidencia guardada en: C:\Auditoria\KohemChemicals\1. Diagnostico Auditoria\MVP\docs\laboratorio3\evidencias\f06_headers.json

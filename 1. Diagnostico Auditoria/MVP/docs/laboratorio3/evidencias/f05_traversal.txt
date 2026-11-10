@@ -1,0 +1,41 @@
+==============================================================================
+VERIFICACION DEL ALERT 'RUTA TRANSVERSAL'
+==============================================================================
+
+/node_modules/.vite/deps/react.js/../../../../../../../../Windows/win.ini
+   HTTP 200 | 715 bytes | text/html
+   sin contenido de sistema 
+
+/node_modules/.vite/deps/..%2f..%2f..%2f..%2f..%2f..%2f..%2fWindows%2fwin.ini
+   HTTP 200 | 715 bytes | text/html
+   sin contenido de sistema 
+
+/node_modules/.vite/deps/react.js/..%5c..%5c..%5c..%5cWindows%5cwin.ini
+   HTTP 200 | 715 bytes | text/html
+   sin contenido de sistema 
+
+/%2e%2e/%2e%2e/Windows/win.ini
+   HTTP 200 | 715 bytes | text/html
+   sin contenido de sistema 
+
+/..%2f..%2fWindows%2fwin.ini
+   HTTP 200 | 715 bytes | text/html
+   sin contenido de sistema 
+
+/@fs/C:/Windows/win.ini
+   HTTP 403 | 433 bytes | None
+   sin contenido de sistema 
+
+/@fs/C:%5CWindows%5Cwin.ini
+   HTTP 403 | 433 bytes | None
+   sin contenido de sistema 
+
+/@fs/C:/Windows/System32/drivers/etc/hosts
+   HTTP 403 | 452 bytes | None
+   sin contenido de sistema 
+
+==============================================================================
+Control: acceso a archivos del proyecto via /@fs/
+==============================================================================
+/@fs/C:/Auditoria/KohemChemicals/1. Diagnostico Auditoria/MVP/kohem.db HTTP 403 | None | 480 bytes
+/@fs/C:/Auditoria/KohemChemicals/1. Diagnostico Auditoria/MVP/.env.exa HTTP 403 | None | 484 bytes

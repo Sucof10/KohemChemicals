@@ -1,0 +1,102 @@
+{
+  "archivo": "2026-11-08-ZAP-Report-localhost.html",
+  "total_tipos": 9,
+  "total_instancias": 43,
+  "por_riesgo": {
+    "Medio": 10,
+    "Bajo": 6,
+    "Informativo": 27
+  },
+  "urls_afectadas": [
+    "http://localhost:5173",
+    "http://localhost:5173/",
+    "http://localhost:5173/?token=wLof8A7nLEw6",
+    "http://localhost:5173/@react-refresh",
+    "http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=84c1906a",
+    "http://localhost:5173/node_modules/.vite/deps/react.js?v=84c1906a",
+    "http://localhost:5173/src/main.tsx"
+  ],
+  "alertas": [
+    {
+      "alerta": "Cabecera Content Security Policy (CSP) no configurada",
+      "riesgo": "Medio",
+      "instancias": 5,
+      "descripcion": "",
+      "solucion": "",
+      "referencias": "",
+      "cwe": ""
+    },
+    {
+      "alerta": "Falta de cabecera Anti-Clickjacking",
+      "riesgo": "Medio",
+      "instancias": 5,
+      "descripcion": "",
+      "solucion": "",
+      "referencias": "",
+      "cwe": ""
+    },
+    {
+      "alerta": "Divulgación de Marcas de Tiempo - Unix",
+      "riesgo": "Bajo",
+      "instancias": 1,
+      "descripcion": "",
+      "solucion": "",
+      "referencias": "",
+      "cwe": ""
+    },
+    {
+      "alerta": "Falta encabezado X-Content-Type-Options",
+      "riesgo": "Bajo",
+      "instancias": 5,
+      "descripcion": "",
+      "solucion": "",
+      "referencias": "",
+      "cwe": ""
+    },
+    {
+      "alerta": "Aplicación Web Moderna",
+      "riesgo": "Informativo",
+      "instancias": 5,
+      "descripcion": "",
+      "solucion": "",
+      "referencias": "",
+      "cwe": ""
+    },
+    {
+      "alerta": "Divulgación de Información - Información sensible en URL",
+      "riesgo": "Informativo",
+      "instancias": 1,
+      "descripcion": "",
+      "solucion": "",
+      "referencias": "",
+      "cwe": ""
+    },
+    {
+      "alerta": "Divulgación de información - Comentarios sospechosos",
+      "riesgo": "Informativo",
+      "instancias": 15,
+      "descripcion": "",
+      "solucion": "",
+      "referencias": "",
+      "cwe": ""
+    },
+    {
+      "alerta": "Divulgación de información - Información en el navegador sessionStorage",
+      "riesgo": "Informativo",
+      "instancias": 3,
+      "descripcion": "",
+      "solucion": "",
+      "referencias": "",
+      "cwe": ""
+    },
+    {
+      "alerta": "Divulgación de información - JWT en el navegador sessionStorage",
+      "riesgo": "Informativo",
+      "instancias": 3,
+      "descripcion": "",
+      "solucion": "",
+      "referencias": "",
+      "cwe": ""
+    }
+  ]
+}

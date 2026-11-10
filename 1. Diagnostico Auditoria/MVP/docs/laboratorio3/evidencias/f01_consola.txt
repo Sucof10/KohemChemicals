@@ -1,0 +1,84 @@
+======================================================================
+F01 - RECONOCIMIENTO FUNCIONAL DEL FRONTEND
+Origen auditado: http://localhost:5173
+Fecha: 2026-11-06T18:20:27
+======================================================================
+
+[1. Login cliente] POST http://localhost:5173/api/v1/auth/token
+    Status: 200  (300.4 ms)
+    Content-Type respuesta: application/json
+    Authorization: (sin cabecera)
+    Request: {"grant_type": "password", "username": "cliente", "password": "***"}
+    Response: {"access_token": "eyJhbGciOiJI...(165 chars)", "token_type": "bearer"}
+    Nota: Content-Type: application/x-www-form-urlencoded
+
+[2. Login admin] POST http://localhost:5173/api/v1/auth/token
+    Status: 200  (262.0 ms)
+    Content-Type respuesta: application/json
+    Authorization: (sin cabecera)
+    Request: {"grant_type": "password", "username": "admin", "password": "***"}
+    Response: {"access_token": "eyJhbGciOiJI...(160 chars)", "token_type": "bearer"}
+    Nota: Content-Type: application/x-www-form-urlencoded
+
+[3. Consultar materias primas] GET http://localhost:5173/api/v1/materials
+    Status: 200  (10.5 ms)
+    Content-Type respuesta: application/json
+    Authorization: Bearer eyJhbGciOiJI...(165 chars)
+    Response: lista con 3 elementos
+    Nota: Pantalla /materials (visible para todos los roles)
+
+[4. Ver detalle de materia prima] GET http://localhost:5173/api/v1/materials/1
+    Status: 200  (9.2 ms)
+    Content-Type respuesta: application/json
+    Authorization: Bearer eyJhbGciOiJI...(165 chars)
+    Response: {"id": 1, "name": "Aceite esencial de menta", "category": "Aceites esenciales", "unit": "kg", "price": 85000.0, "stock": 50.0, "description": "Materia prima para formulaciones cosm\u00e9ticas.", "is_active": true}
+    Nota: Seleccion de un registro del catalogo
+
+[5. Consultar pedidos (cliente)] GET http://localhost:5173/api/v1/orders
+    Status: 200  (7.2 ms)
+    Content-Type respuesta: application/json
+    Authorization: Bearer eyJhbGciOiJI...(165 chars)
+    Response: lista con 0 elementos
+    Nota: El cliente solo ve sus propios pedidos
+
+[6. Intento de auditoria como cliente] GET http://localhost:5173/api/v1/audit-logs
+    Status: 403  (4.9 ms)
+    Content-Type respuesta: application/json
+    Authorization: Bearer eyJhbGciOiJI...(165 chars)
+    Response: {"detail": "Solo admin o analista pueden consultar los logs."}
+    Nota: Control de acceso por rol: se espera 403
+
+[7. Auditoria como admin] GET http://localhost:5173/api/v1/audit-logs
+    Status: 200  (6.3 ms)
+    Content-Type respuesta: application/json
+    Authorization: Bearer eyJhbGciOiJI...(160 chars)
+    Response: lista con 0 elementos
+    Nota: Pantalla /audit-logs (solo admin/analista)
+
+[8. Crear materia prima (admin)] POST http://localhost:5173/api/v1/materials
+    Status: 201  (20.4 ms)
+    Content-Type respuesta: application/json
+    Authorization: Bearer eyJhbGciOiJI...(160 chars)
+    Request: {"name": "Materia prima temporal F01", "category": "Pruebas", "unit": "kg", "price": 1000, "stock": 1, "description": "Registro creado por el script de auditoria F01."}
+    Response: {"id": 4, "name": "Materia prima temporal F01", "category": "Pruebas", "unit": "kg", "price": 1000.0, "stock": 1.0, "description": "Registro creado por el script de auditoria F01.", "is_active": true}
+    Nota: CREATE del CRUD
+
+[9. Actualizar materia prima (admin)] PUT http://localhost:5173/api/v1/materials/4
+    Status: 200  (29.7 ms)
+    Content-Type respuesta: application/json
+    Authorization: Bearer eyJhbGciOiJI...(160 chars)
+    Request: {"price": 1200, "stock": 5}
+    Response: {"id": 4, "name": "Materia prima temporal F01", "category": "Pruebas", "unit": "kg", "price": 1200.0, "stock": 5.0, "description": "Registro creado por el script de auditoria F01.", "is_active": true}
+    Nota: UPDATE del CRUD
+
+[10. Eliminar materia prima (admin)] DELETE http://localhost:5173/api/v1/materials/4
+    Status: 204  (18.3 ms)
+    Content-Type respuesta: application/json
+    Authorization: Bearer eyJhbGciOiJI...(160 chars)
+    Response: ""
+    Nota: DELETE del CRUD; deja la base como estaba
+
+======================================================================
+Total de peticiones registradas: 10
+Evidencia guardada en: docs\laboratorio3\evidencias\f01_reconocimiento.json
+======================================================================

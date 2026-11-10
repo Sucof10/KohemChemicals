@@ -1,0 +1,278 @@
+{
+  "caso": "F01",
+  "origen": "http://localhost:5173",
+  "fecha": "2026-11-06T18:20:27",
+  "peticiones": [
+    {
+      "paso": "1. Login cliente",
+      "metodo": "POST",
+      "url": "http://localhost:5173/api/v1/auth/token",
+      "status": 200,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Content-Length": "62",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      "request_body": {
+        "grant_type": "password",
+        "username": "cliente",
+        "password": "***"
+      },
+      "response_content_type": "application/json",
+      "response_body": {
+        "access_token": "eyJhbGciOiJI...(165 chars)",
+        "token_type": "bearer"
+      },
+      "elapsed_ms": 300.4,
+      "nota": "Content-Type: application/x-www-form-urlencoded"
+    },
+    {
+      "paso": "2. Login admin",
+      "metodo": "POST",
+      "url": "http://localhost:5173/api/v1/auth/token",
+      "status": 200,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Content-Length": "59",
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      "request_body": {
+        "grant_type": "password",
+        "username": "admin",
+        "password": "***"
+      },
+      "response_content_type": "application/json",
+      "response_body": {
+        "access_token": "eyJhbGciOiJI...(160 chars)",
+        "token_type": "bearer"
+      },
+      "elapsed_ms": 262.0,
+      "nota": "Content-Type: application/x-www-form-urlencoded"
+    },
+    {
+      "paso": "3. Consultar materias primas",
+      "metodo": "GET",
+      "url": "http://localhost:5173/api/v1/materials",
+      "status": 200,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Authorization": "Bearer eyJhbGciOiJI...(165 chars)"
+      },
+      "request_body": null,
+      "response_content_type": "application/json",
+      "response_body": [
+        {
+          "id": 1,
+          "name": "Aceite esencial de menta",
+          "category": "Aceites esenciales",
+          "unit": "kg",
+          "price": 85000.0,
+          "stock": 50.0,
+          "description": "Materia prima para formulaciones cosméticas.",
+          "is_active": true
+        },
+        {
+          "id": 2,
+          "name": "Glicerina vegetal",
+          "category": "Humectantes",
+          "unit": "kg",
+          "price": 18000.0,
+          "stock": 100.0,
+          "description": "Materia prima para formulaciones cosméticas.",
+          "is_active": true
+        },
+        {
+          "id": 3,
+          "name": "Ácido cítrico",
+          "category": "Reguladores de pH",
+          "unit": "kg",
+          "price": 12000.0,
+          "stock": 75.0,
+          "description": "Materia prima para formulaciones y ajuste de pH.",
+          "is_active": true
+        }
+      ],
+      "elapsed_ms": 10.5,
+      "nota": "Pantalla /materials (visible para todos los roles)"
+    },
+    {
+      "paso": "4. Ver detalle de materia prima",
+      "metodo": "GET",
+      "url": "http://localhost:5173/api/v1/materials/1",
+      "status": 200,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Authorization": "Bearer eyJhbGciOiJI...(165 chars)"
+      },
+      "request_body": null,
+      "response_content_type": "application/json",
+      "response_body": {
+        "id": 1,
+        "name": "Aceite esencial de menta",
+        "category": "Aceites esenciales",
+        "unit": "kg",
+        "price": 85000.0,
+        "stock": 50.0,
+        "description": "Materia prima para formulaciones cosméticas.",
+        "is_active": true
+      },
+      "elapsed_ms": 9.2,
+      "nota": "Seleccion de un registro del catalogo"
+    },
+    {
+      "paso": "5. Consultar pedidos (cliente)",
+      "metodo": "GET",
+      "url": "http://localhost:5173/api/v1/orders",
+      "status": 200,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Authorization": "Bearer eyJhbGciOiJI...(165 chars)"
+      },
+      "request_body": null,
+      "response_content_type": "application/json",
+      "response_body": [],
+      "elapsed_ms": 7.2,
+      "nota": "El cliente solo ve sus propios pedidos"
+    },
+    {
+      "paso": "6. Intento de auditoria como cliente",
+      "metodo": "GET",
+      "url": "http://localhost:5173/api/v1/audit-logs",
+      "status": 403,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Authorization": "Bearer eyJhbGciOiJI...(165 chars)"
+      },
+      "request_body": null,
+      "response_content_type": "application/json",
+      "response_body": {
+        "detail": "Solo admin o analista pueden consultar los logs."
+      },
+      "elapsed_ms": 4.9,
+      "nota": "Control de acceso por rol: se espera 403"
+    },
+    {
+      "paso": "7. Auditoria como admin",
+      "metodo": "GET",
+      "url": "http://localhost:5173/api/v1/audit-logs",
+      "status": 200,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Authorization": "Bearer eyJhbGciOiJI...(160 chars)"
+      },
+      "request_body": null,
+      "response_content_type": "application/json",
+      "response_body": [],
+      "elapsed_ms": 6.3,
+      "nota": "Pantalla /audit-logs (solo admin/analista)"
+    },
+    {
+      "paso": "8. Crear materia prima (admin)",
+      "metodo": "POST",
+      "url": "http://localhost:5173/api/v1/materials",
+      "status": 201,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Authorization": "Bearer eyJhbGciOiJI...(160 chars)",
+        "Content-Length": "168",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "name": "Materia prima temporal F01",
+        "category": "Pruebas",
+        "unit": "kg",
+        "price": 1000,
+        "stock": 1,
+        "description": "Registro creado por el script de auditoria F01."
+      },
+      "response_content_type": "application/json",
+      "response_body": {
+        "id": 4,
+        "name": "Materia prima temporal F01",
+        "category": "Pruebas",
+        "unit": "kg",
+        "price": 1000.0,
+        "stock": 1.0,
+        "description": "Registro creado por el script de auditoria F01.",
+        "is_active": true
+      },
+      "elapsed_ms": 20.4,
+      "nota": "CREATE del CRUD"
+    },
+    {
+      "paso": "9. Actualizar materia prima (admin)",
+      "metodo": "PUT",
+      "url": "http://localhost:5173/api/v1/materials/4",
+      "status": 200,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Authorization": "Bearer eyJhbGciOiJI...(160 chars)",
+        "Content-Length": "27",
+        "Content-Type": "application/json"
+      },
+      "request_body": {
+        "price": 1200,
+        "stock": 5
+      },
+      "response_content_type": "application/json",
+      "response_body": {
+        "id": 4,
+        "name": "Materia prima temporal F01",
+        "category": "Pruebas",
+        "unit": "kg",
+        "price": 1200.0,
+        "stock": 5.0,
+        "description": "Registro creado por el script de auditoria F01.",
+        "is_active": true
+      },
+      "elapsed_ms": 29.7,
+      "nota": "UPDATE del CRUD"
+    },
+    {
+      "paso": "10. Eliminar materia prima (admin)",
+      "metodo": "DELETE",
+      "url": "http://localhost:5173/api/v1/materials/4",
+      "status": 204,
+      "request_headers": {
+        "User-Agent": "python-requests/2.34.2",
+        "Accept-Encoding": "gzip, deflate, zstd",
+        "Accept": "*/*",
+        "Connection": "keep-alive",
+        "Authorization": "Bearer eyJhbGciOiJI...(160 chars)",
+        "Content-Length": "0"
+      },
+      "request_body": null,
+      "response_content_type": "application/json",
+      "response_body": "",
+      "elapsed_ms": 18.3,
+      "nota": "DELETE del CRUD; deja la base como estaba"
+    }
+  ]
+}

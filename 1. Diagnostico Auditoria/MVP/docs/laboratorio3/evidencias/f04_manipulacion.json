@@ -1,0 +1,454 @@
+{
+  "caso": "F04",
+  "origen": "http://localhost:5173",
+  "fecha": "2026-11-06T18:19:44",
+  "peticiones": [
+    {
+      "etiqueta": "A1. Original valida",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/materials",
+        "body": {
+          "name": "Material F04 original",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 1000,
+          "stock": 10,
+          "description": "Registro base para F04."
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": {
+          "id": 4,
+          "name": "Material F04 original",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 1000.0,
+          "stock": 10.0,
+          "description": "Registro base para F04.",
+          "is_active": true
+        }
+      },
+      "nota": "Peticion base generada desde React"
+    },
+    {
+      "etiqueta": "B1. name vacio",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/materials",
+        "body": {
+          "name": "",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 1000,
+          "stock": 10,
+          "description": "Registro base para F04."
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "Internal Server Error"
+      },
+      "nota": "Se espera 422 por min_length=2"
+    },
+    {
+      "etiqueta": "B2. price texto",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/materials",
+        "body": {
+          "name": "Material F04 original",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": "texto",
+          "stock": 10,
+          "description": "Registro base para F04."
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "Internal Server Error"
+      },
+      "nota": "Se espera 422 por tipo invalido"
+    },
+    {
+      "etiqueta": "B3. price 0",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/materials",
+        "body": {
+          "name": "Material F04 original",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 0,
+          "stock": 10,
+          "description": "Registro base para F04."
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "Internal Server Error"
+      },
+      "nota": "Se espera 422 por gt=0"
+    },
+    {
+      "etiqueta": "B4. stock negativo",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/materials",
+        "body": {
+          "name": "Material F04 original",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 1000,
+          "stock": -1,
+          "description": "Registro base para F04."
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "Internal Server Error"
+      },
+      "nota": "Se espera 422 por ge=0"
+    },
+    {
+      "etiqueta": "B5. name muy largo",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/materials",
+        "body": {
+          "name": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 1000,
+          "stock": 10,
+          "description": "Registro base para F04."
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "Internal Server Error"
+      },
+      "nota": "Se espera 422 por max_length=120"
+    },
+    {
+      "etiqueta": "B6. campos extra (mass assignment)",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/materials",
+        "body": {
+          "name": "Material F04 original",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 1000,
+          "stock": 10,
+          "description": "Registro base para F04.",
+          "id": 999,
+          "is_active": false,
+          "role": "admin"
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": {
+          "id": 5,
+          "name": "Material F04 original",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 1000.0,
+          "stock": 10.0,
+          "description": "Registro base para F04.",
+          "is_active": true
+        }
+      },
+      "nota": "Se inyectan id, is_active y role; los modelos Pydantic deberian ignorarlos"
+    },
+    {
+      "etiqueta": "C1. PUT con valores negativos",
+      "request": {
+        "metodo": "PUT",
+        "url": "http://localhost:5173/api/v1/materials/4",
+        "body": {
+          "stock": -50,
+          "price": -10
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "Internal Server Error"
+      },
+      "nota": "Se espera 422"
+    },
+    {
+      "etiqueta": "C2. PUT valido",
+      "request": {
+        "metodo": "PUT",
+        "url": "http://localhost:5173/api/v1/materials/4",
+        "body": {
+          "name": "Material F04 actualizado",
+          "price": 1500
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "id": 4,
+          "name": "Material F04 actualizado",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 1500.0,
+          "stock": 10.0,
+          "description": "Registro base para F04.",
+          "is_active": true
+        }
+      },
+      "nota": "Modificacion legitima para comparar con C1"
+    },
+    {
+      "etiqueta": "D1. quantity negativa",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/orders",
+        "body": {
+          "items": [
+            {
+              "raw_material_id": 1,
+              "quantity": -5
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "Internal Server Error"
+      },
+      "nota": "Se espera 422 por gt=0"
+    },
+    {
+      "etiqueta": "D2. quantity cero",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/orders",
+        "body": {
+          "items": [
+            {
+              "raw_material_id": 1,
+              "quantity": 0
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "Internal Server Error"
+      },
+      "nota": "Se espera 422 por gt=0"
+    },
+    {
+      "etiqueta": "D3. quantity mayor al stock",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/orders",
+        "body": {
+          "items": [
+            {
+              "raw_material_id": 1,
+              "quantity": 999999
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": 400,
+        "body": {
+          "detail": "Stock insuficiente para 'Aceite esencial de menta'. Disponible: 50.0, solicitado: 999999.0."
+        }
+      },
+      "nota": "Se espera rechazo por disponibilidad"
+    },
+    {
+      "etiqueta": "D4. material inexistente",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/orders",
+        "body": {
+          "items": [
+            {
+              "raw_material_id": 999999,
+              "quantity": 1
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": 400,
+        "body": {
+          "detail": "Materia prima con identificador 999999 no fue encontrado."
+        }
+      },
+      "nota": "Se espera rechazo"
+    },
+    {
+      "etiqueta": "D5. pedido sin items",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/orders",
+        "body": {
+          "items": []
+        }
+      },
+      "response": {
+        "status": 500,
+        "body": "Internal Server Error"
+      },
+      "nota": "Se espera 422 por min_length=1"
+    },
+    {
+      "etiqueta": "E1. cliente intenta crear material",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/materials",
+        "body": {
+          "name": "Material F04 original",
+          "category": "Pruebas F04",
+          "unit": "kg",
+          "price": 1000,
+          "stock": 10,
+          "description": "Registro base para F04."
+        }
+      },
+      "response": {
+        "status": 403,
+        "body": {
+          "detail": "El usuario no posee permisos suficientes para ejecutar esta operación."
+        }
+      },
+      "nota": "Se espera 403"
+    },
+    {
+      "etiqueta": "E2. cliente intenta editar material",
+      "request": {
+        "metodo": "PUT",
+        "url": "http://localhost:5173/api/v1/materials/4",
+        "body": {
+          "price": 1
+        }
+      },
+      "response": {
+        "status": 403,
+        "body": {
+          "detail": "El usuario no posee permisos suficientes para ejecutar esta operación."
+        }
+      },
+      "nota": "Se espera 403"
+    },
+    {
+      "etiqueta": "F1. registro publico con role=admin",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/auth/register",
+        "body": {
+          "username": "auditor_f04_admin",
+          "email": "auditor_f04_admin@kohem.com",
+          "password": "AuditorF04Pass123!",
+          "role": "admin"
+        }
+      },
+      "response": {
+        "status": 201,
+        "body": {
+          "id": 3,
+          "username": "auditor_f04_admin",
+          "email": "auditor_f04_admin@kohem.com",
+          "role": "admin",
+          "is_active": true
+        }
+      },
+      "nota": "El endpoint no exige autenticacion ni restringe el rol"
+    },
+    {
+      "etiqueta": "F2. login del usuario creado",
+      "request": {
+        "metodo": "POST",
+        "url": "http://localhost:5173/api/v1/auth/token",
+        "body": {
+          "username": "auditor_f04_admin",
+          "password": "<oculta>"
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "claims_del_jwt": {
+            "sub": "auditor_f04_admin",
+            "role": "admin",
+            "user_id": 3,
+            "exp": 1794010784
+          }
+        }
+      },
+      "nota": "HALLAZGO: el rol admin queda asignado desde el registro publico"
+    },
+    {
+      "etiqueta": "F3. usuario nuevo consulta auditoria",
+      "request": {
+        "metodo": "GET",
+        "url": "http://localhost:5173/api/v1/audit-logs",
+        "body": null
+      },
+      "response": {
+        "status": 200,
+        "body": []
+      },
+      "nota": "200 confirma que la escalada es efectiva"
+    }
+  ],
+  "hallazgos": [
+    {
+      "id": "H-F04-01",
+      "titulo": "Registro publico permite asignar role=admin",
+      "severidad": "Critica",
+      "detalle": "POST /api/v1/auth/register acepta role=admin sin autenticacion. El usuario creado inicia sesion con rol admin y consulta /audit-logs con 200.",
+      "recomendacion": "Forzar role=cliente en el servidor y quitar el campo del DTO de registro publico."
+    },
+    {
+      "id": "H-F04-02",
+      "titulo": "Errores de validacion devuelven 500 en lugar de 422",
+      "severidad": "Media",
+      "detalle": "Los routers validan con Model.model_validate(); pydantic lanza ValidationError no controlada y FastAPI responde 500 en texto plano.",
+      "recomendacion": "Capturar ValidationError y devolver 422 con detalle de campos."
+    },
+    {
+      "id": "H-F04-03",
+      "titulo": "Codigos HTTP imprecisos en errores de negocio",
+      "severidad": "Baja",
+      "detalle": "Stock insuficiente y material inexistente devuelven 400 en lugar de 409 y 404.",
+      "recomendacion": "Ajustar la semantica de los codigos."
+    },
+    {
+      "id": "H-F04-04",
+      "titulo": "Campos extra ignorados (mass assignment no explotable)",
+      "severidad": "Positivo",
+      "detalle": "Inyectar id, is_active y role en POST /materials no altera el registro.",
+      "recomendacion": "Mantener."
+    },
+    {
+      "id": "H-F04-05",
+      "titulo": "Autorizacion por rol correcta en operaciones de escritura",
+      "severidad": "Positivo",
+      "detalle": "Cliente recibe 403 en POST y PUT de materias primas.",
+      "recomendacion": "Mantener."
+    }
+  ],
+  "resumen": {
+    "casos": 19,
+    "validaciones_rechazadas_correctamente": true,
+    "codigos_incorrectos": [
+      "500 en 7 casos de validacion",
+      "400 en lugar de 409/404"
+    ],
+    "escalada_confirmada": true,
+    "nota_limpieza": "Los materiales temporales se eliminan. El usuario de prueba debe borrarse aparte porque no existe endpoint de baja de usuarios."
+  }
+}

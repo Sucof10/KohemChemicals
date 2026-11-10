@@ -1,0 +1,90 @@
+{
+  "caso": "F05",
+  "actividad": "Analisis DAST con OWASP ZAP - escaneo automatizado sin autenticacion",
+  "herramienta": "OWASP ZAP (Automated Scan sobre http://localhost:5173)",
+  "fecha": "2026-11-08",
+  "alcance": "Solo superficie publica (login). No se autentico ni se ejecuto Ajax Spider con sesion.",
+  "resumen": {
+    "tipos_de_alerta": 8,
+    "instancias": 35,
+    "confirmadas": 3,
+    "falsos_positivos": 3,
+    "informativas": 2,
+    "hallazgos_nuevos": 0
+  },
+  "alertas": [
+    {
+      "alerta": "Ruta Transversal",
+      "instancias": 2,
+      "urls": [
+        "/node_modules/.vite/deps/react...",
+        "/node_modules/.vite/deps/rolldown..."
+      ],
+      "veredicto": "Falso positivo",
+      "severidad": "N/A",
+      "evidencia": "Los payloads de traversal (../, %2e%2e, %5c) devuelven 200 pero con el index.html de 715 bytes. /@fs/C:/Windows/win.ini y /@fs/ a archivos del proyecto devuelven 403. No se obtuvo ningun archivo del sistema.",
+      "explicacion": "Vite responde con la SPA para cualquier ruta; ZAP interpreta ese 200 como exito del traversal."
+    },
+    {
+      "alerta": "Cabecera Content Security Policy (CSP) no configurada",
+      "instancias": 4,
+      "veredicto": "Confirmado",
+      "severidad": "Media",
+      "evidencia": "Coincide con H-F06-01. Las rutas /robots.txt y /sitemap.xml devuelven el index por el fallback de la SPA.",
+      "referencia": "H-F06-01"
+    },
+    {
+      "alerta": "Falta de cabecera Anti-Clickjacking",
+      "instancias": 4,
+      "veredicto": "Confirmado",
+      "severidad": "Media",
+      "evidencia": "No existe X-Frame-Options ni CSP con frame-ancestors. Coincide con H-F06-01.",
+      "referencia": "H-F06-01"
+    },
+    {
+      "alerta": "Falta encabezado X-Content-Type-Options (Systemic)",
+      "instancias": 4,
+      "veredicto": "Confirmado",
+      "severidad": "Baja",
+      "evidencia": "Coincide con H-F06-01.",
+      "referencia": "H-F06-01"
+    },
+    {
+      "alerta": "Divulgacion de Marcas de Tiempo - Unix",
+      "instancias": 1,
+      "veredicto": "Informativa",
+      "severidad": "Informativa",
+      "evidencia": "Corresponde a la cabecera Date de HTTP, presente en cualquier servidor. No es una vulnerabilidad.",
+      "explicacion": "Ruido habitual de ZAP."
+    },
+    {
+      "alerta": "Aplicacion Web Moderna",
+      "instancias": 4,
+      "veredicto": "Informativa",
+      "severidad": "Informativa",
+      "evidencia": "ZAP detecta que la aplicacion es una SPA. No implica riesgo por si mismo."
+    },
+    {
+      "alerta": "Divulgacion de Informacion - Informacion sensible en URL",
+      "instancias": 1,
+      "veredicto": "Falso positivo",
+      "severidad": "N/A",
+      "evidencia": "URL afectada: /?token= Corresponde al token del WebSocket de recarga en caliente de Vite (ws://localhost:5173/?token=...), exclusivo del entorno de desarrollo.",
+      "explicacion": "No es una credencial de usuario ni se envia al backend."
+    },
+    {
+      "alerta": "Divulgacion de informacion - Comentarios sospechosos",
+      "instancias": 15,
+      "veredicto": "Solo en desarrollo",
+      "severidad": "Informativa",
+      "evidencia": "Vite sirve los archivos fuente (/src/*.tsx) con sus comentarios. En el build de produccion (/assets/index-*.js) no se sirven fuentes ni comentarios: se comprobo que /src/main.tsx devuelve el index de 631 bytes en :4173.",
+      "explicacion": "Desaparece al desplegar el build. No afecta a produccion."
+    }
+  ],
+  "limitaciones": [
+    "El escaneo automatizado no inicio sesion: solo cubre la pantalla de login.",
+    "No se ejecuto el Ajax Spider, por lo que las rutas internas no fueron exploradas.",
+    "La API quedo fuera del alcance por tratarse de un servicio consumido."
+  ],
+  "conclusion": "El DAST automatizado no aporto hallazgos nuevos. Confirmo tres ausencias de cabeceras ya documentadas en F06 y genero tres falsos positivos atribuibles al servidor de desarrollo y al fallback de la SPA. Para un resultado representativo se recomienda repetir el escaneo autenticado con Ajax Spider sobre el build de produccion."
+}
