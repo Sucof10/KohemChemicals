@@ -16,6 +16,9 @@ import {
   type AIChatFormValues,
 } from '../../schemas/ai.schema'
 import { cn } from '../../utils/cn'
+import { construirHistorial } from '../../utils/chatHistory'
+import { formatCurrency, formatQuantity } from '../../utils/format'
+import type { AIChatDatos } from '../../types/api'
 
 interface ChatMessage {
   id: string
@@ -23,6 +26,9 @@ interface ChatMessage {
   content: string
   transferToEmployee?: boolean
   reason?: string | null
+  motor?: string
+  datos?: AIChatDatos | null
+  esBienvenida?: boolean
 }
 
 const suggestions = [
@@ -41,7 +47,8 @@ export function AIChatPage() {
       id: createId(),
       role: 'assistant',
       content:
-        'Hola. Puedo orientarte sobre disponibilidad, pedidos y el proceso de compra. Si tu consulta requiere apoyo técnico, la transferiré a un asesor.',
+        'Hola. Puedo orientarte sobre disponibilidad, pedidos y el proceso de compra. Recuerdo los últimos mensajes de esta conversación. Si tu consulta requiere apoyo técnico, la transferiré a un asesor.',
+      esBienvenida: true,
     },
   ])
   const [isSending, setIsSending] = useState(false)
@@ -71,6 +78,7 @@ export function AIChatPage() {
 
   const onSubmit = handleSubmit(async (values) => {
     const message = values.message.trim()
+    const historial = construirHistorial(messages)
     setError(null)
     setMessages((current) => [
       ...current,
@@ -79,7 +87,7 @@ export function AIChatPage() {
     reset({ message: '' })
     setIsSending(true)
     try {
-      const response = await sendChatMessage({ message })
+      const response = await sendChatMessage({ message, historial })
       setMessages((current) => [
         ...current,
         {
@@ -88,6 +96,8 @@ export function AIChatPage() {
           content: response.response,
           transferToEmployee: response.transfer_to_employee,
           reason: response.reason,
+          motor: response.motor,
+          datos: response.datos,
         },
       ])
     } catch (requestError) {
@@ -101,7 +111,7 @@ export function AIChatPage() {
     <div className="space-y-6">
       <PageHeader
         title="Asesoría IA"
-        description="Agente inicial para orientar consultas sobre disponibilidad, pedidos y formulaciones. Si requiere intervención humana, la consulta se marca para transferencia a un empleado."
+        description="Agente conversacional que recuerda los últimos mensajes para orientar consultas sobre disponibilidad, pedidos y formulaciones. Si requiere intervención humana, la consulta se marca para transferencia a un empleado."
       />
 
       {error ? <Alert tone="error">{error}</Alert> : null}
@@ -132,6 +142,26 @@ export function AIChatPage() {
                     </Badge>
                     {message.reason ? (
                       <p className="text-xs text-slate-500">{message.reason}</p>
+                    ) : null}
+                  </div>
+                ) : null}
+                {message.role === 'assistant' && (message.motor || message.datos) ? (
+                  <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-2 text-[11px] text-slate-500">
+                    {message.motor ? (
+                      <span className="rounded-full bg-slate-200/70 px-2 py-0.5">
+                        Motor: {message.motor}
+                      </span>
+                    ) : null}
+                    {message.datos?.tipo === 'cotizacion' &&
+                    typeof message.datos.total === 'number' ? (
+                      <span>Total calculado: {formatCurrency(message.datos.total)}</span>
+                    ) : null}
+                    {message.datos?.tipo === 'stock' &&
+                    typeof message.datos.stock === 'number' ? (
+                      <span>
+                        Stock: {formatQuantity(message.datos.stock)}{' '}
+                        {String(message.datos.unidad ?? '')}
+                      </span>
                     ) : null}
                   </div>
                 ) : null}

@@ -1,5 +1,6 @@
 import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
+import { sendChatMessage } from '../api/services/ai.service'
 import { login, register } from '../api/services/auth.service'
 import {
   createMaterial,
@@ -140,8 +141,7 @@ describe('materials service', () => {
   })
 })
 
-describe('orders service', () => {
-  it('cambia el estado con PATCH y JSON', async () => {
+describe('orders service', () => {  it('cambia el estado con PATCH y JSON', async () => {
     storeToken(createTestToken('admin'))
     let method = ''
     let body: Record<string, unknown> = {}
@@ -160,5 +160,38 @@ describe('orders service', () => {
     expect(body).toEqual({ status: 'confirmado' })
     expect(result.status).toBe('confirmado')
     expect(result.total).toBe(36000)
+  })
+})
+
+describe('ai service', () => {
+  it('envía el historial y devuelve motor y datos', async () => {
+    storeToken(createTestToken('cliente'))
+    let body: Record<string, unknown> = {}
+
+    server.use(
+      http.post(`${api}/ai/chat`, async ({ request }) => {
+        body = (await request.json()) as Record<string, unknown>
+        return HttpResponse.json({
+          response: 'Contamos con 100 kg disponibles.',
+          transfer_to_employee: false,
+          reason: null,
+          motor: 'deepseek-conversacional',
+          datos: { tipo: 'stock', stock: 100, unidad: 'kg' },
+        })
+      }),
+    )
+
+    const resultado = await sendChatMessage({
+      message: '¿Y cuánto hay de ese material?',
+      historial: [
+        { role: 'user', content: 'Quiero dos kilos de glicerina' },
+        { role: 'assistant', content: 'Te cotizamos 2 kg en $36.000.' },
+      ],
+    })
+
+    expect(body.message).toBe('¿Y cuánto hay de ese material?')
+    expect(body.historial).toHaveLength(2)
+    expect(resultado.motor).toBe('deepseek-conversacional')
+    expect(resultado.datos?.stock).toBe(100)
   })
 })

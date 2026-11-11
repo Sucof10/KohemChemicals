@@ -92,14 +92,35 @@ export interface OrderStatusUpdateInput {
   status: OrderStatus
 }
 
+export interface ChatHistoryMessage {
+  role: 'user' | 'assistant'
+  content: string
+}
+
 export interface AIChatInput {
   message: string
+  historial?: ChatHistoryMessage[]
+}
+
+export interface AIChatDatos {
+  tipo?: string
+  subtotal?: number
+  iva?: number
+  total?: number
+  material?: string
+  stock?: number
+  unidad?: string
+  tope_aplicado?: boolean
+  requiere_revision?: boolean
+  [clave: string]: unknown
 }
 
 export interface AIChatResponse {
   response: string
   transfer_to_employee: boolean
   reason: string | null
+  motor?: string
+  datos?: AIChatDatos | null
 }
 
 export interface AuditLog {
