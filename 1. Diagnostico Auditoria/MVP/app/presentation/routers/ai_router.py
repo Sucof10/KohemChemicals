@@ -33,7 +33,8 @@ async def chat(
         raise HTTPException(status_code=400, detail="El cuerpo de la solicitud no es un JSON UTF-8 válido.")
 
     try:
-        response, transfer, reason = await ai.respond(dto.message)
+        historial = [{"role": mensaje.role, "content": mensaje.content} for mensaje in dto.historial]
+        response, transfer, reason = await ai.respond(dto.message, historial)
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
 
@@ -42,4 +43,5 @@ async def chat(
         transfer_to_employee=transfer,
         reason=reason,
         motor=ai.ultimo_motor,
+        datos=ai.ultimos_datos,
     )

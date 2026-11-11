@@ -29,9 +29,12 @@ class LLMFalso:
         self.respuesta = respuesta
         self.llamadas = []
 
-    async def interpretar(self, mensaje, contexto, materiales):
-        self.llamadas.append({"mensaje": mensaje, "contexto": contexto})
+    async def interpretar(self, mensaje, contexto, materiales, historial=None):
+        self.llamadas.append({"mensaje": mensaje, "contexto": contexto, "historial": historial})
         return self.respuesta
+
+    async def redactar(self, mensaje, datos, contexto, historial=None):
+        return None
 
 
 def construir(llm=None):

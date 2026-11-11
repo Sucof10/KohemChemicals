@@ -136,14 +136,26 @@ class OrderResponseDTO(BaseModel):
     created_at: str
     updated_at: str
 
+class MensajeHistorial(BaseModel):
+    role: str = Field(..., pattern="^(user|assistant)$")
+    content: str = Field(..., min_length=1, max_length=2000)
+
 class AIChatRequestDTO(BaseModel):
     model_config = ConfigDict(json_schema_extra={
-        "example": {"message": "Necesito asesoría para formular un producto cosmético."}
+        "example": {
+            "message": "¿Y de ese material cuánto hay?",
+            "historial": [
+                {"role": "user", "content": "Cotiza 2 kg de glicerina"},
+                {"role": "assistant", "content": "La glicerina cuesta $36.000 por 2 kg."},
+            ],
+        }
     })
     message: str = Field(..., min_length=1, max_length=1000)
+    historial: List[MensajeHistorial] = Field(default_factory=list, max_length=20)
 
 class AIChatResponseDTO(BaseModel):
     response: str
     transfer_to_employee: bool
     reason: Optional[str] = None
     motor: str = "reglas"
+    datos: Optional[dict] = None

@@ -3,7 +3,7 @@
 {
   "pytest": {
     "codigo_salida": 0,
-    "resumen": "68 passed, 3 warnings in 3.09s",
+    "resumen": "74 passed, 3 warnings in 3.35s",
     "errores": ""
   },
   "arquitectura": {

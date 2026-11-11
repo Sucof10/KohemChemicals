@@ -1,11 +1,17 @@
 {
   "pytest": {
     "codigo_salida": 0,
-    "resumen": "68 passed, 3 warnings in 3.09s",
-    "salida": "....................................................................     [100%]\n============================== warnings summary ===============================\ntests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order\ntests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order\n  <string>:9: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n\ntests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order\n  <string>:10: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n68 passed, 3 warnings in 3.09s\n",
+    "resumen": "74 passed, 3 warnings in 3.35s",
+    "salida": "........................................................................ [ 97%]\n..                                                                       [100%]\n============================== warnings summary ===============================\ntests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order\ntests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order\n  <string>:9: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n\ntests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order\n  <string>:10: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n74 passed, 3 warnings in 3.35s\n",
     "errores": ""
   },
   "pruebas_colectadas": [
+    "tests/test_ai_conversacional.py::test_conversacional_usa_redaccion_del_modelo",
+    "tests/test_ai_conversacional.py::test_conversacional_recibe_datos_verificados",
+    "tests/test_ai_conversacional.py::test_conversacional_sin_redaccion_usa_plantilla",
+    "tests/test_ai_conversacional.py::test_conversacional_charla_libre",
+    "tests/test_ai_conversacional.py::test_historial_se_reenvia_y_se_recorta",
+    "tests/test_ai_conversacional.py::test_modo_asistente_no_redacta",
     "tests/test_ai_llm.py::test_llm_interpreta_cotizacion_con_palabras",
     "tests/test_ai_llm.py::test_llm_interpreta_consulta_de_stock",
     "tests/test_ai_llm.py::test_llm_deriva_a_asesor",

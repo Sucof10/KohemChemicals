@@ -125,7 +125,7 @@
       "tope_aplicado": false,
       "requiere_revision": false
     },
-    "duracion_ms": 1688.0
+    "duracion_ms": 1692.3
   },
   "criterios": {
     "tres_herramientas": true,

@@ -6,10 +6,13 @@ está, las consultas deben resolverse con DeepSeek y el campo ``motor`` debe
 reflejarlo.
 """
 
+import os
 import sys
 import time
 
 sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parents[2]))
+# Leer el .env del MVP aunque el script se ejecute desde docs/laboratorio4.
+os.chdir(str(__import__("pathlib").Path(__file__).resolve().parents[2]))
 
 from _common import guardar, imprimir, solicitud, token
 from app.infrastructure.config import settings
@@ -42,13 +45,18 @@ def ejecutar() -> dict:
             }
         )
 
-    esperado = "deepseek" if configurado else "reglas"
+    esperado = (
+        "reglas"
+        if not configurado
+        else ("deepseek-conversacional" if settings.AI_MODE == "conversacional" else "deepseek")
+    )
     evidencia = {
         "proveedor": "DeepSeek",
         "modelo": settings.DEEPSEEK_MODEL,
         "base_url": settings.DEEPSEEK_BASE_URL,
         "variable_entorno": "DEEPSEEK_API_KEY",
         "configurado": configurado,
+        "modo": settings.AI_MODE,
         "motor_esperado": esperado,
         "casos": casos,
         "criterios": {

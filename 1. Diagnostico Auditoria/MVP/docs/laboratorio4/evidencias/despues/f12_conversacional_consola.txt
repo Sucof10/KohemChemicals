@@ -1,0 +1,60 @@
+﻿
+=== P12 ÔÇö Modo conversacional ===
+{
+  "modo": "conversacional",
+  "proveedor": "DeepSeek",
+  "configurado": false,
+  "motor_esperado": "reglas",
+  "casos": [
+    {
+      "mensaje": "Buenas tardes",
+      "status": 200,
+      "respuesta": "Puedo ayudarte con disponibilidad, pedidos y orientaci├│n inicial sobre el proceso de compra.",
+      "motor": "reglas",
+      "transfer": false,
+      "datos": null
+    },
+    {
+      "mensaje": "Quiero dos kilos de glicerina",
+      "status": 200,
+      "respuesta": "Cotizaci├│n de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nTotal: $36.000,00",
+      "motor": "reglas",
+      "transfer": false,
+      "datos": {
+        "tipo": "cotizacion",
+        "items": [
+          {
+            "material_id": 2,
+            "nombre": "Glicerina vegetal",
+            "cantidad": 2.0,
+            "unidad": "kg",
+            "precio_unitario": 18000.0,
+            "subtotal": 36000.0,
+            "requiere_revision": false
+          }
+        ],
+        "subtotal": 36000.0,
+        "iva": 0.0,
+        "total": 36000.0,
+        "tope_aplicado": false,
+        "requiere_revision": false
+      }
+    },
+    {
+      "mensaje": "┬┐Y cu├ínto hay de ese material?",
+      "status": 200,
+      "respuesta": "Puedo ayudarte con disponibilidad, pedidos y orientaci├│n inicial sobre el proceso de compra.",
+      "motor": "reglas",
+      "transfer": false,
+      "datos": null
+    }
+  ],
+  "criterios": {
+    "responde_sin_error": true,
+    "motor_correcto": true,
+    "datos_estructurados": true,
+    "datos_calculados_por_dominio": true,
+    "acepta_historial": true,
+    "cumple_todos": true
+  }
+}

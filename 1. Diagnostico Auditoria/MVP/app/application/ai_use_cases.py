@@ -167,21 +167,42 @@ class AIAssistantUseCase:
         mcp_executor: IMcpToolExecutor,
         pricing: PricingDomainService | None = None,
         llm: ILLMProvider | None = None,
+        modo: str = "asistente",
+        max_historial: int = 8,
     ):
         self.rag_repo = rag_repo
         self.mcp_executor = mcp_executor
         self.pricing = pricing or PricingDomainService()
         self.llm = llm
+        self.modo = modo if modo in ("asistente", "conversacional") else "asistente"
+        self.max_historial = max(max_historial, 0)
         self.ultimo_motor = "reglas"
+        self.ultimos_datos: dict[str, Any] | None = None
 
-    async def respond(self, message: str) -> tuple[str, bool, str | None]:
+    async def respond(
+        self, message: str, historial: list[dict[str, str]] | None = None
+    ) -> tuple[str, bool, str | None]:
         consulta = message.strip()
         if not consulta:
             raise ValueError("El mensaje no puede estar vacío.")
 
+        self.ultimos_datos = None
+        self.ultimo_motor = "reglas"
         contexto = self.rag_repo.buscar_contexto(consulta)
+        historial = (historial or [])[-self.max_historial:]
 
-        interpretacion = await self._interpretar(consulta, contexto)
+        respuesta = await self._responder(consulta, contexto, historial)
+        if self.modo == "conversacional" and self.llm is not None:
+            redactado = await self.llm.redactar(consulta, self.ultimos_datos, contexto, historial)
+            if redactado:
+                self.ultimo_motor = f"{getattr(self.llm, 'nombre', 'llm')}-conversacional"
+                return (redactado, respuesta[1], respuesta[2])
+        return respuesta
+
+    async def _responder(
+        self, consulta: str, contexto: str, historial: list[dict[str, str]]
+    ) -> tuple[str, bool, str | None]:
+        interpretacion = await self._interpretar(consulta, contexto, historial)
         if interpretacion is not None:
             respuesta = await self._aplicar_interpretacion(interpretacion, contexto)
             if respuesta is not None:
@@ -216,10 +237,12 @@ class AIAssistantUseCase:
     # ------------------------------------------------------------------
     # Interpretación con modelo de lenguaje (respaldo: reglas)
     # ------------------------------------------------------------------
-    async def _interpretar(self, consulta: str, contexto: str) -> dict[str, Any] | None:
+    async def _interpretar(
+        self, consulta: str, contexto: str, historial: list[dict[str, str]]
+    ) -> dict[str, Any] | None:
         if self.llm is None:
             return None
-        datos = await self.llm.interpretar(consulta, contexto, [])
+        datos = await self.llm.interpretar(consulta, contexto, [], historial)
         if not isinstance(datos, dict):
             return None
         intencion = datos.get("intencion")
@@ -303,6 +326,15 @@ class AIAssistantUseCase:
                 "aplicar_tope": "50.000.000" in contexto,
             },
         )
+        self.ultimos_datos = {
+            "tipo": "cotizacion",
+            "items": cotizacion["items"],
+            "subtotal": cotizacion["subtotal"],
+            "iva": cotizacion["iva"],
+            "total": cotizacion["total"],
+            "tope_aplicado": cotizacion["tope_aplicado"],
+            "requiere_revision": cotizacion["requiere_revision"],
+        }
 
         lineas = ["Cotización de pedido:"]
         for item in cotizacion["items"]:
@@ -349,6 +381,7 @@ class AIAssistantUseCase:
             )
 
         stock = await self.mcp_executor.ejecutar_herramienta("consultar_stock", {"nombre": material["nombre"]})
+        self.ultimos_datos = {"tipo": "stock", **stock}
         respuesta = (
             f"{stock['material']}: {stock['stock']:g} {stock['unidad']} disponibles "
             f"(mínimo operativo {stock['stock_minimo']:g} {stock['unidad']})."

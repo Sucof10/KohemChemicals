@@ -1,20 +1,20 @@
 # Laboratorio 4 — Auditoría Backend IA · Kohem Chemicals
 
 Material del laboratorio adaptado desde la guía de calculadora FastAPI al backend
-del MVP de Kohem Chemicals, con **RAG y MCP reales** y **DeepSeek opcional** para
-que los casos P06, P07 y P11 auditen componentes existentes.
+del MVP de Kohem Chemicals, con **RAG y MCP reales**, **DeepSeek opcional** y
+**modo conversacional** para que P06, P07, P11 y P12 auditen componentes reales.
 
 ## Contenido
 
 | Archivo | Descripción |
 |---|---|
 | `GUIA_LABORATORIO_4_KOHEM.docx` / `.pdf` | Guía adaptada con la plantilla institucional |
-| `RESULTADOS_LAB4.md` | Resumen, hallazgos, correcciones y configuración de DeepSeek |
-| `f01_operaciones.py` … `f11_deepseek.py` | Scripts de cada caso |
+| `RESULTADOS_LAB4.md` | Resumen, hallazgos, correcciones y configuración |
+| `f01_operaciones.py` … `f12_conversacional.py` | Scripts de cada caso |
 | `_common.py` | Utilidades: tokens, HTTP y guardado de evidencia |
-| `_build_guia.py` | Generador del `.docx` a partir de la plantilla del profesor |
+| `_build_guia.py` | Generador del `.docx` desde la plantilla del profesor |
 | `evidencias/antes/` | Ejecución previa a las correcciones |
-| `evidencias/despues/` | Ejecución final (P01–P11 en verde) |
+| `evidencias/despues/` | Ejecución final (P01–P12) |
 
 ## Requisitos
 
@@ -27,37 +27,57 @@ cd "C:\Auditoria\KohemChemicals\1. Diagnostico Auditoria\MVP"
 .\venv\Scripts\python.exe -m uvicorn app.presentation.main:app --reload
 ```
 
-## Motor de IA
+## Modos de IA
 
-Sin configuración adicional funciona el **motor de reglas**. Para usar DeepSeek:
+| `AI_MODE` | Comportamiento |
+|---|---|
+| `asistente` (defecto) | Plantilla fija; DeepSeek solo interpreta. Auditable. |
+| `conversacional` | DeepSeek redacta con las cifras del dominio y acepta historial. |
+
+Sin `DEEPSEEK_API_KEY`, ambos modos funcionan con el motor de reglas y devuelven
+la plantilla.
+
+Para ejecutar **f01–f11**, el backend debe estar en `AI_MODE=asistente`.
+**f12** levanta su propia instancia en el puerto 8001 con
+`AI_MODE=conversacional`, así que la auditoría no depende del modo del servicio
+principal.
+
+## Configurar DeepSeek
 
 ```powershell
 Copy-Item .env.example .env
-# Editar .env y completar DEEPSEEK_API_KEY=sk-...
+# Editar .env:
+#   DEEPSEEK_API_KEY=sk-...
+#   AI_MODE=conversacional
 ```
 
 | Variable | Valor |
 |---|---|
-| `DEEPSEEK_API_KEY` | clave del proveedor |
+| `DEEPSEEK_API_KEY` | clave de <https://platform.deepseek.com> |
 | `DEEPSEEK_BASE_URL` | `https://api.deepseek.com` |
 | `DEEPSEEK_MODEL` | `deepseek-chat` |
 | `LLM_TIMEOUT_SECONDS` | `20` |
+| `LLM_TEMPERATURE` | `0.3` |
+| `AI_MODE` | `asistente` o `conversacional` |
+| `AI_HISTORY_MAX` | `8` |
 
-La respuesta incluye `motor` (`reglas` o `deepseek`). Si el modelo falla, el
-asistente continúa por reglas.
+`.env` está ignorado por Git. No subir la clave ni incluirla en evidencias.
 
 ## Ejecución
 
-Desde `docs\laboratorio4`:
+Desde `docs\laboratorio4`, con el backend en el puerto 8000:
 
 ```powershell
 ..\..\venv\Scripts\python.exe f01_operaciones.py
-..\..\venv\Scripts\python.exe f02_stock.py
 # …
 ..\..\venv\Scripts\python.exe f11_deepseek.py
+..\..\venv\Scripts\python.exe f12_conversacional.py
 ```
 
-Para guardar en otra carpeta (por ejemplo, una nueva ejecución):
+`f12` levanta su propia instancia en el puerto 8001 con
+`AI_MODE=conversacional`, ejecuta el diálogo y la apaga.
+
+Para guardar en otra carpeta:
 
 ```powershell
 $env:LAB4_EVID = "evidencias/despues"
@@ -65,10 +85,9 @@ $env:LAB4_EVID = "evidencias/despues"
 
 ## Notas
 
-- `f07_mcp.py` abre una sesión MCP real por stdio (`initialize → list_tools →
-  call_tool`) y tarda ~2 s porque arranca el servidor como subproceso.
-- El servidor MCP puede levantarse con `python -m app.infrastructure.mcp_server`
-  (transporte stdio, no HTTP).
+- `f07_mcp.py` abre una sesión MCP real por stdio y tarda ~2 s porque arranca el
+  servidor como subproceso.
 - Los scripts crean datos temporales y los eliminan o cancelan al final; si se
   interrumpe uno, revisar `GET /api/v1/materials` y `GET /api/v1/orders`.
 - Las evidencias no contienen tokens ni la clave de DeepSeek.
+- Para volver al estado sin modo conversacional: `git checkout lab4-asistente-estable`.

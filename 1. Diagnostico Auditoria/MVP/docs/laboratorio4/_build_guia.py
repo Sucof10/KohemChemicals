@@ -1,4 +1,4 @@
-"""Genera la guía del Laboratorio 4 adaptada a Kohem Chemicals.
+﻿"""Genera la guía del Laboratorio 4 adaptada a Kohem Chemicals.
 
 Reutiliza el .docx del profesor como plantilla para conservar encabezado, pie,
 márgenes y estilos institucionales, y reemplaza todo el cuerpo.
@@ -221,8 +221,8 @@ parrafo("La auditoría se concentra en la corrección de los cálculos de pedido
 parrafo("Limitaciones declaradas de la versión auditada", negrita=True, espacio_antes=6)
 vineta("El asistente funciona sin modelo externo por defecto: la intención se identifica con "
        "reglas léxicas y expresiones regulares. Si se configura DEEPSEEK_API_KEY, un modelo de "
-       "lenguaje interpreta la consulta, pero la ejecución de acciones sigue siendo determinista "
-       "en el servidor MCP y el dominio.")
+       "lenguaje interpreta la consulta; con AI_MODE=conversacional también redacta la respuesta "
+       "usando las cifras calculadas por el dominio.")
 vineta("El RAG es un adaptador simulado en memoria que recupera reglas por palabras clave, no una "
        "base vectorial con búsqueda semántica.")
 vineta("El asistente cotiza y consulta stock, pero no registra pedidos ni consulta por identificador.")
@@ -272,7 +272,7 @@ tabla(
         ["app/presentation/validacion.py", "Presentación", "Validación centralizada y errores 422/400."],
         ["app/presentation/dependencies.py", "Presentación", "Inyección de dependencias."],
         ["tests/ (5 archivos)", "Pruebas", "Suite automatizada del dominio, MCP, IA y HTTP."],
-        ["docs/laboratorio4/", "Evidencias", "Scripts f01–f10, JSON y consolas."],
+        ["docs/laboratorio4/", "Evidencias", "Scripts f01–f12, JSON y consolas."],
     ],
     anchos=[6.4, 3.2, 6.0],
 )
@@ -303,7 +303,7 @@ codigo("POST /api/v1/ai/chat\n"
        "      → IMcpToolExecutor.ejecutar_herramienta()  (listar_materiales / consultar_stock / calcular_pedido)\n"
        "          → MCPServer (protocolo MCP)\n"
        "              → PricingDomainService + SQLiteRawMaterialRepository\n"
-       "  → AIChatResponseDTO { response, transfer_to_employee, reason, motor }")
+       "  → AIChatResponseDTO { response, transfer_to_employee, reason, motor, datos }")
 
 titulo("5.1 Motor de inteligencia", nivel=2)
 parrafo("El asistente tiene dos motores intercambiables y siempre deja constancia del usado en el "
@@ -317,9 +317,36 @@ parrafo("Configuración (archivo .env, nunca versionado):", negrita=True, espaci
 codigo("DEEPSEEK_API_KEY=sk-...\n"
        "DEEPSEEK_BASE_URL=https://api.deepseek.com\n"
        "DEEPSEEK_MODEL=deepseek-chat\n"
-       "LLM_TIMEOUT_SECONDS=20")
+       "LLM_TIMEOUT_SECONDS=20\n"
+       "AI_MODE=conversacional\n"
+       "AI_HISTORY_MAX=8")
 parrafo("El adaptador está en app/infrastructure/deepseek_llm.py y usa el formato JSON de la API "
         "compatible con OpenAI. La clave no se registra en logs ni en evidencias.")
+
+titulo("5.2 Modo conversacional", nivel=2)
+parrafo("El comportamiento se controla con la variable AI_MODE:")
+tabla(
+    ["AI_MODE", "Comportamiento", "Uso recomendado"],
+    [
+        ["asistente (por defecto)", "Plantilla fija + reglas o DeepSeek para la intención.",
+         "Auditoría P01–P11: respuestas reproducibles."],
+        ["conversacional", "DeepSeek redacta la respuesta con los datos calculados por el dominio.",
+         "Atención al cliente y P12."],
+    ],
+    anchos=[3.6, 7.2, 4.8],
+)
+parrafo("En modo conversacional el modelo nunca calcula: recibe un bloque «Datos verificados» "
+        "(subtotal, IVA, total, stock) y solo lo redacta. Si el modelo falla, se devuelve la "
+        "plantilla del modo asistente. El cliente puede enviar el historial para dar contexto:")
+codigo('{\n  "message": "¿Y cuánto hay de ese material?",\n  "historial": [\n'
+       '    {"role": "user", "content": "Quiero dos kilos de glicerina"},\n'
+       '    {"role": "assistant", "content": "..."}\n  ]\n}')
+parrafo("Para ejecutar f01–f11 el backend debe estar en AI_MODE=asistente. El caso f12 levanta su "
+        "propia instancia en el puerto 8001 con AI_MODE=conversacional, de modo que la auditoría "
+        "no depende del modo configurado en el servicio principal.", tamano=9, cursiva=True)
+parrafo("El servidor no guarda conversaciones: el historial lo envía el cliente y se recorta a "
+        "AI_HISTORY_MAX mensajes. La respuesta incluye el campo «datos» con las cifras usadas.",
+        tamano=9, cursiva=True)
 
 # ======================================================================
 # 6. ENTORNO
@@ -328,8 +355,8 @@ titulo("6. Preparación del entorno")
 paso(1, "Abrir PowerShell en «1. Diagnostico Auditoria\\MVP».")
 paso(2, "Instalar dependencias si hace falta (incluye mcp>=2.3.0):")
 codigo(".\\venv\\Scripts\\python.exe -m pip install -r requirements.txt")
-paso(3, "Opcional: copiar .env.example a .env y completar DEEPSEEK_API_KEY para usar el modelo. "
-        "Sin clave, el asistente usa el motor de reglas.")
+paso(3, "Opcional: copiar .env.example a .env, completar DEEPSEEK_API_KEY y elegir AI_MODE "
+        "(asistente o conversacional). Sin clave, el asistente usa el motor de reglas.")
 paso(4, "Iniciar el servicio:")
 codigo(".\\venv\\Scripts\\python.exe -m uvicorn app.presentation.main:app --reload")
 paso(5, "Confirmar que el servidor escucha en http://127.0.0.1:8000 y abrir Swagger en "
@@ -362,7 +389,7 @@ tabla(
     ["Fase", "Actividad en el laboratorio", "Evidencia"],
     [
         ["Planear", "Definir casos, datos de entrada y resultado esperado.", "Esta guía, sección 8"],
-        ["Hacer", "Ejecutar pytest, Swagger y los scripts f01–f10.", "evidencias/*.json y *.txt"],
+        ["Hacer", "Ejecutar pytest, Swagger y los scripts f01–f12.", "evidencias/*.json y *.txt"],
         ["Verificar", "Comparar lo obtenido con lo esperado y clasificar hallazgos.", "RESULTADOS_LAB4.md"],
         ["Actuar", "Proponer correcciones y repetir las pruebas afectadas.", "Informe final"],
     ],
@@ -553,12 +580,29 @@ caso(
     [
         "Sin DEEPSEEK_API_KEY, ejecutar f11_deepseek.py y comprobar que el campo «motor» es «reglas».",
         "Copiar .env.example a .env, completar la clave y reiniciar el backend.",
-        "Repetir la ejecución y comprobar que «motor» es «deepseek» y medir la latencia.",
+        "Repetir la ejecución y comprobar que «motor» corresponde al modo configurado "
+        "(«deepseek» o «deepseek-conversacional») y medir la latencia.",
         "Forzar un fallo (clave inválida o sin red) y verificar que la respuesta sigue llegando por reglas.",
     ],
     "El asistente responde con el motor configurado, informa cuál utilizó y cae a reglas ante "
     "cualquier fallo del modelo, sin exponer la clave ni trazas.",
     "f11_deepseek.json",
+)
+
+caso(
+    "P12", "Modo conversacional y memoria de la conversación",
+    "Aplicación: ai_use_cases.py; infraestructura: deepseek_llm.py; configuración: AI_MODE.",
+    [
+        "Levantar una instancia con AI_MODE=conversacional (f12 lo hace en el puerto 8001).",
+        "Enviar un saludo y comprobar que responde de forma natural o con la plantilla de respaldo.",
+        "Enviar una cotización y verificar que el campo «datos» trae subtotal, IVA y total calculados.",
+        "Enviar un seguimiento con historial («¿Y cuánto hay de ese material?») y revisar que el "
+        "contrato lo acepta y que el contexto se usa.",
+        "Ejecutar f12_conversacional.py con y sin clave.",
+    ],
+    "El modo conversacional responde con el motor configurado, mantiene el contrato, devuelve "
+    "cifras estructuradas y cae a la plantilla si el modelo no está disponible.",
+    "f12_conversacional.json",
 )
 
 # ======================================================================
@@ -579,6 +623,7 @@ tabla(
         ["P09", "Errores y robustez", "Presentación/Aplicación", "f09_errores.json"],
         ["P10", "Regresión y arquitectura", "Todas", "f10_regresion.json"],
         ["P11", "Motor DeepSeek y respaldo", "Aplicación/Infraestructura", "f11_deepseek.json"],
+        ["P12", "Modo conversacional", "Aplicación/Infraestructura", "f12_conversacional.json"],
     ],
     anchos=[1.6, 6.6, 4.4, 3.0],
 )
@@ -589,7 +634,7 @@ tabla(
 titulo("10. Entregables")
 for texto in (
     "Informe en PDF y DOCX con los hallazgos, su severidad y las correcciones propuestas.",
-    "Carpeta docs/laboratorio4 con los scripts f01–f10 y la carpeta evidencias.",
+    "Carpeta docs/laboratorio4 con los scripts f01–f12 y la carpeta evidencias.",
     "Salida completa de pytest (f10_pytest.txt) y los JSON crudos de cada caso.",
     "Enlace al repositorio, rama lab4-mcp-rag, sin datos personales ni tokens.",
     "Tabla de adaptación respecto a la guía original (Anexo A).",
@@ -623,6 +668,7 @@ tabla(
         ["mock_vector_db con impuesto 15% y tope 1000", "IVA 19%, tope 50.000.000 COP y stock mínimo 10 kg"],
         ["mcp_server con la herramienta calcular", "Kohem-Chemicals-MCP: listar_materiales, consultar_stock, calcular_pedido"],
         ["Componente LLM simulado", "Reglas por defecto y DeepSeek opcional (deepseek_llm.py)"],
+        ["Conversación de un solo turno", "Modo conversacional con historial y redacción del modelo"],
         ["POST /api/v1/calcular", "POST /api/v1/ai/chat"],
         ["Puerto 7000", "Puerto 8000"],
         ["Respuesta CalculoResult", "AIChatResponseDTO (response, transfer_to_employee, reason, motor)"],
@@ -675,6 +721,7 @@ tabla(
         ["P09", "Errores", _estado(EVID_DESPUES, "f09_errores.json")],
         ["P10", "Regresión y arquitectura", _estado(EVID_DESPUES, "f10_regresion.json")],
         ["P11", "Motor DeepSeek / reglas", _estado(EVID_DESPUES, "f11_deepseek.json")],
+        ["P12", "Modo conversacional", _estado(EVID_DESPUES, "f12_conversacional.json")],
     ],
     anchos=[1.6, 4.6, 9.4],
 )
@@ -687,7 +734,7 @@ tabla(
     ["ID", "Hallazgo", "Severidad", "Estado"],
     [
         ["H-L4-01", "El «LLM» era un motor de reglas limitado.", "Media",
-         "Mitigado: DeepSeek opcional y reglas ampliadas"],
+         "Mitigado: DeepSeek, modo conversacional y reglas ampliadas"],
         ["H-L4-02", "El RAG activaba el tope con «al máximo».", "Media",
          "Resuelto: coincidencia por palabra completa"],
         ["H-L4-03", "Endpoints legados devolvían 500 al validar.", "Media",
@@ -727,6 +774,7 @@ tabla(
         ["P09", _estado(EVID_ANTES, "f09_errores.json"), _estado(EVID_DESPUES, "f09_errores.json")],
         ["P10", _estado(EVID_ANTES, "f10_regresion.json"), _estado(EVID_DESPUES, "f10_regresion.json")],
         ["P11", "No existía", _estado(EVID_DESPUES, "f11_deepseek.json")],
+        ["P12", "No existía", _estado(EVID_DESPUES, "f12_conversacional.json")],
     ],
     anchos=[1.6, 7.0, 7.0],
     tamano=8,
@@ -752,3 +800,4 @@ run_cierre.font.size = Pt(1)
 doc.save(str(SALIDA))
 print(f"Documento generado: {SALIDA}")
 print(f"Párrafos: {len(doc.paragraphs)} · Tablas: {len(doc.tables)}")
+

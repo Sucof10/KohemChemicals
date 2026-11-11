@@ -8,7 +8,8 @@
         "response": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
         "transfer_to_employee": false,
         "reason": null,
-        "motor": "reglas"
+        "motor": "reglas",
+        "datos": null
       },
       "fuya_internos": false
     },
@@ -52,7 +53,8 @@
         "response": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
         "transfer_to_employee": false,
         "reason": null,
-        "motor": "reglas"
+        "motor": "reglas",
+        "datos": null
       },
       "fuya_internos": false
     },

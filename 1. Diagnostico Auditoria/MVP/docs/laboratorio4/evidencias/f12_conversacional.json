@@ -1,0 +1,66 @@
+{
+  "modo": "conversacional",
+  "proveedor": "DeepSeek",
+  "configurado": true,
+  "motor_esperado": "deepseek-conversacional",
+  "casos": [
+    {
+      "mensaje": "Buenas tardes",
+      "status": 200,
+      "respuesta": "Buenas tardes:\n\nGracias por escribirnos a Kohem Chemicals. Con gusto le ayudamos con su consulta sobre materias primas.\n\nPara poder darle una respuesta precisa, ¿podría indicarnos qué producto o productos necesita, las cantidades aproximadas y la fecha en que los requeriría? Con esos datos podremos confirmarle existencias y condiciones.\n\nSi su consulta requiere una revisión más detallada, uno de nuestros asesores se pondrá en contacto con usted.\n\nQuedamos atentos.",
+      "motor": "deepseek-conversacional",
+      "transfer": false,
+      "datos": null
+    },
+    {
+      "mensaje": "Quiero dos kilos de glicerina",
+      "status": 200,
+      "respuesta": "Hola, muchas gracias por escribirnos.\n\nCon gusto te cotizamos 2 kg de glicerina vegetal: el precio es de $18.000 por kg, para un subtotal de $36.000. El IVA aplicado es $0 y el total queda en $36.000.\n\nSi te parece bien, confírmanos para continuar con tu pedido. Quedamos atentos a cualquier duda.",
+      "motor": "deepseek-conversacional",
+      "transfer": false,
+      "datos": {
+        "tipo": "cotizacion",
+        "items": [
+          {
+            "material_id": 2,
+            "nombre": "Glicerina vegetal",
+            "cantidad": 2.0,
+            "unidad": "kg",
+            "precio_unitario": 18000.0,
+            "subtotal": 36000.0,
+            "requiere_revision": false
+          }
+        ],
+        "subtotal": 36000.0,
+        "iva": 0.0,
+        "total": 36000.0,
+        "tope_aplicado": false,
+        "requiere_revision": false
+      }
+    },
+    {
+      "mensaje": "¿Y cuánto hay de ese material?",
+      "status": 200,
+      "respuesta": "Hola de nuevo. Contamos con 100 kg de glicerina vegetal disponibles, así que tus 2 kg quedan cubiertos sin problema.\n\nSi quieres, avanzamos con tu pedido y te confirmamos los siguientes pasos. Quedamos atentos.",
+      "motor": "deepseek-conversacional",
+      "transfer": false,
+      "datos": {
+        "tipo": "stock",
+        "encontrado": true,
+        "material": "Glicerina vegetal",
+        "stock": 100.0,
+        "unidad": "kg",
+        "stock_minimo": 10.0,
+        "requiere_revision": false
+      }
+    }
+  ],
+  "criterios": {
+    "responde_sin_error": true,
+    "motor_correcto": true,
+    "datos_estructurados": true,
+    "datos_calculados_por_dominio": true,
+    "acepta_historial": true,
+    "cumple_todos": true
+  }
+}

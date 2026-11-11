@@ -5,32 +5,33 @@
   "modelo": "deepseek-chat",
   "base_url": "https://api.deepseek.com",
   "variable_entorno": "DEEPSEEK_API_KEY",
-  "configurado": false,
-  "motor_esperado": "reglas",
+  "configurado": true,
+  "modo": "conversacional",
+  "motor_esperado": "deepseek-conversacional",
   "casos": [
     {
       "consulta": "Cotiza dos kilos de glicerina",
       "status": 200,
-      "motor": "reglas",
-      "respuesta": "Cotizaci├│n de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nTotal: $36.000,00",
+      "motor": "deepseek-conversacional",
+      "respuesta": "Estimado cliente:\n\nGracias por su consulta. Con gusto le cotizamos 2 kg de glicerina vegetal:\n\n- Glicerina vegetal: 2 kg ├ù $18.000 = $36.000\n- Subtotal: $36.000\n- IVA: $0\n- **Total: $36.000**\n\nQuedamos atentos a confirmar disponibilidad y condiciones de entrega. Si desea ampliar la cantidad o conocer otras presentaciones, con gusto le ayudamos.\n\nSaludos cordiales,\nAsesor Comercial ÔÇö Kohem Chemicals",
       "transfer": false,
-      "latencia_ms": 257.9
+      "latencia_ms": 3848.0
     },
     {
       "consulta": "┬┐Cu├íntos kilos de glicerina tienen disponibles?",
       "status": 200,
-      "motor": "reglas",
-      "respuesta": "Puedo ayudarte con disponibilidad, pedidos y orientaci├│n inicial sobre el proceso de compra.",
+      "motor": "deepseek-conversacional",
+      "respuesta": "Hola, gracias por escribir a Kohem Chemicals. Con gusto le informo que contamos con 100 kg de glicerina vegetal disponibles. Nuestro stock m├¡nimo de referencia es de 10 kg, por lo que su consulta est├í cubierta sin problema. Si desea conocer condiciones de entrega o coordinar una cotizaci├│n formal, con gusto le atendemos. Quedamos a su disposici├│n.",
       "transfer": false,
-      "latencia_ms": 248.8
+      "latencia_ms": 4170.8
     },
     {
       "consulta": "Necesito asesor├¡a para una formulaci├│n",
       "status": 200,
-      "motor": "reglas",
-      "respuesta": "Puedo registrar tu consulta, pero este caso requiere revisi├│n de un asesor de Kohem Chemicals.",
+      "motor": "deepseek-conversacional",
+      "respuesta": "Hola, gracias por escribirnos. Con gusto te asesoramos para tu formulaci├│n.\n\nPara orientarte bien, cu├®ntanos qu├® producto buscas desarrollar, los componentes que tienes en mente y las cantidades o especificaciones que necesitas. Con esa informaci├│n revisamos alternativas y te confirmamos qu├® podemos ofrecerte.\n\nSi tu consulta requiere un an├ílisis m├ís detallado, la revisar├í uno de nuestros asesores y te responder├í a la brevedad.\n\nQuedamos atentos.",
       "transfer": true,
-      "latencia_ms": 248.8
+      "latencia_ms": 4065.4
     }
   ],
   "criterios": {

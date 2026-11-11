@@ -7,7 +7,8 @@
         "response": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
         "transfer_to_employee": false,
         "reason": null,
-        "motor": "reglas"
+        "motor": "reglas",
+        "datos": null
       },
       "esperado": 200,
       "coincide": true
@@ -65,7 +66,8 @@
         "response": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
         "transfer_to_employee": false,
         "reason": null,
-        "motor": "reglas"
+        "motor": "reglas",
+        "datos": null
       },
       "esperado": 200,
       "coincide": true
@@ -76,7 +78,8 @@
         "response": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
         "transfer_to_employee": false,
         "reason": null,
-        "motor": "reglas"
+        "motor": "reglas",
+        "datos": null
       },
       "esperado": 200,
       "coincide": true

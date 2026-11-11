@@ -1,0 +1,40 @@
+{
+  "proveedor": "DeepSeek",
+  "modelo": "deepseek-chat",
+  "base_url": "https://api.deepseek.com",
+  "variable_entorno": "DEEPSEEK_API_KEY",
+  "configurado": false,
+  "motor_esperado": "reglas",
+  "casos": [
+    {
+      "consulta": "Cotiza dos kilos de glicerina",
+      "status": 200,
+      "motor": "deepseek-conversacional",
+      "respuesta": "Estimado cliente:\n\nGracias por su consulta. Con gusto le cotizamos 2 kg de glicerina vegetal:\n\n- Glicerina vegetal: 2 kg × $18.000 = $36.000\n- Subtotal: $36.000\n- IVA: $0\n- Total: $36.000\n\nQuedamos atentos para confirmar disponibilidad y coordinar la entrega. Si desea ampliar la cantidad o conocer otras presentaciones, con gusto le ayudamos.\n\nSaludos cordiales,\nAsesor Comercial — Kohem Chemicals",
+      "transfer": false,
+      "latencia_ms": 3954.8
+    },
+    {
+      "consulta": "¿Cuántos kilos de glicerina tienen disponibles?",
+      "status": 200,
+      "motor": "deepseek-conversacional",
+      "respuesta": "Hola, gracias por escribir a Kohem Chemicals.\n\nCon gusto le informo que contamos con 100 kg de glicerina vegetal disponibles. Nuestro stock mínimo de referencia es de 10 kg, por lo que su consulta está cubierta sin problema.\n\nSi desea conocer precios, plazos de entrega o condiciones de despacho, un asesor comercial puede atenderle con detalle. Quedamos atentos a sus siguientes pasos.\n\nSaludos cordiales,\nEquipo Comercial Kohem Chemicals",
+      "transfer": false,
+      "latencia_ms": 3843.3
+    },
+    {
+      "consulta": "Necesito asesoría para una formulación",
+      "status": 200,
+      "motor": "deepseek-conversacional",
+      "respuesta": "¡Hola! Gracias por escribirnos. Con gusto te asesoramos para tu formulación.\n\nPara orientarte bien, ¿podrías contarnos qué producto buscas desarrollar y qué materias primas o especificaciones tienes en mente? Así podremos revisar alternativas y disponibilidad.\n\nUn asesor de nuestro equipo revisará tu caso y te dará una respuesta detallada. Quedamos atentos.",
+      "transfer": true,
+      "latencia_ms": 3687.6
+    }
+  ],
+  "criterios": {
+    "responde_sin_error": true,
+    "motor_correcto": false,
+    "respuesta_no_vacia": true,
+    "cumple_todos": false
+  }
+}

@@ -20,5 +20,17 @@ class ILLMProvider(Protocol):
     nombre: str
 
     async def interpretar(
-        self, mensaje: str, contexto: str, materiales: list[str]
+        self,
+        mensaje: str,
+        contexto: str,
+        materiales: list[str],
+        historial: list[dict[str, str]] | None = None,
     ) -> dict[str, Any] | None: ...
+
+    async def redactar(
+        self,
+        mensaje: str,
+        datos: dict[str, Any] | None,
+        contexto: str,
+        historial: list[dict[str, str]] | None = None,
+    ) -> str | None: ...
