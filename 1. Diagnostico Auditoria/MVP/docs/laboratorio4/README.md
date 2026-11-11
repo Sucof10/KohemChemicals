@@ -9,6 +9,7 @@ del MVP de Kohem Chemicals, con **RAG y MCP reales**, **DeepSeek opcional** y
 | Archivo | Descripción |
 |---|---|
 | `GUIA_LABORATORIO_4_KOHEM.docx` / `.pdf` | Guía adaptada con la plantilla institucional |
+| `INFORME_LABORATORIO_4_KOHEM.docx` / `.pdf` | Informe final de auditoría (P01–P12) |
 | `RESULTADOS_LAB4.md` | Resumen, hallazgos, correcciones y configuración |
 | `f01_operaciones.py` … `f12_conversacional.py` | Scripts de cada caso |
 | `_common.py` | Utilidades: tokens, HTTP y guardado de evidencia |
