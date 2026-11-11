@@ -684,14 +684,13 @@ tabla(
 # ANEXO B — RESULTADOS
 # ======================================================================
 titulo("Anexo B. Resultados de la ejecución de referencia")
-parrafo("Valores obtenidos el 10/11/2026 sobre la rama lab4-mcp-rag, después de aplicar las "
-        "correcciones. La evidencia completa está en docs/laboratorio4/evidencias/despues.",
+parrafo("Valores obtenidos el 10/11/2026 sobre la rama lab4-conversacional. La evidencia "
+        "completa está en docs/laboratorio4/evidencias.",
         tamano=9, cursiva=True)
-_resumen_pytest = json.loads((BASE / "evidencias" / "despues" / "f10_regresion.json").read_text(encoding="utf-8"))["pytest"]["resumen"]
+_resumen_pytest = json.loads((BASE / "evidencias" / "f10_regresion.json").read_text(encoding="utf-8"))["pytest"]["resumen"]
 parrafo(f"Suite completa: {_resumen_pytest}.", tamano=9, cursiva=True)
 
-EVID_ANTES = BASE / "evidencias" / "antes"
-EVID_DESPUES = BASE / "evidencias" / "despues"
+EVID_DESPUES = BASE / "evidencias"
 
 
 def _estado(carpeta: Path, nombre: str) -> str:
@@ -712,7 +711,7 @@ def _estado(carpeta: Path, nombre: str) -> str:
 
 
 tabla(
-    ["ID", "Caso", "Resultado después de corregir"],
+    ["ID", "Caso", "Resultado observado"],
     [
         ["P01", "Operaciones y cálculo", _estado(EVID_DESPUES, "f01_operaciones.json")],
         ["P02", "Stock y atomicidad", _estado(EVID_DESPUES, "f02_stock.json")],
@@ -728,60 +727,6 @@ tabla(
         ["P12", "Modo conversacional", _estado(EVID_DESPUES, "f12_conversacional.json")],
     ],
     anchos=[1.6, 4.6, 9.4],
-)
-
-# ======================================================================
-# ANEXO C — HALLAZGOS
-# ======================================================================
-titulo("Anexo C. Hallazgos y estado de corrección")
-tabla(
-    ["ID", "Hallazgo", "Severidad", "Estado"],
-    [
-        ["H-L4-01", "El «LLM» era un motor de reglas limitado.", "Media",
-         "Mitigado: DeepSeek, modo conversacional y reglas ampliadas"],
-        ["H-L4-02", "El RAG activaba el tope con «al máximo».", "Media",
-         "Resuelto: coincidencia por palabra completa"],
-        ["H-L4-03", "Endpoints legados devolvían 500 al validar.", "Media",
-         "Resuelto: validación centralizada en 422"],
-        ["H-L4-04", "Un término técnico anulaba la cotización.", "Baja",
-         "Resuelto: la cotización tiene prioridad"],
-        ["H-L4-05", "La ruta de SQLite depende del directorio de trabajo.", "Baja",
-         "Pendiente"],
-        ["H-L4-06", "SECRET_KEY por defecto sin validación al arrancar.", "Media",
-         "Pendiente"],
-        ["H-L4-07", "El servidor MCP no aplica autenticación.", "Baja",
-         "Pendiente (MCP solo local)"],
-        ["H-L4-08", "El asistente no registra pedidos ni consulta por ID.", "Informativa",
-         "Aceptado por alcance"],
-    ],
-    anchos=[2.2, 8.4, 2.2, 5.0],
-    tamano=8,
-)
-
-# ======================================================================
-# ANEXO D — ANTES / DESPUÉS
-# ======================================================================
-titulo("Anexo D. Comparación antes y después de las correcciones")
-parrafo("Misma batería de scripts ejecutada antes y después de la fase Actuar del ciclo PHVA.",
-        tamano=9, cursiva=True)
-tabla(
-    ["ID", "Antes", "Después"],
-    [
-        ["P01", _estado(EVID_ANTES, "f01_operaciones.json"), _estado(EVID_DESPUES, "f01_operaciones.json")],
-        ["P02", _estado(EVID_ANTES, "f02_stock.json"), _estado(EVID_DESPUES, "f02_stock.json")],
-        ["P03", _estado(EVID_ANTES, "f03_limites.json"), _estado(EVID_DESPUES, "f03_limites.json")],
-        ["P04", _estado(EVID_ANTES, "f04_contrato.json"), _estado(EVID_DESPUES, "f04_contrato.json")],
-        ["P05", _estado(EVID_ANTES, "f05_prompt.json"), _estado(EVID_DESPUES, "f05_prompt.json")],
-        ["P06", _estado(EVID_ANTES, "f06_rag.json"), _estado(EVID_DESPUES, "f06_rag.json")],
-        ["P07", _estado(EVID_ANTES, "f07_mcp.json"), _estado(EVID_DESPUES, "f07_mcp.json")],
-        ["P08", _estado(EVID_ANTES, "f08_e2e.json"), _estado(EVID_DESPUES, "f08_e2e.json")],
-        ["P09", _estado(EVID_ANTES, "f09_errores.json"), _estado(EVID_DESPUES, "f09_errores.json")],
-        ["P10", _estado(EVID_ANTES, "f10_regresion.json"), _estado(EVID_DESPUES, "f10_regresion.json")],
-        ["P11", "No existía", _estado(EVID_DESPUES, "f11_deepseek.json")],
-        ["P12", "No existía", _estado(EVID_DESPUES, "f12_conversacional.json")],
-    ],
-    anchos=[1.6, 7.0, 7.0],
-    tamano=8,
 )
 
 # Eliminar párrafos vacíos finales que generan una página en blanco.

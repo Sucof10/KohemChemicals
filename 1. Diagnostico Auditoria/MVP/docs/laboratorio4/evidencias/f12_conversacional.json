@@ -7,15 +7,73 @@
     {
       "mensaje": "Buenas tardes",
       "status": 200,
-      "respuesta": "Buenas tardes:\n\nGracias por escribirnos a Kohem Chemicals. Con gusto le ayudamos con su consulta sobre materias primas.\n\nPara poder darle una respuesta precisa, ¿podría indicarnos qué producto o productos necesita, las cantidades aproximadas y la fecha en que los requeriría? Con esos datos podremos confirmarle existencias y condiciones.\n\nSi su consulta requiere una revisión más detallada, uno de nuestros asesores se pondrá en contacto con usted.\n\nQuedamos atentos.",
+      "respuesta": "¡Buenas tardes! Gracias por escribir a Kohem Chemicals. Con gusto te ayudo.\n\nContamos con materias primas para cosmética y aseo, por ejemplo aceite esencial de menta, glicerina vegetal y ácido cítrico, entre otras categorías.\n\nPara orientarte mejor: ¿qué producto o tipo de formulación estás buscando desarrollar?",
       "motor": "deepseek-conversacional",
       "transfer": false,
-      "datos": null
+      "datos": {
+        "tipo": "catalogo",
+        "materiales": [
+          {
+            "nombre": "Aceite esencial de menta",
+            "categoria": "Aceites esenciales",
+            "unidad": "kg",
+            "precio": 85000.0,
+            "stock": 50.0
+          },
+          {
+            "nombre": "Glicerina vegetal",
+            "categoria": "Humectantes",
+            "unidad": "kg",
+            "precio": 18000.0,
+            "stock": 100.0
+          },
+          {
+            "nombre": "Ácido cítrico",
+            "categoria": "Reguladores de pH",
+            "unidad": "kg",
+            "precio": 12000.0,
+            "stock": 75.0
+          }
+        ]
+      }
+    },
+    {
+      "mensaje": "¿Qué venden?",
+      "status": 200,
+      "respuesta": "¡Hola! En Kohem Chemicals manejamos materias primas para cosmética y aseo. Del catálogo te puedo nombrar, por ejemplo:\n\n- Aceite esencial de menta (aceites esenciales)\n- Glicerina vegetal (humectantes)\n- Ácido cítrico (reguladores de pH)\n\nSe venden por kilo y tenemos existencias de los tres.\n\nPara orientarte mejor: ¿qué tipo de producto estás desarrollando o fabricando?",
+      "motor": "deepseek-conversacional",
+      "transfer": false,
+      "datos": {
+        "tipo": "catalogo",
+        "materiales": [
+          {
+            "nombre": "Aceite esencial de menta",
+            "categoria": "Aceites esenciales",
+            "unidad": "kg",
+            "precio": 85000.0,
+            "stock": 50.0
+          },
+          {
+            "nombre": "Glicerina vegetal",
+            "categoria": "Humectantes",
+            "unidad": "kg",
+            "precio": 18000.0,
+            "stock": 100.0
+          },
+          {
+            "nombre": "Ácido cítrico",
+            "categoria": "Reguladores de pH",
+            "unidad": "kg",
+            "precio": 12000.0,
+            "stock": 75.0
+          }
+        ]
+      }
     },
     {
       "mensaje": "Quiero dos kilos de glicerina",
       "status": 200,
-      "respuesta": "Hola, muchas gracias por escribirnos.\n\nCon gusto te cotizamos 2 kg de glicerina vegetal: el precio es de $18.000 por kg, para un subtotal de $36.000. El IVA aplicado es $0 y el total queda en $36.000.\n\nSi te parece bien, confírmanos para continuar con tu pedido. Quedamos atentos a cualquier duda.",
+      "respuesta": "¡Hola! Con gusto te ayudo con la glicerina vegetal. Dos kilos te quedan en $36.000 (IVA incluido en el total). \n\nAntes de avanzar, cuéntame: ¿la vas a usar en una formulación cosmética o para otro tipo de aplicación? Así te oriento mejor sobre el producto y las condiciones de entrega.",
       "motor": "deepseek-conversacional",
       "transfer": false,
       "datos": {
@@ -41,7 +99,7 @@
     {
       "mensaje": "¿Y cuánto hay de ese material?",
       "status": 200,
-      "respuesta": "Hola de nuevo. Contamos con 100 kg de glicerina vegetal disponibles, así que tus 2 kg quedan cubiertos sin problema.\n\nSi quieres, avanzamos con tu pedido y te confirmamos los siguientes pasos. Quedamos atentos.",
+      "respuesta": "Tenemos 100 kg de glicerina vegetal disponibles, así que tus dos kilos están cubiertos sin problema.\n\n¿Te confirmo el pedido con esas 2 unidades o necesitas ajustar la cantidad?",
       "motor": "deepseek-conversacional",
       "transfer": false,
       "datos": {
@@ -58,6 +116,7 @@
   "criterios": {
     "responde_sin_error": true,
     "motor_correcto": true,
+    "catalogo_con_datos": true,
     "datos_estructurados": true,
     "datos_calculados_por_dominio": true,
     "acepta_historial": true,

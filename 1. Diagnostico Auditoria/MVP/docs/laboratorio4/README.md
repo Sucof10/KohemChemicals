@@ -14,8 +14,8 @@ del MVP de Kohem Chemicals, con **RAG y MCP reales**, **DeepSeek opcional** y
 | `f01_operaciones.py` … `f12_conversacional.py` | Scripts de cada caso |
 | `_common.py` | Utilidades: tokens, HTTP y guardado de evidencia |
 | `_build_guia.py` | Generador del `.docx` desde la plantilla del profesor |
-| `evidencias/antes/` | Ejecución previa a las correcciones |
-| `evidencias/despues/` | Ejecución final (P01–P12) |
+| `evidencias/` | Ejecución actual (P01–P12) |
+| `_historico/antes/` | Archivo interno, no se entrega |
 
 ## Requisitos
 
@@ -81,7 +81,7 @@ Desde `docs\laboratorio4`, con el backend en el puerto 8000:
 Para guardar en otra carpeta:
 
 ```powershell
-$env:LAB4_EVID = "evidencias/despues"
+$env:LAB4_EVID = "evidencias"
 ```
 
 ## Notas

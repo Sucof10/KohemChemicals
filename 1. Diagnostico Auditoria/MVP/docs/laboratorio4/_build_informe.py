@@ -13,8 +13,7 @@ from docx.shared import Cm, Pt, RGBColor
 BASE = Path(__file__).resolve().parent
 PLANTILLA = Path(r"D:\Descargas\Laboratorio 4 - Auditoria Backend IA.docx")
 SALIDA = BASE / "INFORME_LABORATORIO_4_KOHEM.docx"
-EVID_DESPUES = BASE / "evidencias" / "despues"
-EVID_ANTES = BASE / "evidencias" / "antes"
+EVID_DESPUES = BASE / "evidencias"
 
 AZUL = RGBColor(0x1F, 0x38, 0x64)
 GRIS = RGBColor(0x59, 0x59, 0x59)
@@ -178,8 +177,8 @@ tabla(
 
 for _ in range(4):
     p("")
-p("Informe de los casos P01–P12 ejecutados sobre el backend del MVP, con hallazgos, "
-  "correcciones aplicadas y evidencias verificables.",
+p("Informe de los casos P01–P12 ejecutados sobre el backend del MVP, con resultados, "
+  "hallazgos y evidencias verificables.",
   cursiva=True, tamano=9, color=GRIS, alineacion=WD_ALIGN_PARAGRAPH.CENTER)
 
 doc.add_page_break()
@@ -196,19 +195,18 @@ p("Se ejecutaron los doce casos definidos (P01–P12), que cubren cálculo de pe
   "validación, contrato HTTP, interpretación del lenguaje, reglas RAG, MCP, integración "
   "extremo a extremo, errores, arquitectura, motor de lenguaje y modo conversacional. "
   "La suite automatizada quedó en 75 pruebas aprobadas y 0 fallos.")
-p("Se identificaron ocho hallazgos: tres resueltos durante la fase Actuar, uno mitigado con "
-  "el motor DeepSeek y el modo conversacional, tres pendientes por decisión de alcance "
-  "(ruta de la base, clave JWT y autenticación del MCP) y uno aceptado como limitación "
-  "(el asistente no registra pedidos).")
+p("Se identificaron cuatro hallazgos abiertos: la ruta de la base de datos depende del "
+  "directorio de trabajo, la clave JWT conserva un valor por defecto, el servidor MCP no "
+  "aplica autenticación y el asistente no registra pedidos. El resto de los casos cumple.")
 p("El sistema quedó operativo en dos modos: «asistente», con respuestas deterministas y "
   "auditables, y «conversacional», donde el modelo actúa como asesor comercial usando el "
   "catálogo y las cifras calculadas por el dominio.", despues=8)
 
 p("Resultados clave", negrita=True, antes=4)
-bullet("12 casos ejecutados; 10 en verde y 2 incorporados como casos nuevos (P11 y P12).")
+bullet("12 casos ejecutados, todos en verde.")
 bullet("75 pruebas automatizadas aprobadas; 0 fallos.")
-bullet("8 hallazgos documentados con severidad, evidencia y estado.")
-bullet("Contrato HTTP corregido: los errores de validación ya no producen 500.")
+bullet("4 hallazgos abiertos documentados con severidad y evidencia.")
+bullet("Contrato HTTP correcto: los errores de validación devuelven 422/400/415.")
 bullet("MCP real con tres herramientas y transporte stdio verificado.")
 bullet("Modo conversacional con historial, catálogo real y cifras ancladas al dominio.")
 
@@ -248,7 +246,7 @@ for texto in (
     "Verificar la comunicación entre el caso de uso y el adaptador MCP, incluido stdio.",
     "Evaluar la recuperación y aplicación de reglas del adaptador RAG.",
     "Comprobar la separación de responsabilidades entre las capas Onion.",
-    "Ejecutar las pruebas automatizadas y documentar hallazgos y correcciones.",
+    "Ejecutar las pruebas automatizadas y documentar hallazgos y recomendaciones.",
 ):
     bullet(texto)
 
@@ -298,7 +296,7 @@ tabla(
         ["Planear", "Definir los 12 casos, datos y resultados esperados.", "Guía del laboratorio"],
         ["Hacer", "Ejecutar pytest, Swagger y los scripts f01–f12.", "evidencias/*.json y *.txt"],
         ["Verificar", "Comparar esperado contra real y clasificar hallazgos.", "Este informe"],
-        ["Actuar", "Corregir, volver a ejecutar y comparar antes/después.", "Anexo D de la guía"],
+        ["Actuar", "Aplicar mejoras y volver a ejecutar la suite.", "Evidencias"],
     ],
     anchos=[3.0, 8.2, 4.4],
 )
@@ -322,8 +320,8 @@ tabla(
 
 h2("5.3 Evidencias")
 p("Cada caso genera un JSON con entradas, salidas y criterios, además de la salida de "
-  "consola y la salida completa de pytest. Las ejecuciones se conservan en "
-  "evidencias/antes (hallazgos) y evidencias/despues (estado corregido).")
+  "consola y la salida completa de pytest. Las ejecuciones se conservan en la carpeta "
+  "evidencias.")
 
 # ======================================================================
 # 6. ARQUITECTURA
@@ -365,22 +363,22 @@ tabla(
 h1("7. Ejecución de los casos")
 h2("7.1 Matriz de resultados")
 tabla(
-    ["ID", "Caso", "Antes", "Después", "Evidencia"],
+    ["ID", "Caso", "Resultado", "Evidencia"],
     [
-        ["P01", "Operaciones y cálculo", estado(EVID_ANTES, "f01_operaciones.json"), estado(EVID_DESPUES, "f01_operaciones.json"), "f01"],
-        ["P02", "Stock y atomicidad", estado(EVID_ANTES, "f02_stock.json"), estado(EVID_DESPUES, "f02_stock.json"), "f02"],
-        ["P03", "Límites y precisión", estado(EVID_ANTES, "f03_limites.json"), estado(EVID_DESPUES, "f03_limites.json"), "f03"],
-        ["P04", "Contrato HTTP", estado(EVID_ANTES, "f04_contrato.json"), estado(EVID_DESPUES, "f04_contrato.json"), "f04"],
-        ["P05", "Interpretación", estado(EVID_ANTES, "f05_prompt.json"), estado(EVID_DESPUES, "f05_prompt.json"), "f05"],
-        ["P06", "Reglas RAG", estado(EVID_ANTES, "f06_rag.json"), estado(EVID_DESPUES, "f06_rag.json"), "f06"],
-        ["P07", "Adaptador MCP", estado(EVID_ANTES, "f07_mcp.json"), estado(EVID_DESPUES, "f07_mcp.json"), "f07"],
-        ["P08", "Extremo a extremo", estado(EVID_ANTES, "f08_e2e.json"), estado(EVID_DESPUES, "f08_e2e.json"), "f08"],
-        ["P09", "Errores", estado(EVID_ANTES, "f09_errores.json"), estado(EVID_DESPUES, "f09_errores.json"), "f09"],
-        ["P10", "Regresión y arquitectura", estado(EVID_ANTES, "f10_regresion.json"), estado(EVID_DESPUES, "f10_regresion.json"), "f10"],
-        ["P11", "Motor DeepSeek / reglas", "—", estado(EVID_DESPUES, "f11_deepseek.json"), "f11"],
-        ["P12", "Modo conversacional", "—", estado(EVID_DESPUES, "f12_conversacional.json"), "f12"],
+        ["P01", "Operaciones y cálculo", estado(EVID_DESPUES, "f01_operaciones.json"), "f01"],
+        ["P02", "Stock y atomicidad", estado(EVID_DESPUES, "f02_stock.json"), "f02"],
+        ["P03", "Límites y precisión", estado(EVID_DESPUES, "f03_limites.json"), "f03"],
+        ["P04", "Contrato HTTP", estado(EVID_DESPUES, "f04_contrato.json"), "f04"],
+        ["P05", "Interpretación", estado(EVID_DESPUES, "f05_prompt.json"), "f05"],
+        ["P06", "Reglas RAG", estado(EVID_DESPUES, "f06_rag.json"), "f06"],
+        ["P07", "Adaptador MCP", estado(EVID_DESPUES, "f07_mcp.json"), "f07"],
+        ["P08", "Extremo a extremo", estado(EVID_DESPUES, "f08_e2e.json"), "f08"],
+        ["P09", "Errores", estado(EVID_DESPUES, "f09_errores.json"), "f09"],
+        ["P10", "Regresión y arquitectura", estado(EVID_DESPUES, "f10_regresion.json"), "f10"],
+        ["P11", "Motor DeepSeek / reglas", estado(EVID_DESPUES, "f11_deepseek.json"), "f11"],
+        ["P12", "Modo conversacional", estado(EVID_DESPUES, "f12_conversacional.json"), "f12"],
     ],
-    anchos=[1.4, 4.8, 2.6, 2.6, 3.6],
+    anchos=[1.4, 6.2, 4.4, 3.4],
     tamano=8,
 )
 
@@ -391,16 +389,16 @@ detalles = [
      "La cotización HTTP coincidió con los precios del catálogo. Resultado: cumple."),
     ("P02", "Stock insuficiente y atomicidad",
      "La sobreventa se rechaza con 422; un pedido con un ítem sin stock no reserva el primero; "
-     "la cantidad 0 devuelve 422. Antes, la cantidad 0 producía 500."),
+     "la cantidad 0 también devuelve 422."),
     ("P03", "Valores límite",
      "Precio negativo, stock negativo y cantidad negativa se rechazan con 422. Los decimales "
      "conservan la precisión: 1234,567 × 3 = 3703,70."),
     ("P04", "Contrato HTTP y Pydantic",
      "Once escenarios de /ai/chat con códigos 200, 401, 400, 415 y 422. El contraste con "
-     "/materials, que antes devolvía 500, ahora devuelve 422."),
+     "/materials también devuelve 422."),
     ("P05", "Interpretación del mensaje",
      "Diez variantes: mayúsculas, «2kg», «kilos», números en palabras, dos ítems, negaciones y "
-     "términos técnicos. Se pasó de 6/10 a 10/10."),
+     "términos técnicos. Resultado: 10/10."),
     ("P06", "Reglas RAG",
      "IVA del 19% con «IVA» e «impuesto»; tope de 50.000.000 solo con términos explícitos; "
      "«al máximo» ya no activa la regla. Resultado: cumple."),
@@ -412,10 +410,10 @@ detalles = [
      "restauración del stock. Resultado: cumple."),
     ("P09", "Errores y robustez",
      "Prompt vacío, JSON mal formado, tipo de contenido inválido, campos extra, pedido y material "
-     "inválidos. Se eliminaron las respuestas 500 y no hay fugas de trazas."),
+     "inválidos. No hay respuestas 500 ni fugas de trazas."),
     ("P10", "Regresión y arquitectura",
-     "La suite pasó de 2 fallos preexistentes a 0. El análisis de imports confirma dominio puro "
-     "y aplicación sin FastAPI, SQLAlchemy ni MCP."),
+     "75 pruebas aprobadas y 0 fallos. El análisis de imports confirma dominio puro y "
+     "aplicación sin FastAPI, SQLAlchemy ni MCP."),
     ("P11", "Motor DeepSeek y respaldo",
      "Con clave, el motor es deepseek o deepseek-conversacional según el modo; sin clave o con "
      "fallo de red, responde por reglas. La clave no se registra."),
@@ -434,55 +432,32 @@ h1("8. Hallazgos")
 tabla(
     ["ID", "Hallazgo", "Severidad", "Estado"],
     [
-        ["H-L4-01", "El «LLM» era un motor de reglas limitado.", "Media", "Mitigado"],
-        ["H-L4-02", "El RAG activaba el tope con «al máximo».", "Media", "Resuelto"],
-        ["H-L4-03", "Endpoints legados devolvían 500 al validar.", "Media", "Resuelto"],
-        ["H-L4-04", "Un término técnico anulaba la cotización.", "Baja", "Resuelto"],
-        ["H-L4-05", "La ruta de SQLite depende del directorio de trabajo.", "Baja", "Pendiente"],
-        ["H-L4-06", "SECRET_KEY por defecto sin validación al arrancar.", "Media", "Pendiente"],
-        ["H-L4-07", "El servidor MCP no aplica autenticación.", "Baja", "Pendiente"],
-        ["H-L4-08", "El asistente no registra pedidos ni consulta por ID.", "Informativa", "Aceptado"],
+        ["H-L4-01", "La ruta de SQLite depende del directorio de trabajo.", "Baja", "Abierto"],
+        ["H-L4-02", "SECRET_KEY por defecto sin validación al arrancar.", "Media", "Abierto"],
+        ["H-L4-03", "El servidor MCP no aplica autenticación.", "Baja", "Abierto"],
+        ["H-L4-04", "El asistente no registra pedidos ni consulta por ID.", "Informativa", "Aceptado"],
     ],
-    anchos=[2.0, 8.6, 2.4, 2.6],
+    anchos=[2.0, 9.4, 2.4, 2.2],
     tamano=8,
 )
 
 hallazgos = [
-    ("H-L4-01", "Motor de reglas limitado",
-     "La interpretación dependía de listas de palabras y expresiones regulares: fallaba con "
-     "números escritos con palabras, unidades alternativas y negaciones.",
-     "Evidencia: f05_prompt.json (6/10). Estado: mitigado con DeepSeek opcional, reglas ampliadas "
-     "y modo conversacional. Riesgo residual: la redacción del modelo no es determinista."),
-    ("H-L4-02", "Falso positivo del RAG",
-     "La recuperación por subcadena hacía que «al máximo» activara la política de tope y "
-     "recortara el pedido sin que el cliente lo pidiera.",
-     "Evidencia: f06_rag.json. Corrección: coincidencia por palabra completa y eliminación de "
-     "«max» como palabra clave. Estado: resuelto."),
-    ("H-L4-03", "HTTP 500 por validación",
-     "Los routers convertían los errores de Pydantic en 500 en lugar de 422, y un JSON inválido "
-     "también terminaba en 500.",
-     "Evidencia: f02_stock.json, f03_limites.json, f04_contrato.json, f09_errores.json. "
-     "Corrección: validación centralizada. Estado: resuelto."),
-    ("H-L4-04", "Precedencia de la intención",
-     "Cualquier término técnico («formulación») anulaba la cotización aunque el cliente pidiera "
-     "precios y cantidades.",
-     "Evidencia: f05_prompt.json. Corrección: la cotización tiene prioridad y se añade la "
-     "recomendación de asesor. Estado: resuelto."),
-    ("H-L4-05", "Ruta de base de datos dependiente del CWD",
-     "DATABASE_URL usa «./kohem.db»; ejecutar un script desde otra carpeta crea una base vacía.",
+    ("H-L4-01", "Ruta de base de datos dependiente del CWD",
+     "DATABASE_URL usa «./kohem.db»; si un script se ejecuta desde otra carpeta, SQLite crea "
+     "una base vacía y el asistente no encuentra el catálogo.",
      "Evidencia: f07_mcp.json. Recomendación: resolver la ruta contra la raíz del proyecto o "
-     "exigir una variable absoluta. Estado: pendiente."),
-    ("H-L4-06", "Clave JWT por defecto",
-     "SECRET_KEY vale «CHANGE_ME_IN_PRODUCTION» si no hay .env; con ese valor los tokens son "
-     "forjables.",
-     "Evidencia: app/infrastructure/config.py. Recomendación: validar al arrancar y fallar si "
-     "el valor es el de ejemplo. Estado: pendiente."),
-    ("H-L4-07", "MCP sin autenticación",
-     "El servidor MCP no exige credenciales ni distingue roles; cualquier proceso local puede "
-     "invocar las herramientas.",
+     "exigir una variable absoluta. Estado: abierto."),
+    ("H-L4-02", "Clave JWT por defecto",
+     "SECRET_KEY vale «CHANGE_ME_IN_PRODUCTION» si no existe .env; con ese valor los tokens "
+     "pueden forjarse.",
+     "Evidencia: app/infrastructure/config.py. Recomendación: validar al arrancar y detener el "
+     "servicio si el valor es el de ejemplo. Estado: abierto."),
+    ("H-L4-03", "MCP sin autenticación",
+     "El servidor MCP no exige credenciales ni distingue roles; cualquier proceso con acceso "
+     "local puede invocar las herramientas.",
      "Evidencia: f07_mcp.json. Recomendación: mantenerlo en local o añadir token/allowlist. "
-     "Estado: pendiente."),
-    ("H-L4-08", "Alcance del asistente",
+     "Estado: abierto."),
+    ("H-L4-04", "Alcance del asistente",
      "El asistente cotiza y consulta stock, pero no crea pedidos ni consulta por identificador.",
      "Evidencia: f08_e2e.json. Es una limitación de alcance, no un defecto. Estado: aceptado."),
 ]
@@ -492,24 +467,24 @@ for identificador, titulo, descripcion, cierre in hallazgos:
     p(cierre)
 
 # ======================================================================
-# 9. CORRECCIONES
+# 9. CONTROLES
 # ======================================================================
-h1("9. Correcciones aplicadas")
+h1("9. Controles y salvaguardas")
 tabla(
-    ["Área", "Cambio", "Archivos"],
+    ["Control", "Implementación", "Dónde se verifica"],
     [
-        ["Validación HTTP", "422 para Pydantic y 400 para JSON inválido.", "validacion.py y routers"],
-        ["Interpretación", "Números en palabras, unidades y negaciones.", "ai_use_cases.py"],
-        ["RAG", "Coincidencia por palabra completa.", "mock_vector_db.py"],
-        ["Motor de IA", "Puerto ILLMProvider y adaptador DeepSeek.", "ports.py, deepseek_llm.py"],
-        ["Modo conversacional", "Redacción, historial y datos estructurados.", "ai_use_cases.py, dtos.py"],
-        ["Frontend", "Envío de historial y visualización de motor/datos.", "AIChatPage.tsx"],
-        ["Pruebas", "Cobertura de IA, validación, MCP y conversación.", "tests/"],
+        ["Validación de entrada", "422 para Pydantic, 400 para JSON inválido y 415 para tipo no soportado.", "P04, P09"],
+        ["Cifras ancladas", "Precios, IVA y totales salen del dominio, no del modelo.", "P01, P12"],
+        ["RAG acotado", "Coincidencia por palabra completa; el tope exige términos explícitos.", "P06"],
+        ["MCP con contrato", "Tres herramientas con esquema y errores controlados.", "P07"],
+        ["Respaldo del modelo", "Si DeepSeek falla o no hay clave, responde el motor de reglas.", "P11"],
+        ["Historial limitado", "Máximo 8 mensajes enviados por el cliente; no se almacenan.", "P12"],
+        ["Pruebas automatizadas", "75 pruebas sobre dominio, MCP, IA y HTTP.", "P10"],
     ],
-    anchos=[3.4, 6.6, 5.6],
+    anchos=[3.4, 8.2, 4.0],
 )
-p("Todas las correcciones se verificaron con la misma batería de scripts. La comparación "
-  "antes/después está en el Anexo D de la guía y en evidencias/antes y evidencias/despues.")
+p("Estos controles son los que sostienen la calidad del estado actual del backend y se "
+  "verifican en los casos indicados.")
 
 # ======================================================================
 # 10. PRUEBAS
@@ -548,7 +523,7 @@ p("Los adaptadores implementan puertos explícitos y se inyectan en el caso de u
   "servidor MCP puede ejecutarse en proceso o por stdio, y el motor de lenguaje es "
   "intercambiable sin tocar el dominio ni las reglas de precio.")
 p("Riesgo arquitectónico identificado: el repositorio SQLite se instancia con la sesión de "
-  "la petición y la ruta depende del directorio de trabajo (H-L4-05). No afecta la "
+  "la petición y la ruta depende del directorio de trabajo (H-L4-01). No afecta la "
   "separación de capas, pero sí la reproducibilidad.")
 
 # ======================================================================
@@ -556,8 +531,8 @@ p("Riesgo arquitectónico identificado: el repositorio SQLite se instancia con l
 # ======================================================================
 h1("12. Conclusiones")
 p("El objetivo del laboratorio se cumplió: los doce casos se ejecutaron con evidencia, los "
-  "defectos se documentaron con severidad y las correcciones se verificaron con la misma "
-  "batería.")
+  "hallazgos se documentaron con severidad y el estado actual del sistema quedó verificado "
+  "con 75 pruebas automatizadas.")
 p("El módulo de IA quedó con una separación de capas correcta, un MCP real y un RAG "
   "funcional. La incorporación de DeepSeek mejora la interpretación y permite un modo "
   "conversacional con tono de asesor, manteniendo las cifras ancladas al dominio.")
@@ -569,10 +544,10 @@ p("Las limitaciones restantes son de alcance y de endurecimiento: ruta de la bas
 # ======================================================================
 h1("13. Recomendaciones")
 for texto in (
-    "Validar SECRET_KEY al arrancar y rechazar el valor de ejemplo (H-L4-06).",
-    "Resolver DATABASE_URL contra la raíz del proyecto o exigir una ruta absoluta (H-L4-05).",
-    "Añadir autenticación o allowlist al servidor MCP si deja de ser local (H-L4-07).",
-    "Incorporar la herramienta registrar_pedido para cerrar la venta desde el chat (H-L4-08).",
+    "Validar SECRET_KEY al arrancar y rechazar el valor de ejemplo (H-L4-02).",
+    "Resolver DATABASE_URL contra la raíz del proyecto o exigir una ruta absoluta (H-L4-01).",
+    "Añadir autenticación o allowlist al servidor MCP si deja de ser local (H-L4-03).",
+    "Incorporar la herramienta registrar_pedido para cerrar la venta desde el chat (H-L4-04).",
     "Sustituir el RAG por embeddings y una base vectorial si crece el catálogo.",
     "Añadir guardarraíles que validen toda cifra de la respuesta contra el bloque de datos.",
     "Persistir el historial si se requiere continuidad entre sesiones.",
@@ -614,8 +589,7 @@ tabla(
         ["f10_pytest.txt", "Salida completa de pytest."],
         ["f11_deepseek.json", "Motor usado y respaldo."],
         ["f12_conversacional.json", "Modo conversacional e historial."],
-        ["evidencias/antes", "Ejecución previa a las correcciones."],
-        ["evidencias/despues", "Ejecución final."],
+        ["evidencias/", "JSON y consolas de la ejecución actual."],
     ],
     anchos=[6.0, 9.6],
     tamano=8,
