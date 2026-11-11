@@ -335,9 +335,12 @@ tabla(
     ],
     anchos=[3.6, 7.2, 4.8],
 )
-parrafo("En modo conversacional el modelo nunca calcula: recibe un bloque «Datos verificados» "
-        "(subtotal, IVA, total, stock) y solo lo redacta. Si el modelo falla, se devuelve la "
-        "plantilla del modo asistente. El cliente puede enviar el historial para dar contexto:")
+parrafo("En modo conversacional el modelo actúa como asesor comercial: recibe el catálogo real "
+        "(materiales, categorías, precios y stock) y las políticas aplicables, además de un bloque "
+        "«Datos verificados» con las cifras calculadas. Puede responder preguntas abiertas sobre "
+        "qué vende la empresa, orientar al cliente y pedir la información que falte, sin inventar "
+        "precios ni existencias. Si el modelo falla, se devuelve la plantilla del modo asistente.")
+parrafo("El cliente puede enviar el historial para dar contexto:")
 codigo('{\n  "message": "¿Y cuánto hay de ese material?",\n  "historial": [\n'
        '    {"role": "user", "content": "Quiero dos kilos de glicerina"},\n'
        '    {"role": "assistant", "content": "..."}\n  ]\n}')
@@ -595,13 +598,14 @@ caso(
     [
         "Levantar una instancia con AI_MODE=conversacional (f12 lo hace en el puerto 8001).",
         "Enviar un saludo y comprobar que responde de forma natural o con la plantilla de respaldo.",
+        "Preguntar «¿Qué venden?» y verificar que lista materiales reales del catálogo.",
         "Enviar una cotización y verificar que el campo «datos» trae subtotal, IVA y total calculados.",
         "Enviar un seguimiento con historial («¿Y cuánto hay de ese material?») y revisar que el "
         "contrato lo acepta y que el contexto se usa.",
         "Ejecutar f12_conversacional.py con y sin clave.",
     ],
-    "El modo conversacional responde con el motor configurado, mantiene el contrato, devuelve "
-    "cifras estructuradas y cae a la plantilla si el modelo no está disponible.",
+    "El modo conversacional responde como asesor, lista el catálogo real, mantiene el contrato, "
+    "devuelve cifras estructuradas y cae a la plantilla si el modelo no está disponible.",
     "f12_conversacional.json",
 )
 

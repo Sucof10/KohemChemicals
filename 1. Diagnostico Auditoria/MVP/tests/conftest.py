@@ -1,3 +1,11 @@
+import os
+
+# Las pruebas no deben depender de la red ni de la clave real: se fuerza el
+# motor de reglas antes de importar la aplicación (las variables de entorno
+# tienen prioridad sobre el archivo .env).
+os.environ["DEEPSEEK_API_KEY"] = ""
+os.environ["AI_MODE"] = "asistente"
+
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker

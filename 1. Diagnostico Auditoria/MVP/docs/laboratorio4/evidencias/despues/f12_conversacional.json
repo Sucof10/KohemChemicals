@@ -1,22 +1,80 @@
 {
   "modo": "conversacional",
   "proveedor": "DeepSeek",
-  "configurado": false,
-  "motor_esperado": "reglas",
+  "configurado": true,
+  "motor_esperado": "deepseek-conversacional",
   "casos": [
     {
       "mensaje": "Buenas tardes",
       "status": 200,
-      "respuesta": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
-      "motor": "reglas",
+      "respuesta": "¡Buenas tardes! Gracias por escribir a Kohem Chemicals. Con gusto te ayudo.\n\nContamos con materias primas para cosmética y aseo, por ejemplo aceite esencial de menta, glicerina vegetal y ácido cítrico, entre otras categorías.\n\nPara orientarte mejor: ¿qué producto o tipo de formulación estás buscando desarrollar?",
+      "motor": "deepseek-conversacional",
       "transfer": false,
-      "datos": null
+      "datos": {
+        "tipo": "catalogo",
+        "materiales": [
+          {
+            "nombre": "Aceite esencial de menta",
+            "categoria": "Aceites esenciales",
+            "unidad": "kg",
+            "precio": 85000.0,
+            "stock": 50.0
+          },
+          {
+            "nombre": "Glicerina vegetal",
+            "categoria": "Humectantes",
+            "unidad": "kg",
+            "precio": 18000.0,
+            "stock": 100.0
+          },
+          {
+            "nombre": "Ácido cítrico",
+            "categoria": "Reguladores de pH",
+            "unidad": "kg",
+            "precio": 12000.0,
+            "stock": 75.0
+          }
+        ]
+      }
+    },
+    {
+      "mensaje": "¿Qué venden?",
+      "status": 200,
+      "respuesta": "¡Hola! En Kohem Chemicals manejamos materias primas para cosmética y aseo. Del catálogo te puedo nombrar, por ejemplo:\n\n- Aceite esencial de menta (aceites esenciales)\n- Glicerina vegetal (humectantes)\n- Ácido cítrico (reguladores de pH)\n\nSe venden por kilo y tenemos existencias de los tres.\n\nPara orientarte mejor: ¿qué tipo de producto estás desarrollando o fabricando?",
+      "motor": "deepseek-conversacional",
+      "transfer": false,
+      "datos": {
+        "tipo": "catalogo",
+        "materiales": [
+          {
+            "nombre": "Aceite esencial de menta",
+            "categoria": "Aceites esenciales",
+            "unidad": "kg",
+            "precio": 85000.0,
+            "stock": 50.0
+          },
+          {
+            "nombre": "Glicerina vegetal",
+            "categoria": "Humectantes",
+            "unidad": "kg",
+            "precio": 18000.0,
+            "stock": 100.0
+          },
+          {
+            "nombre": "Ácido cítrico",
+            "categoria": "Reguladores de pH",
+            "unidad": "kg",
+            "precio": 12000.0,
+            "stock": 75.0
+          }
+        ]
+      }
     },
     {
       "mensaje": "Quiero dos kilos de glicerina",
       "status": 200,
-      "respuesta": "Cotización de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nTotal: $36.000,00",
-      "motor": "reglas",
+      "respuesta": "¡Hola! Con gusto te ayudo con la glicerina vegetal. Dos kilos te quedan en $36.000 (IVA incluido en el total). \n\nAntes de avanzar, cuéntame: ¿la vas a usar en una formulación cosmética o para otro tipo de aplicación? Así te oriento mejor sobre el producto y las condiciones de entrega.",
+      "motor": "deepseek-conversacional",
       "transfer": false,
       "datos": {
         "tipo": "cotizacion",
@@ -41,15 +99,24 @@
     {
       "mensaje": "¿Y cuánto hay de ese material?",
       "status": 200,
-      "respuesta": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
-      "motor": "reglas",
+      "respuesta": "Tenemos 100 kg de glicerina vegetal disponibles, así que tus dos kilos están cubiertos sin problema.\n\n¿Te confirmo el pedido con esas 2 unidades o necesitas ajustar la cantidad?",
+      "motor": "deepseek-conversacional",
       "transfer": false,
-      "datos": null
+      "datos": {
+        "tipo": "stock",
+        "encontrado": true,
+        "material": "Glicerina vegetal",
+        "stock": 100.0,
+        "unidad": "kg",
+        "stock_minimo": 10.0,
+        "requiere_revision": false
+      }
     }
   ],
   "criterios": {
     "responde_sin_error": true,
     "motor_correcto": true,
+    "catalogo_con_datos": true,
     "datos_estructurados": true,
     "datos_calculados_por_dominio": true,
     "acepta_historial": true,

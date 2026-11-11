@@ -98,7 +98,22 @@ async def test_conversacional_charla_libre():
     caso = construir(llm)
     respuesta, _, _ = await caso.respond("Buenas tardes")
     assert respuesta == "¡Hola! ¿En qué te ayudo?"
-    assert llm.llamadas["redactar"][0]["datos"] is None
+    datos = llm.llamadas["redactar"][0]["datos"]
+    assert datos["tipo"] == "catalogo"
+    assert datos["materiales"][0]["nombre"] == "Glicerina vegetal"
+
+
+async def test_conversacional_pregunta_por_catalogo():
+    llm = LLMConversacional(
+        interpretacion={"intencion": "otro"},
+        redaccion="Manejamos glicerina vegetal, entre otras materias primas.",
+    )
+    caso = construir(llm)
+    respuesta, _, _ = await caso.respond("¿Qué venden?")
+    assert "glicerina" in respuesta.lower()
+    datos = llm.llamadas["redactar"][0]["datos"]
+    assert datos["tipo"] == "catalogo"
+    assert datos["materiales"][0]["precio"] == 18000
 
 
 async def test_historial_se_reenvia_y_se_recorta():

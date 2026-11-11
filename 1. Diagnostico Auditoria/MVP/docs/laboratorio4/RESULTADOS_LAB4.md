@@ -8,7 +8,7 @@ módulo de IA reconstruido (RAG + MCP reales + DeepSeek opcional) y los modos
 - **Ramas:** `lab4-mcp-rag` (base), `lab4-conversacional` (modo conversacional)
 - **Etiqueta estable:** `lab4-asistente-estable`
 - **API auditada:** `http://127.0.0.1:8000`
-- **Suite:** **74 pruebas aprobadas, 0 fallos**
+- **Suite:** **75 pruebas aprobadas, 0 fallos**
 - **Evidencias:** `evidencias/antes/` y `evidencias/despues/`
 
 ## 1. Resumen por caso
@@ -36,14 +36,14 @@ POST /ai/chat → AIAssistantUseCase.respond(message, historial)
   2. Interpretación: DeepSeek si hay clave; si no (o si falla), reglas.
   3. Acción: MCP listar_materiales / consultar_stock / calcular_pedido.
   4. Dominio: PricingDomainService + SQLite.
-  5. Motor asistente: plantilla. Motor conversacional: DeepSeek redacta.
+  5. Motor asistente: plantilla. Motor conversacional: DeepSeek actúa como asesor.
   6. Respuesta: {response, transfer_to_employee, reason, motor, datos}
 ```
 
 | Modo | Qué hace | Cuándo usarlo |
 |---|---|---|
 | `asistente` (defecto) | Plantilla fija con cifras calculadas | Auditoría reproducible (P01–P11) |
-| `conversacional` | DeepSeek redacta con los datos del dominio | Atención al cliente (P12) |
+| `conversacional` | DeepSeek actúa como asesor con catálogo, políticas e historial | Atención al cliente (P12) |
 
 **Salvaguardas:** el modelo nunca calcula precios ni stock; recibe un bloque
 `datos` ya calculado. Si falla, se devuelve la plantilla. El historial lo envía

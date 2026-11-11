@@ -84,6 +84,7 @@ def ejecutar() -> dict:
             cabecera = {"Authorization": f"Bearer {_token()}"}
 
             saludo = _chat("Buenas tardes", cabecera)
+            catalogo = _chat("¿Qué venden?", cabecera)
             cotizacion = _chat("Quiero dos kilos de glicerina", cabecera)
             historial = [
                 {"role": "user", "content": "Quiero dos kilos de glicerina"},
@@ -99,7 +100,7 @@ def ejecutar() -> dict:
 
     configurado = bool(settings.DEEPSEEK_API_KEY.strip())
     esperado = "deepseek-conversacional" if configurado else "reglas"
-    casos = [saludo, cotizacion, seguimiento]
+    casos = [saludo, catalogo, cotizacion, seguimiento]
     evidencia = {
         "modo": "conversacional",
         "proveedor": "DeepSeek",
@@ -109,6 +110,8 @@ def ejecutar() -> dict:
         "criterios": {
             "responde_sin_error": all(c["status"] == 200 for c in casos),
             "motor_correcto": all(c["motor"] == esperado for c in casos),
+            "catalogo_con_datos": catalogo.get("datos", {}).get("tipo") == "catalogo"
+            and len(catalogo.get("datos", {}).get("materiales", [])) > 0,
             "datos_estructurados": cotizacion.get("datos", {}).get("tipo") == "cotizacion",
             "datos_calculados_por_dominio": cotizacion.get("datos", {}).get("total") == 36000.0,
             "acepta_historial": seguimiento["status"] == 200,

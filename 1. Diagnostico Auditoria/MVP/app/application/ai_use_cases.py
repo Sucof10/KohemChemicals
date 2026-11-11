@@ -193,6 +193,11 @@ class AIAssistantUseCase:
 
         respuesta = await self._responder(consulta, contexto, historial)
         if self.modo == "conversacional" and self.llm is not None:
+            if self.ultimos_datos is None:
+                self.ultimos_datos = {
+                    "tipo": "catalogo",
+                    "materiales": await self._catalogo_compacto(),
+                }
             redactado = await self.llm.redactar(consulta, self.ultimos_datos, contexto, historial)
             if redactado:
                 self.ultimo_motor = f"{getattr(self.llm, 'nombre', 'llm')}-conversacional"
@@ -291,6 +296,19 @@ class AIAssistantUseCase:
             if material:
                 return await self._consultar_stock(material)
         return None
+
+    async def _catalogo_compacto(self) -> list[dict[str, Any]]:
+        catalogo = (await self.mcp_executor.ejecutar_herramienta("listar_materiales", {}))["materiales"]
+        return [
+            {
+                "nombre": material["nombre"],
+                "categoria": material["categoria"],
+                "unidad": material["unidad"],
+                "precio": material["precio"],
+                "stock": material["stock"],
+            }
+            for material in catalogo[:50]
+        ]
 
     # ------------------------------------------------------------------
     # Acciones
