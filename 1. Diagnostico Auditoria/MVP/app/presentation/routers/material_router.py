@@ -3,18 +3,13 @@ from fastapi import APIRouter, Depends, HTTPException, status, Request
 from app.application.dtos import RawMaterialCreateDTO, RawMaterialUpdateDTO, RawMaterialResponseDTO, TokenData
 from app.application.material_use_cases import RawMaterialUseCases
 from app.presentation.dependencies import get_material_use_cases, get_current_user_data
+from app.presentation.validacion import leer_cuerpo, validar_modelo
 from app.domain.exceptions import EntityNotFoundException, InsufficientPermissionsException
 
 router=APIRouter(prefix="/materials",tags=["Materias primas / Inventario"])
 
 async def parse_body(request: Request, model_cls):
-    content_type=request.headers.get("content-type","").split(";",1)[0].lower()
-    if content_type == "application/json":
-        return model_cls.model_validate(await request.json())
-    if content_type in ("application/x-www-form-urlencoded", "multipart/form-data"):
-        form=await request.form()
-        return model_cls.model_validate(dict(form))
-    raise HTTPException(status_code=415, detail="Use application/json o application/x-www-form-urlencoded.")
+    return validar_modelo(model_cls, await leer_cuerpo(request))
 
 @router.get("",response_model=List[RawMaterialResponseDTO])
 async def list_materials(skip:int=0,limit:int=100,uc:RawMaterialUseCases=Depends(get_material_use_cases)):

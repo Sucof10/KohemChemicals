@@ -7,15 +7,26 @@ from app.infrastructure.security import SecurityService
 from app.application.auth_use_cases import AuthUseCases
 from app.application.material_use_cases import RawMaterialUseCases
 from app.application.order_use_cases import OrderUseCases
-from app.application.ai_use_cases import AIUseCases
+from app.application.ai_use_cases import AIAssistantUseCase
 from app.application.dtos import TokenData
+from app.infrastructure.mock_vector_db import MockVectorDbAdapter
+from app.infrastructure.mcp_server import KohemMcpAdapter
+from app.infrastructure.deepseek_llm import DeepSeekLLMAdapter
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/token")
+
+_llm = DeepSeekLLMAdapter()
 
 def get_auth_use_cases(db: AsyncSession = Depends(get_db)): return AuthUseCases(SQLiteUserRepository(db), SecurityService(), SecurityService())
 def get_material_use_cases(db: AsyncSession = Depends(get_db)): return RawMaterialUseCases(SQLiteRawMaterialRepository(db))
 def get_order_use_cases(db: AsyncSession = Depends(get_db)): return OrderUseCases(SQLiteOrderRepository(db), SQLiteRawMaterialRepository(db), SQLiteAuditRepository(db))
-def get_ai_use_cases(): return AIUseCases()
+
+def get_ai_use_cases(db: AsyncSession = Depends(get_db)) -> AIAssistantUseCase:
+    return AIAssistantUseCase(
+        rag_repo=MockVectorDbAdapter(),
+        mcp_executor=KohemMcpAdapter(SQLiteRawMaterialRepository(db)),
+        llm=_llm if _llm.disponible else None,
+    )
 
 async def get_current_user_data(token: str = Depends(oauth2_scheme)) -> TokenData:
     exc=HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas.", headers={"WWW-Authenticate":"Bearer"})

@@ -1,0 +1,18 @@
+﻿
+=== P10 ÔÇö Regresi├│n y arquitectura ===
+{
+  "pytest": {
+    "codigo_salida": 0,
+    "resumen": "68 passed, 3 warnings in 3.09s",
+    "errores": ""
+  },
+  "arquitectura": {
+    "domain": [],
+    "application": []
+  },
+  "criterios": {
+    "dominio_puro": true,
+    "aplicacion_sin_frameworks": true,
+    "suite_ejecutable": true
+  }
+}

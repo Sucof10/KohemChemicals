@@ -3,6 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.application.dtos import UserCreateDTO, UserResponseDTO, Token
 from app.application.auth_use_cases import AuthUseCases
 from app.presentation.dependencies import get_auth_use_cases
+from app.presentation.validacion import leer_cuerpo, validar_modelo
 from app.domain.exceptions import UserAlreadyExistsException, AuthenticationFailedException
 import json
 
@@ -25,13 +26,7 @@ async def register(
     request: Request,
     auth: AuthUseCases = Depends(get_auth_use_cases),
 ):
-    content_type = request.headers.get("content-type", "").split(";", 1)[0].lower()
-    if content_type == "application/json":
-        dto = UserCreateDTO.model_validate(await request.json())
-    elif content_type == "application/x-www-form-urlencoded" or content_type == "multipart/form-data":
-        dto = _model_from_form(await request.form(), UserCreateDTO)
-    else:
-        raise HTTPException(status_code=415, detail="Use application/json o application/x-www-form-urlencoded.")
+    dto = validar_modelo(UserCreateDTO, await leer_cuerpo(request))
     try:
         return await auth.register_user(dto)
     except UserAlreadyExistsException as e:
@@ -48,17 +43,9 @@ async def login_oauth(
     request: Request,
     auth: AuthUseCases = Depends(get_auth_use_cases),
 ):
-    content_type = request.headers.get("content-type", "").split(";", 1)[0].lower()
-    if content_type == "application/json":
-        data = await request.json()
-        username = data.get("username")
-        password = data.get("password")
-    elif content_type == "application/x-www-form-urlencoded" or content_type == "multipart/form-data":
-        form = await request.form()
-        username = form.get("username")
-        password = form.get("password")
-    else:
-        raise HTTPException(status_code=415, detail="Use application/json o application/x-www-form-urlencoded.")
+    data = await leer_cuerpo(request)
+    username = data.get("username")
+    password = data.get("password")
     if not username or not password:
         raise HTTPException(status_code=422, detail="username y password son obligatorios.")
     try:

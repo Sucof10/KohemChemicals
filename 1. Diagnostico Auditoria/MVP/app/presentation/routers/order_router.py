@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from app.application.dtos import OrderCreateDTO, OrderStatusUpdateDTO, OrderResponseDTO, OrderItemResponseDTO, TokenData
 from app.application.order_use_cases import OrderUseCases
 from app.presentation.dependencies import get_order_use_cases, get_current_user_data
+from app.presentation.validacion import leer_cuerpo, validar_modelo
 from app.domain.exceptions import EntityNotFoundException, InsufficientStockException, InsufficientPermissionsException, InvalidOrderStateException
 import json
 
@@ -14,22 +15,14 @@ def to_response(order):
         created_at=order.created_at.isoformat(),updated_at=order.updated_at.isoformat())
 
 async def parse_order_create(request: Request):
-    content_type=request.headers.get("content-type","").split(";",1)[0].lower()
-    if content_type == "application/json":
-        return OrderCreateDTO.model_validate(await request.json())
-    if content_type in ("application/x-www-form-urlencoded", "multipart/form-data"):
-        form=await request.form(); data=dict(form)
-        if isinstance(data.get("items"), str):
-            try: data["items"]=json.loads(data["items"])
-            except json.JSONDecodeError: raise HTTPException(status_code=422, detail="El campo items debe contener un JSON válido.")
-        return OrderCreateDTO.model_validate(data)
-    raise HTTPException(status_code=415, detail="Use application/json o application/x-www-form-urlencoded.")
+    data = await leer_cuerpo(request)
+    if isinstance(data.get("items"), str):
+        try: data["items"]=json.loads(data["items"])
+        except json.JSONDecodeError: raise HTTPException(status_code=422, detail="El campo items debe contener un JSON válido.")
+    return validar_modelo(OrderCreateDTO, data)
 
 async def parse_status(request: Request):
-    content_type=request.headers.get("content-type","").split(";",1)[0].lower()
-    if content_type == "application/json": return OrderStatusUpdateDTO.model_validate(await request.json())
-    if content_type in ("application/x-www-form-urlencoded", "multipart/form-data"): return OrderStatusUpdateDTO.model_validate(dict(await request.form()))
-    raise HTTPException(status_code=415, detail="Use application/json o application/x-www-form-urlencoded.")
+    return validar_modelo(OrderStatusUpdateDTO, await leer_cuerpo(request))
 
 @router.post("",response_model=OrderResponseDTO,status_code=201)
 async def create_order(request:Request,uc:OrderUseCases=Depends(get_order_use_cases),usr:TokenData=Depends(get_current_user_data)):

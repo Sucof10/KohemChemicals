@@ -1,0 +1,136 @@
+{
+  "en_proceso": {
+    "herramientas": [
+      {
+        "nombre": "listar_materiales",
+        "descripcion": "Devuelve el catálogo de materias primas activas con precio y stock.",
+        "esquema": {
+          "properties": {},
+          "title": "listar_materialesArguments",
+          "type": "object"
+        }
+      },
+      {
+        "nombre": "consultar_stock",
+        "descripcion": "Consulta el stock disponible de una materia prima por nombre.",
+        "esquema": {
+          "properties": {
+            "nombre": {
+              "title": "Nombre",
+              "type": "string"
+            }
+          },
+          "required": [
+            "nombre"
+          ],
+          "title": "consultar_stockArguments",
+          "type": "object"
+        }
+      },
+      {
+        "nombre": "calcular_pedido",
+        "descripcion": "Cotiza un pedido a partir de material_id y cantidad. Aplica IVA y tope solo cuando la regla correspondiente fue recuperada por el RAG.",
+        "esquema": {
+          "properties": {
+            "items": {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "title": "Items",
+              "type": "array"
+            },
+            "aplicar_iva": {
+              "default": false,
+              "title": "Aplicar Iva",
+              "type": "boolean"
+            },
+            "aplicar_tope": {
+              "default": false,
+              "title": "Aplicar Tope",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "items"
+          ],
+          "title": "calcular_pedidoArguments",
+          "type": "object"
+        }
+      }
+    ],
+    "consultar_stock": {
+      "encontrado": true,
+      "material": "Glicerina vegetal",
+      "stock": 100.0,
+      "unidad": "kg",
+      "stock_minimo": 10.0,
+      "requiere_revision": false
+    },
+    "calcular_pedido": {
+      "items": [
+        {
+          "material_id": 1,
+          "nombre": "Aceite esencial de menta",
+          "cantidad": 2.0,
+          "unidad": "kg",
+          "precio_unitario": 85000.0,
+          "subtotal": 170000.0,
+          "requiere_revision": false
+        }
+      ],
+      "subtotal": 170000.0,
+      "iva": 32300.0,
+      "total": 202300.0,
+      "tope_aplicado": false,
+      "requiere_revision": false
+    },
+    "herramienta_inexistente": "ValueError: Unknown tool: raiz_cuadrada"
+  },
+  "transporte_stdio": {
+    "servidor": {
+      "nombre": "Kohem-Chemicals-MCP",
+      "version": "1.0.0"
+    },
+    "herramientas": [
+      "listar_materiales",
+      "consultar_stock",
+      "calcular_pedido"
+    ],
+    "consultar_stock": {
+      "encontrado": true,
+      "material": "Glicerina vegetal",
+      "stock": 100.0,
+      "unidad": "kg",
+      "stock_minimo": 10.0,
+      "requiere_revision": false
+    },
+    "calcular_pedido": {
+      "items": [
+        {
+          "material_id": 1,
+          "nombre": "Aceite esencial de menta",
+          "cantidad": 2.0,
+          "unidad": "kg",
+          "precio_unitario": 85000.0,
+          "subtotal": 170000.0,
+          "requiere_revision": false
+        }
+      ],
+      "subtotal": 170000.0,
+      "iva": 0.0,
+      "total": 170000.0,
+      "tope_aplicado": false,
+      "requiere_revision": false
+    },
+    "duracion_ms": 1845.0
+  },
+  "criterios": {
+    "tres_herramientas": true,
+    "esquema_requerido": true,
+    "rechaza_herramienta_inexistente": true,
+    "transporte_inicializa": true,
+    "transporte_devuelve_datos": true,
+    "cumple_todos": true
+  }
+}

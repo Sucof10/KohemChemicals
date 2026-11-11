@@ -1,0 +1,50 @@
+﻿
+=== P02 ÔÇö Divisi├│n por cero / stock insuficiente ===
+{
+  "stock_antes": {
+    "1": 50.0,
+    "2": 100.0,
+    "3": 75.0
+  },
+  "stock_despues": {
+    "1": 50.0,
+    "2": 100.0,
+    "3": 75.0
+  },
+  "stock_sin_cambios": true,
+  "sobreventa_ia": {
+    "metodo": "POST",
+    "ruta": "/ai/chat",
+    "status": 422,
+    "cuerpo": {
+      "detail": "Error executing tool calcular_pedido"
+    }
+  },
+  "pedido_multitems_con_stock_insuficiente": {
+    "metodo": "POST",
+    "ruta": "/orders",
+    "status": 400,
+    "cuerpo": {
+      "detail": "Stock insuficiente para '├ücido c├¡trico'. Disponible: 75.0, solicitado: 999999.0."
+    }
+  },
+  "cantidad_cero": {
+    "metodo": "POST",
+    "ruta": "/orders",
+    "status": 422,
+    "cuerpo": {
+      "detail": [
+        {
+          "campo": "items.0.quantity",
+          "mensaje": "Input should be greater than 0"
+        }
+      ]
+    }
+  },
+  "criterios": {
+    "impide_sobreventa": true,
+    "no_reserva_stock_parcial": true,
+    "rechaza_cantidad_cero": true,
+    "cumple_todos": true
+  }
+}

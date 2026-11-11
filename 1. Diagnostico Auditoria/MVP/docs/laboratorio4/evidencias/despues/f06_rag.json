@@ -1,0 +1,53 @@
+{
+  "recuperacion_por_palabras_clave": {
+    "Cotiza 2 kg de glicerina con IVA": "Política tributaria: a todo pedido se le aplica un IVA del 19% sobre el subtotal.",
+    "Cotiza 2 kg de glicerina con impuesto": "Política tributaria: a todo pedido se le aplica un IVA del 19% sobre el subtotal.",
+    "Cotiza 2 kg de glicerina con tope máximo": "Política comercial: ningún pedido puede superar 50.000.000 COP; el excedente requiere aprobación gerencial.",
+    "¿Cuál es el stock de glicerina?": "Política de inventario: cada materia prima exige un stock mínimo de 10 kg. Si el stock disponible es inferior, la solicitud requiere revisión de un asesor.",
+    "Cotiza 2 kg de glicerina": "Sin reglas especiales."
+  },
+  "casos_http": {
+    "sin_reglas": {
+      "prompt": "Cotiza 2 kg de glicerina",
+      "status": 200,
+      "respuesta": "Cotización de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nTotal: $36.000,00",
+      "transfer": false,
+      "aplica_iva": false
+    },
+    "iva": {
+      "prompt": "Cotiza 2 kg de glicerina con IVA",
+      "status": 200,
+      "respuesta": "Cotización de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nIVA 19%: $6.840,00\nTotal: $42.840,00",
+      "transfer": false,
+      "aplica_iva": true
+    },
+    "impuesto": {
+      "prompt": "Cotiza 2 kg de glicerina con impuesto",
+      "status": 200,
+      "respuesta": "Cotización de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nIVA 19%: $6.840,00\nTotal: $42.840,00",
+      "transfer": false,
+      "aplica_iva": true
+    },
+    "tope": {
+      "prompt": "Cotiza 1000 kg de Base cosmética P06 con tope máximo",
+      "status": 200,
+      "respuesta": "Cotización de pedido:\n- 1000 kg de Base cosmética P06: $60.000.000,00\nSubtotal: $60.000.000,00\nTotal: $50.000.000,00\nSe aplicó el tope comercial de 50.000.000 COP; requiere aprobación gerencial.",
+      "transfer": true,
+      "aplica_tope": true
+    },
+    "falso_positivo_max": {
+      "prompt": "Cotiza 1000 kg de Base cosmética P06 al máximo",
+      "status": 200,
+      "respuesta": "Cotización de pedido:\n- 1000 kg de Base cosmética P06: $60.000.000,00\nSubtotal: $60.000.000,00\nTotal: $60.000.000,00",
+      "transfer": false,
+      "aplica_tope": false
+    }
+  },
+  "criterios": {
+    "sin_reglas_no_aplica_iva": true,
+    "iva_por_sinonimo": true,
+    "tope_aplicado": true,
+    "sin_falso_positivo": true,
+    "cumple_todos": true
+  }
+}

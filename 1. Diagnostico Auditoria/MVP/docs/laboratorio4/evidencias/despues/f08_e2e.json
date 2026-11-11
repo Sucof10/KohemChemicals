@@ -1,0 +1,93 @@
+{
+  "cotizacion": {
+    "metodo": "POST",
+    "ruta": "/ai/chat",
+    "status": 200,
+    "cuerpo": {
+      "response": "Cotización de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nIVA 19%: $6.840,00\nTotal: $42.840,00",
+      "transfer_to_employee": false,
+      "reason": null,
+      "motor": "reglas"
+    }
+  },
+  "pedido": {
+    "metodo": "POST",
+    "ruta": "/orders",
+    "status": 201,
+    "cuerpo": {
+      "id": 4,
+      "customer_id": 2,
+      "status": "pendiente",
+      "total": 36000.0,
+      "notes": null,
+      "items": [
+        {
+          "id": 4,
+          "raw_material_id": 2,
+          "quantity": 2.0,
+          "unit_price": 18000.0,
+          "subtotal": 36000.0
+        }
+      ],
+      "created_at": "2026-11-10T23:36:48.776249",
+      "updated_at": "2026-11-10T23:36:48.776253"
+    }
+  },
+  "stock": {
+    "antes": 100.0,
+    "tras_pedido": 98.0,
+    "tras_cancelar": 100.0
+  },
+  "auditoria": {
+    "creacion": {
+      "id": 7,
+      "user_id": 2,
+      "action": "CREATE",
+      "entity": "order",
+      "entity_id": 4,
+      "detail": "Pedido creado por cliente 2; total=36000.0",
+      "created_at": "2026-11-10T23:36:48.797102"
+    },
+    "cancelacion": {
+      "id": 8,
+      "user_id": 2,
+      "action": "UPDATE_STATUS",
+      "entity": "order",
+      "entity_id": 4,
+      "detail": "Estado cambiado a cancelado",
+      "created_at": "2026-11-10T23:36:49.615108"
+    }
+  },
+  "cancelacion": {
+    "metodo": "PATCH",
+    "ruta": "/orders/4/status",
+    "status": 200,
+    "cuerpo": {
+      "id": 4,
+      "customer_id": 2,
+      "status": "cancelado",
+      "total": 36000.0,
+      "notes": null,
+      "items": [
+        {
+          "id": 4,
+          "raw_material_id": 2,
+          "quantity": 2.0,
+          "unit_price": 18000.0,
+          "subtotal": 36000.0
+        }
+      ],
+      "created_at": "2026-11-10T23:36:48.776249",
+      "updated_at": "2026-11-10T23:36:49.602815"
+    }
+  },
+  "criterios": {
+    "cotizacion_200": true,
+    "pedido_201": true,
+    "descuenta_stock": true,
+    "registra_creacion": true,
+    "restaura_stock": true,
+    "registra_cancelacion": true,
+    "cumple_todos": true
+  }
+}

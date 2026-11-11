@@ -1,0 +1,70 @@
+﻿
+=== P03 ÔÇö Negativos y decimales ===
+{
+  "precision_dominio": {
+    "0.1x3": {
+      "esperado": 0.3,
+      "obtenido": 0.3,
+      "correcto": true
+    },
+    "1234.567x3": {
+      "esperado": 3703.7,
+      "obtenido": 3703.7,
+      "correcto": true
+    },
+    "media_unidad": {
+      "esperado": 9000.0,
+      "obtenido": 9000.0,
+      "correcto": true
+    }
+  },
+  "precision_correcta": true,
+  "material_precio_negativo": {
+    "metodo": "POST",
+    "ruta": "/materials",
+    "status": 500,
+    "cuerpo": "Internal Server Error"
+  },
+  "material_stock_negativo": {
+    "metodo": "POST",
+    "ruta": "/materials",
+    "status": 500,
+    "cuerpo": "Internal Server Error"
+  },
+  "pedido_con_decimales": {
+    "metodo": "POST",
+    "ruta": "/orders",
+    "status": 201,
+    "cuerpo": {
+      "id": 1,
+      "customer_id": 2,
+      "status": "pendiente",
+      "total": 3703.7,
+      "notes": null,
+      "items": [
+        {
+          "id": 1,
+          "raw_material_id": 4,
+          "quantity": 3.0,
+          "unit_price": 1234.567,
+          "subtotal": 3703.7
+        }
+      ],
+      "created_at": "2026-11-10T22:23:38.368227",
+      "updated_at": "2026-11-10T22:23:38.368230"
+    }
+  },
+  "pedido_cantidad_negativa": {
+    "metodo": "POST",
+    "ruta": "/orders",
+    "status": 500,
+    "cuerpo": "Internal Server Error"
+  },
+  "criterios": {
+    "rechaza_precio_negativo": false,
+    "rechaza_stock_negativo": false,
+    "rechaza_cantidad_negativa": false,
+    "conserva_precision": true,
+    "cumple_todos": false
+  }
+}

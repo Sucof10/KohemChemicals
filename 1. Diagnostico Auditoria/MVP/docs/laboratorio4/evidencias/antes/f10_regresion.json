@@ -1,0 +1,62 @@
+{
+  "pytest": {
+    "codigo_salida": 1,
+    "resumen": "2 failed, 41 passed, 3 warnings in 2.69s",
+    "salida": "...................F.............F.........                              [100%]\n================================== FAILURES ===================================\n___________________________ test_register_and_login ___________________________\n\nclient = <httpx.AsyncClient object at 0x0000017B0E338A50>\n\n    @pytest.mark.asyncio\n    async def test_register_and_login(client):\n        res=await client.post('/api/v1/auth/register',json={'username':'testuser','email':'test@kohem.com','password':'Secure123!','role':'cliente'})\n        assert res.status_code==201\n        login=await client.post('/api/v1/auth/login',json={'username':'testuser','password':'Secure123!'})\n>       assert login.status_code==200\nE       assert 404 == 200\nE        +  where 404 = <Response [404 Not Found]>.status_code\n\ntests\\test_auth.py:8: AssertionError\n____________________________ test_order_visibility ____________________________\n\nclient = <httpx.AsyncClient object at 0x0000017B0E60DFD0>\n\n    @pytest.mark.asyncio\n    async def test_order_visibility(client):\n>       await client.post('/api/v1/auth/register',json={'username':'c1','email':'c1@kohem.com','password':'Client123!','role':'cliente'})\n\ntests\\test_order_permissions.py:5: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\nvenv\\Lib\\site-packages\\httpx\\_client.py:1859: in post\n    return await self.request(\nvenv\\Lib\\site-packages\\httpx\\_client.py:1540: in request\n    return await self.send(request, auth=auth, follow_redirects=follow_redirects)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nvenv\\Lib\\site-packages\\httpx\\_client.py:1629: in send\n    response = await self._send_handling_auth(\nvenv\\Lib\\site-packages\\httpx\\_client.py:1657: in _send_handling_auth\n    response = await self._send_handling_redirects(\nvenv\\Lib\\site-packages\\httpx\\_client.py:1694: in _send_handling_redirects\n    response = await self._send_single_request(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nvenv\\Lib\\site-packages\\httpx\\_client.py:1730: in _send_single_request\n    response = await transport.handle_async_request(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nvenv\\Lib\\site-packages\\httpx\\_transports\\asgi.py:170: in handle_async_request\n    await self.app(scope, receive, send)\nvenv\\Lib\\site-packages\\fastapi\\applications.py:1216: in __call__\n    await super().__call__(scope, receive, send)\nvenv\\Lib\\site-packages\\starlette\\applications.py:96: in __call__\n    await self.middleware_stack(scope, receive, send)\nvenv\\Lib\\site-packages\\starlette\\middleware\\errors.py:186: in __call__\n    raise exc\nvenv\\Lib\\site-packages\\starlette\\middleware\\errors.py:164: in __call__\n    await self.app(scope, receive, _send)\nvenv\\Lib\\site-packages\\fastapi\\telemetry\\_asgi.py:151: in __call__\n    await self.app(scope, receive, send)\nvenv\\Lib\\site-packages\\starlette\\middleware\\cors.py:91: in __call__\n    await self.simple_response(scope, receive, send, request_headers=headers)\nvenv\\Lib\\site-packages\\starlette\\middleware\\cors.py:149: in simple_response\n    await self.app(scope, receive, send)\nvenv\\Lib\\site-packages\\starlette\\middleware\\exceptions.py:63: in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\nvenv\\Lib\\site-packages\\starlette\\_exception_handler.py:53: in wrapped_app\n    raise exc\nvenv\\Lib\\site-packages\\starlette\\_exception_handler.py:42: in wrapped_app\n    await app(scope, receive, sender)\nvenv\\Lib\\site-packages\\fastapi\\middleware\\asyncexitstack.py:18: in __call__\n    await self.app(scope, receive, send)\nvenv\\Lib\\site-packages\\starlette\\routing.py:676: in __call__\n    await self.middleware_stack(scope, receive, send)\nvenv\\Lib\\site-packages\\fastapi\\routing.py:2786: in app\n    await route.handle(scope, receive, send)\nvenv\\Lib\\site-packages\\fastapi\\routing.py:1817: in handle\n    await self.original_router.handle(scope, receive, send)\nvenv\\Lib\\site-packages\\fastapi\\routing.py:2869: in handle\n    await included_router._handle_selected(scope, receive, send)\nvenv\\Lib\\site-packages\\fastapi\\routing.py:1843: in _handle_selected\n    await original_route.handle(scope, receive, send)\nvenv\\Lib\\site-packages\\fastapi\\routing.py:1308: in handle\n    await effective_context.app(scope, receive, send)\nvenv\\Lib\\site-packages\\fastapi\\routing.py:165: in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\nvenv\\Lib\\site-packages\\starlette\\_exception_handler.py:53: in wrapped_app\n    raise exc\nvenv\\Lib\\site-packages\\starlette\\_exception_handler.py:42: in wrapped_app\n    await app(scope, receive, sender)\nvenv\\Lib\\site-packages\\fastapi\\routing.py:151: in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\nvenv\\Lib\\site-packages\\fastapi\\routing.py:727: in app\n    raw_response = await run_endpoint_function(\nvenv\\Lib\\site-packages\\fastapi\\routing.py:360: in run_endpoint_function\n    return await dependant.call(**values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nrequest = <starlette.requests.Request object at 0x0000017B0E621230>\nauth = <app.application.auth_use_cases.AuthUseCases object at 0x0000017B0E601480>\n\n    @router.post(\n        \"/register\",\n        response_model=UserResponseDTO,\n        status_code=status.HTTP_201_CREATED,\n        summary=\"Registrar usuario\",\n        description=\"Acepta JSON (application/json) o campos individuales (application/x-www-form-urlencoded). En Swagger puedes cambiar el tipo de contenido y probar cualquiera de las dos formas.\",\n    )\n    async def register(\n        request: Request,\n        auth: AuthUseCases = Depends(get_auth_use_cases),\n    ):\n        content_type = request.headers.get(\"content-type\", \"\").split(\";\", 1)[0].lower()\n        if content_type == \"application/json\":\n>           dto = UserCreateDTO.model_validate(await request.json())\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nE           pydantic_core._pydantic_core.ValidationError: 1 validation error for UserCreateDTO\nE           username\nE             String should have at least 3 characters [type=string_too_short, input_value='c1', input_type=str]\nE               For further information visit https://errors.pydantic.dev/2.14/v/string_too_short\n\napp\\presentation\\routers\\auth_router.py:30: ValidationError\n============================== warnings summary ===============================\ntests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order\ntests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order\n  <string>:9: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n\ntests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order\n  <string>:10: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ===========================\nFAILED tests/test_auth.py::test_register_and_login - assert 404 == 200\nFAILED tests/test_order_permissions.py::test_order_visibility - pydantic_core...\n2 failed, 41 passed, 3 warnings in 2.69s\n",
+    "errores": ""
+  },
+  "pruebas_colectadas": [
+    "tests/test_ai_presentation.py::test_chat_exige_autenticacion",
+    "tests/test_ai_presentation.py::test_chat_cotizacion_valida",
+    "tests/test_ai_presentation.py::test_chat_mensaje_ausente_devuelve_422",
+    "tests/test_ai_presentation.py::test_chat_mensaje_vacio_devuelve_422",
+    "tests/test_ai_presentation.py::test_chat_mensaje_solo_espacios_devuelve_422",
+    "tests/test_ai_presentation.py::test_chat_tipo_incorrecto_devuelve_422",
+    "tests/test_ai_presentation.py::test_chat_content_type_no_soportado",
+    "tests/test_ai_presentation.py::test_chat_json_mal_formado",
+    "tests/test_ai_presentation.py::test_chat_ignora_campos_extra",
+    "tests/test_ai_use_case.py::test_cotizacion_sin_reglas_rag",
+    "tests/test_ai_use_case.py::test_cotizacion_con_iva_recuperado_por_rag",
+    "tests/test_ai_use_case.py::test_cotizacion_con_tope_requiere_aprobacion",
+    "tests/test_ai_use_case.py::test_material_bajo_stock_minimo_requiere_asesor",
+    "tests/test_ai_use_case.py::test_material_desconocido",
+    "tests/test_ai_use_case.py::test_consulta_de_stock",
+    "tests/test_ai_use_case.py::test_consulta_de_stock_bajo_minimo",
+    "tests/test_ai_use_case.py::test_consulta_sin_reglas_especiales",
+    "tests/test_ai_use_case.py::test_consulta_tecnica_se_transfiere",
+    "tests/test_ai_use_case.py::test_mensaje_vacio",
+    "tests/test_auth.py::test_register_and_login",
+    "tests/test_auth.py::test_login_oauth2_still_works",
+    "tests/test_materials_and_orders.py::test_client_cannot_create_material_but_can_create_order",
+    "tests/test_mcp_adapter.py::test_contrato_de_herramientas",
+    "tests/test_mcp_adapter.py::test_listar_materiales_omite_inactivos",
+    "tests/test_mcp_adapter.py::test_consultar_stock_encontrado",
+    "tests/test_mcp_adapter.py::test_consultar_stock_bajo_minimo",
+    "tests/test_mcp_adapter.py::test_consultar_stock_inexistente",
+    "tests/test_mcp_adapter.py::test_calcular_pedido_sin_reglas",
+    "tests/test_mcp_adapter.py::test_calcular_pedido_con_iva",
+    "tests/test_mcp_adapter.py::test_calcular_pedido_con_tope",
+    "tests/test_mcp_adapter.py::test_calcular_pedido_stock_insuficiente",
+    "tests/test_mcp_adapter.py::test_herramienta_desconocida",
+    "tests/test_mcp_adapter.py::test_pedido_vacio",
+    "tests/test_order_permissions.py::test_order_visibility",
+    "tests/test_pricing_domain.py::test_subtotal_exacto",
+    "tests/test_pricing_domain.py::test_subtotal_redondea_a_dos_decimales",
+    "tests/test_pricing_domain.py::test_total_suma_subtotales",
+    "tests/test_pricing_domain.py::test_iva_del_19_por_ciento",
+    "tests/test_pricing_domain.py::test_tope_comercial",
+    "tests/test_pricing_domain.py::test_revision_por_stock_minimo",
+    "tests/test_pricing_domain.py::test_cantidad_cero_o_negativa",
+    "tests/test_pricing_domain.py::test_precio_invalido",
+    "tests/test_pricing_domain.py::test_base_gravable_negativa"
+  ],
+  "arquitectura": {
+    "domain": [],
+    "application": []
+  },
+  "criterios": {
+    "dominio_puro": true,
+    "aplicacion_sin_frameworks": true,
+    "suite_ejecutable": true
+  }
+}

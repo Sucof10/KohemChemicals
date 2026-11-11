@@ -6,6 +6,12 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     DATABASE_URL: str = "sqlite+aiosqlite:///./kohem.db"
+    # Motor de lenguaje opcional (DeepSeek, API compatible con OpenAI).
+    # Si DEEPSEEK_API_KEY está vacía, el asistente usa el motor de reglas.
+    DEEPSEEK_API_KEY: str = ""
+    DEEPSEEK_BASE_URL: str = "https://api.deepseek.com"
+    DEEPSEEK_MODEL: str = "deepseek-chat"
+    LLM_TIMEOUT_SECONDS: float = 20.0
     # Orígenes permitidos para CORS, separados por coma.
     # En producción reemplazar por el dominio real del frontend.
     CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"

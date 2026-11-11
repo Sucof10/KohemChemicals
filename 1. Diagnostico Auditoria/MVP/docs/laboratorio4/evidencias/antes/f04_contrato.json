@@ -1,0 +1,126 @@
+{
+  "endpoint": "/api/v1/ai/chat",
+  "casos": {
+    "valido": {
+      "status": 200,
+      "cuerpo": {
+        "response": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
+        "transfer_to_employee": false,
+        "reason": null
+      },
+      "esperado": 200,
+      "coincide": true
+    },
+    "sin_message": {
+      "status": 422,
+      "cuerpo": {
+        "detail": [
+          {
+            "campo": "message",
+            "mensaje": "Field required"
+          }
+        ]
+      },
+      "esperado": 422,
+      "coincide": true
+    },
+    "message_vacio": {
+      "status": 422,
+      "cuerpo": {
+        "detail": [
+          {
+            "campo": "message",
+            "mensaje": "String should have at least 1 character"
+          }
+        ]
+      },
+      "esperado": 422,
+      "coincide": true
+    },
+    "message_espacios": {
+      "status": 422,
+      "cuerpo": {
+        "detail": "El mensaje no puede estar vacío."
+      },
+      "esperado": 422,
+      "coincide": true
+    },
+    "message_no_textual": {
+      "status": 422,
+      "cuerpo": {
+        "detail": [
+          {
+            "campo": "message",
+            "mensaje": "Input should be a valid string"
+          }
+        ]
+      },
+      "esperado": 422,
+      "coincide": true
+    },
+    "campo_extra": {
+      "status": 200,
+      "cuerpo": {
+        "response": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
+        "transfer_to_employee": false,
+        "reason": null
+      },
+      "esperado": 200,
+      "coincide": true
+    },
+    "formulario": {
+      "status": 200,
+      "cuerpo": {
+        "response": "Puedo ayudarte con disponibilidad, pedidos y orientación inicial sobre el proceso de compra.",
+        "transfer_to_employee": false,
+        "reason": null
+      },
+      "esperado": 200,
+      "coincide": true
+    },
+    "content_type_texto": {
+      "status": 415,
+      "cuerpo": {
+        "detail": "Use application/json o application/x-www-form-urlencoded."
+      },
+      "esperado": 415,
+      "coincide": true
+    },
+    "json_mal_formado": {
+      "status": 400,
+      "cuerpo": {
+        "detail": "El cuerpo de la solicitud no es un JSON UTF-8 válido."
+      },
+      "esperado": 400,
+      "coincide": true
+    },
+    "utf8_invalido": {
+      "status": 400,
+      "cuerpo": {
+        "detail": "El cuerpo de la solicitud no es un JSON UTF-8 válido."
+      },
+      "esperado": 400,
+      "coincide": true
+    },
+    "sin_token": {
+      "status": 401,
+      "cuerpo": {
+        "detail": "Not authenticated"
+      },
+      "esperado": 401,
+      "coincide": true
+    }
+  },
+  "contraste_legado_materials": {
+    "status": 500,
+    "cuerpo": "Internal Server Error",
+    "esperado": 422,
+    "coincide": false
+  },
+  "todos_coinciden": true,
+  "criterios": {
+    "contrato_estricto": true,
+    "legado_devuelve_422": false,
+    "cumple_todos": false
+  }
+}

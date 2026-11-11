@@ -1,0 +1,104 @@
+﻿
+=== P05 ÔÇö Prompt y extracci├│n de operandos ===
+{
+  "casos": [
+    {
+      "prompt": "Cotiza 2 kg de glicerina",
+      "esperado": "cotiza 2 kg a precio de cat├ílogo",
+      "status": 200,
+      "respuesta": "Cotizaci├│n de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nTotal: $36.000,00",
+      "transfer": false,
+      "motivo": null,
+      "coincide": true
+    },
+    {
+      "prompt": "COTIZA 2 KG DE GLICERINA",
+      "esperado": "misma cotizaci├│n en may├║sculas",
+      "status": 200,
+      "respuesta": "Cotizaci├│n de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nTotal: $36.000,00",
+      "transfer": false,
+      "motivo": null,
+      "coincide": true
+    },
+    {
+      "prompt": "cotiza 2kg de glicerina",
+      "esperado": "tolera ausencia de espacio entre n├║mero y unidad",
+      "status": 200,
+      "respuesta": "Cotizaci├│n de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nTotal: $36.000,00",
+      "transfer": false,
+      "motivo": null,
+      "coincide": true
+    },
+    {
+      "prompt": "Necesito 2 kg de glicerina",
+      "esperado": "cotiza aunque no diga 'cotiza'",
+      "status": 200,
+      "respuesta": "Cotizaci├│n de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\nSubtotal: $36.000,00\nTotal: $36.000,00",
+      "transfer": false,
+      "motivo": null,
+      "coincide": true
+    },
+    {
+      "prompt": "Cotiza 2 kilos de glicerina",
+      "esperado": "entiende 'kilos' como unidad",
+      "status": 200,
+      "respuesta": "Puedes crear un pedido seleccionando las materias primas disponibles y las cantidades requeridas.",
+      "transfer": false,
+      "motivo": null,
+      "coincide": false
+    },
+    {
+      "prompt": "Cotiza dos kg de glicerina",
+      "esperado": "entiende n├║meros escritos con palabras",
+      "status": 200,
+      "respuesta": "Puedes crear un pedido seleccionando las materias primas disponibles y las cantidades requeridas.",
+      "transfer": false,
+      "motivo": null,
+      "coincide": false
+    },
+    {
+      "prompt": "Cotiza 2 kg de glicerina y 3 kg de ├ícido c├¡trico",
+      "esperado": "extrae dos ├¡tems en una sola frase",
+      "status": 200,
+      "respuesta": "Cotizaci├│n de pedido:\n- 2 kg de Glicerina vegetal: $36.000,00\n- 3 kg de ├ücido c├¡trico: $36.000,00\nSubtotal: $72.000,00\nTotal: $72.000,00",
+      "transfer": false,
+      "motivo": null,
+      "coincide": true
+    },
+    {
+      "prompt": "Cotiza 2 kg de mercurio",
+      "esperado": "informa que el material no existe",
+      "status": 200,
+      "respuesta": "No encontr├® en el cat├ílogo: mercurio.",
+      "transfer": true,
+      "motivo": "Material no identificado en el cat├ílogo de Kohem Chemicals.",
+      "coincide": true
+    },
+    {
+      "prompt": "No tengo problemas con mi pedido",
+      "esperado": "no transfiere: no hay consulta t├®cnica",
+      "status": 200,
+      "respuesta": "Puedo registrar tu consulta, pero este caso requiere revisi├│n de un asesor de Kohem Chemicals.",
+      "transfer": true,
+      "motivo": "La consulta puede requerir conocimiento t├®cnico o intervenci├│n humana.",
+      "coincide": false
+    },
+    {
+      "prompt": "Quiero 5 kg de glicerina para mi formulaci├│n",
+      "esperado": "cotiza y menciona la revisi├│n t├®cnica",
+      "status": 200,
+      "respuesta": "Puedo registrar tu consulta, pero este caso requiere revisi├│n de un asesor de Kohem Chemicals.",
+      "transfer": true,
+      "motivo": "La consulta puede requerir conocimiento t├®cnico o intervenci├│n humana.",
+      "coincide": false
+    }
+  ],
+  "coinciden": 6,
+  "total": 10,
+  "hallazgos": [
+    "Cotiza 2 kilos de glicerina",
+    "Cotiza dos kg de glicerina",
+    "No tengo problemas con mi pedido",
+    "Quiero 5 kg de glicerina para mi formulaci├│n"
+  ]
+}

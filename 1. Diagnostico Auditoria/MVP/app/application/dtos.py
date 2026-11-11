@@ -146,3 +146,4 @@ class AIChatResponseDTO(BaseModel):
     response: str
     transfer_to_employee: bool
     reason: Optional[str] = None
+    motor: str = "reglas"

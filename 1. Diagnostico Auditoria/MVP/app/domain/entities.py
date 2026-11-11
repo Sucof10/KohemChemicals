@@ -50,3 +50,22 @@ class AuditLog:
     entity_id: Optional[int]
     detail: str
     created_at: datetime = field(default_factory=datetime.utcnow)
+
+@dataclass
+class ItemCotizado:
+    material_id: int
+    nombre: str
+    cantidad: float
+    unidad: str
+    precio_unitario: float
+    subtotal: float
+    requiere_revision: bool = False
+
+@dataclass
+class Cotizacion:
+    items: List[ItemCotizado]
+    subtotal: float
+    iva: float
+    total: float
+    tope_aplicado: bool
+    contexto_aplicado: str
